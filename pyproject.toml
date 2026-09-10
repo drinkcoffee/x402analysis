@@ -1,0 +1,20 @@
+[project]
+name = "x402tool"
+version = "0.1.0"
+description = "Command-line analysis tool for the x402 payment protocol ecosystem"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "pyjwt>=2.8",
+    "cryptography>=42.0",
+]
+
+[project.scripts]
+x402tool = "x402tool.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["x402tool"]
