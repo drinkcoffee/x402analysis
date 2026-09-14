@@ -7,6 +7,7 @@ import csv
 import json
 import os
 import sys
+import time
 from typing import Any, Optional
 
 import requests
@@ -323,6 +324,68 @@ def cmd_cdp_discover_merchant(args: argparse.Namespace) -> int:
     return print_response(response, args.json, label="CDP /discovery/merchant")
 
 
+_DISCOVER_MERCHANT_CSV_COLUMNS = (
+    "payTo",
+    "serviceName",
+    "amount",
+    "asset",
+    "network",
+    "resource",
+    "l30DaysTotalCalls",
+    "l30DaysUniquePayers",
+    "description",
+    "tags",
+)
+
+_DISCOVER_MERCHANT_CSV_PAUSE_SECONDS = 1.0
+
+
+def cmd_cdp_discover_merchant_csv(args: argparse.Namespace) -> int:
+    client = _cdp_client_from_args(args)
+    pay_tos = [p.strip() for p in args.pay_to.split(",") if p.strip()]
+
+    writer = csv.writer(sys.stdout)
+    writer.writerow(_DISCOVER_MERCHANT_CSV_COLUMNS)
+
+    had_error = False
+    for i, pay_to in enumerate(pay_tos):
+        if i > 0:
+            time.sleep(_DISCOVER_MERCHANT_CSV_PAUSE_SECONDS)
+
+        response = client.discovery_merchant(pay_to, limit=args.limit, offset=args.offset)
+        body = response_body(response)
+        if not response.ok:
+            had_error = True
+            print_error(f"CDP /discovery/merchant returned HTTP {response.status_code} for payTo={pay_to}: {body}")
+            continue
+
+        resources = body.get("resources", []) if isinstance(body, dict) else []
+        for resource in resources:
+            description = resource.get("description", "")
+            service_name = resource.get("serviceName", "")
+            resource_url = resource.get("resource", "")
+            quality = resource.get("quality") or {}
+            l30_days_total_calls = quality.get("l30DaysTotalCalls", "")
+            l30_days_unique_payers = quality.get("l30DaysUniquePayers", "")
+            tags = ", ".join(resource.get("tags") or [])
+            for accept in resource.get("accepts", []):
+                writer.writerow(
+                    [
+                        accept.get("payTo", pay_to),
+                        service_name,
+                        accept.get("amount", ""),
+                        accept.get("asset", ""),
+                        accept.get("network", ""),
+                        resource_url,
+                        l30_days_total_calls,
+                        l30_days_unique_payers,
+                        description,
+                        tags,
+                    ]
+                )
+    return 1 if had_error else 0
+
+
 def cmd_cdp_search(args: argparse.Namespace) -> int:
     client = _cdp_client_from_args(args)
     response = client.discovery_search(
@@ -458,6 +521,20 @@ def build_parser() -> argparse.ArgumentParser:
     _add_cdp_auth_args(p_dm)
     _add_common_output_args(p_dm)
     p_dm.set_defaults(func=cmd_cdp_discover_merchant)
+
+    p_dm_csv = cdp_sub.add_parser(
+        "discover-merchant-csv",
+        help="list merchants' discovered x402 resources as CSV (one row per accepted payment option)",
+    )
+    p_dm_csv.add_argument(
+        "--pay-to",
+        required=True,
+        help="merchant payment address, or a comma-separated list to query one at a time",
+    )
+    p_dm_csv.add_argument("--limit", type=int)
+    p_dm_csv.add_argument("--offset", type=int)
+    _add_cdp_auth_args(p_dm_csv)
+    p_dm_csv.set_defaults(func=cmd_cdp_discover_merchant_csv)
 
     p_search = cdp_sub.add_parser("search", help="search active discovered x402 resources")
     p_search.add_argument("--query", help="full-text/semantic search query")

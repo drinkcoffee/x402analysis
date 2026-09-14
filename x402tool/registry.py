@@ -161,6 +161,16 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["solana"],
         auth={"type": "none"},
     ),
+    "fluxa": dict(
+        name="Fluxa",
+        api="generic",
+        base_url="https://facilitator.fluxapay.xyz",
+        docs_url="https://facilitator.fluxapay.xyz",
+        access="public",
+        fee=0,
+        networks=["base"],
+        auth={"type": "none"},
+    ),
     "heurist": dict(
         name="Heurist",
         api="generic",
@@ -185,6 +195,21 @@ FACILITATORS: dict[str, dict[str, Any]] = {
             "its auth scheme; use --header to supply credentials if you have "
             "them."
         ),
+    ),
+    "meridian": dict(
+        name="Meridian Facilitator",
+        api="generic",
+        base_url="https://api.mrdn.finance/v1",
+        docs_url="https://mrdn.finance",
+        access="public",
+        fee=0,
+        networks=[
+            "ethereum", "avalanche", "base", "optimism", "arbitrum", "polygon",
+            "unichain", "ink", "worldchain", "sei", "hyperevm", "megaeth",
+            "tempo", "robinhood", "bsc", "monad", "bot-chain", "solana",
+        ],
+        auth={"type": "none"},
+        notes="Also exposes the exact scheme's 'upto' variant across most listed EVM networks.",
     ),
     "mogami": dict(
         name="Mogami",
