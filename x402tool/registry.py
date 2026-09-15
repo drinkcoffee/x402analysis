@@ -53,21 +53,6 @@ CDP_PLATFORM_NETWORKS = [
 ]
 
 FACILITATORS: dict[str, dict[str, Any]] = {
-    "coinbase": dict(
-        name="Coinbase (public facilitator)",
-        api="generic",
-        base_url="https://facilitator.cdp.coinbase.com",
-        docs_url="https://docs.cdp.coinbase.com/x402/welcome",
-        access="public",
-        fee=0,
-        networks=["base", "solana"],
-        auth={"type": "none"},
-        notes=(
-            "Coinbase's free, unauthenticated x402 facilitator (implements the "
-            "generic /verify, /settle, /supported contract). Distinct from the "
-            "authenticated CDP Platform API, see 'coinbase-cdp'."
-        ),
-    ),
     "coinbase-cdp": dict(
         name="Coinbase CDP Platform API",
         api="cdp",
@@ -96,17 +81,6 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["base"],
         auth={"type": "none"},
     ),
-    "auto": dict(
-        name="Auto (x402scan)",
-        api="generic",
-        base_url="https://facilitators.x402scan.com",
-        docs_url="https://facilitators.x402scan.com",
-        access="public",
-        fee=0,
-        networks=["base"],
-        auth={"type": "none"},
-        notes="Routes to whichever underlying facilitator x402scan selects.",
-    ),
     "aurracloud": dict(
         name="AurraCloud",
         api="generic",
@@ -121,6 +95,27 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         },
         notes="verify/settle/supported require an API key appended to the URL path.",
     ),
+    "canton": dict(
+        name="Canton",
+        api="generic",
+        base_url="https://facilitator.ftptech.xyz",
+        docs_url="https://www.ftptech.xyz/x402",
+        access="public",
+        fee=0,
+        networks=["canton"],
+        auth={"type": "none"},
+        notes="Settles in Canton Coin or USDCx on Canton MainNet, run by FTP Tech LLC.",
+    ),
+    "celo": dict(
+        name="Celo Facilitator",
+        api="generic",
+        base_url="https://api.x402.celo.org",
+        docs_url="https://x402.celo.org",
+        access="public",
+        fee=0,
+        networks=["celo"],
+        auth={"type": "none"},
+    ),
     "codenut": dict(
         name="CodeNut",
         api="generic",
@@ -129,16 +124,6 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         access="public",
         fee=0,
         networks=["base", "solana"],
-        auth={"type": "none"},
-    ),
-    "corbits": dict(
-        name="Corbits",
-        api="generic",
-        base_url="https://facilitator.corbits.dev",
-        docs_url="https://corbits.dev",
-        access="public",
-        fee=0,
-        networks=["solana"],
         auth={"type": "none"},
     ),
     "daydreams": dict(
@@ -162,7 +147,7 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         auth={"type": "none"},
     ),
     "fluxa": dict(
-        name="Fluxa",
+        name="FluxA",
         api="generic",
         base_url="https://facilitator.fluxapay.xyz",
         docs_url="https://facilitator.fluxapay.xyz",
@@ -180,6 +165,17 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "none"},
+    ),
+    "hpp": dict(
+        name="HPP",
+        api="generic",
+        base_url="https://facilitator.hpp.io",
+        docs_url="https://docs.hpp.io/x402/facilitator",
+        access="public",
+        fee=0,
+        networks=["eip155:190415 (HPP Mainnet)"],
+        auth={"type": "none"},
+        notes="Also exposes the exact scheme's 'upto' variant on its own HPP Mainnet L2 (eip155:190415).",
     ),
     "kamiyo": dict(
         name="KAMIYO",
@@ -221,15 +217,32 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["base"],
         auth={"type": "none"},
     ),
-    "openx402": dict(
-        name="OpenX402",
+    "near": dict(
+        name="Unknown (Near)",
         api="generic",
-        base_url="https://open.x402.host",
-        docs_url="https://open.x402.host",
+        base_url="https://x402.mikedotexe.com",
+        docs_url="https://x402.mikedotexe.com",
         access="public",
         fee=0,
-        networks=["base", "solana"],
+        networks=["near"],
         auth={"type": "none"},
+    ),
+    "polymer": dict(
+        name="Polymer",
+        api="generic",
+        base_url="https://api.polymer.zone/v1",
+        docs_url="https://docs.polymerlabs.org/docs/build/start",
+        access="public",
+        fee=0,
+        networks=[],
+        auth={"type": "none"},
+        notes=(
+            "Could not confirm supported networks/schemes: a live check of "
+            "/supported returned HTTP 400 'Invalid request' from Cloudflare "
+            "on every path tried, including '/'  - likely edge-level bot/WAF "
+            "protection rather than the API itself. Verify with "
+            "`x402tool supported polymer` from a normal client."
+        ),
     ),
     "payai": dict(
         name="PayAI",
@@ -251,6 +264,17 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["polygon"],
         auth={"type": "none"},
     ),
+    "primer": dict(
+        name="Primer",
+        api="generic",
+        base_url="https://x402.primer.systems",
+        docs_url="https://docs.primer.systems/facilitator.html",
+        access="public",
+        fee=0,
+        networks=["base", "skale-base", "robinhood"],
+        auth={"type": "none"},
+        notes="Supports exact, upto, and batch-settlement schemes.",
+    ),
     "questflow": dict(
         name="Questflow",
         api="generic",
@@ -260,7 +284,43 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "bearer"},
-        notes="verify/settle/supported require Authorization: Bearer <api_key>.",
+        notes=(
+            "/supported works unauthenticated; verify/settle may still "
+            "require Authorization: Bearer <api_key> per the facilitator's "
+            "own SDK config."
+        ),
+    ),
+    "solvador": dict(
+        name="Solvador",
+        api="generic",
+        base_url="https://api.solvador.com",
+        docs_url="https://solvador.com",
+        access="public",
+        fee=0,
+        networks=[
+            "base", "arbitrum", "optimism", "polygon", "avalanche", "celo",
+            "linea", "unichain", "worldchain", "monad", "robinhood",
+            "solana", "near", "xrpl", "starknet",
+        ],
+        auth={"type": "none"},
+        notes="Also exposes upto and batch-settlement schemes across most listed EVM networks.",
+    ),
+    "stellar": dict(
+        name="Stellar",
+        api="generic",
+        base_url="https://channels.openzeppelin.com/x402",
+        docs_url="https://channels.openzeppelin.com/x402",
+        access="gated",
+        fee=0,
+        networks=[],
+        auth={"type": "unknown"},
+        notes=(
+            "OpenZeppelin Relayer x402 channel. Every path returned HTTP 401 "
+            "Unauthorized during a live, unauthenticated check, including "
+            "/supported - could not confirm supported networks/schemes or "
+            "the auth scheme it expects. Use --header to supply credentials "
+            "if you have them."
+        ),
     ),
     "thirdweb": dict(
         name="Thirdweb",
@@ -273,6 +333,16 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         auth={"type": "header", "name": "x-secret-key"},
         notes="Requires a thirdweb secret key for verify/settle/supported.",
     ),
+    "t54": dict(
+        name="T54",
+        api="generic",
+        base_url="https://xrpl-facilitator-mainnet.t54.ai",
+        docs_url="https://docs.x402.org/dev-tools/facilitators",
+        access="public",
+        fee=0,
+        networks=["xrpl"],
+        auth={"type": "none"},
+    ),
     "ultravioletadao": dict(
         name="Ultravioleta DAO",
         api="generic",
@@ -284,6 +354,66 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         auth={"type": "none"},
         notes="Gasless payments.",
     ),
+    "fareside": dict(
+        name="FareSide",
+        api="generic",
+        base_url="https://facilitator.x402.rs",
+        docs_url="https://x402.rs",
+        access="public",
+        fee=0,
+        networks=["base", "polygon"],
+        auth={"type": "none"},
+    ),
+    "figment": dict(
+        name="Figment",
+        api="generic",
+        base_url="https://api.figment.io/x402",
+        docs_url="https://docs.figment.io/reference/x402",
+        access="gated",
+        fee=0,
+        networks=[],
+        auth={"type": "header", "name": "apikey"},
+        notes=(
+            "Behind a Kong API gateway (WWW-Authenticate: Key realm=\"kong\"); "
+            "a live, unauthenticated check of /supported returned 401 so "
+            "supported networks/schemes could not be confirmed. Pass "
+            "--api-key with a Figment API key."
+        ),
+    ),
+}
+
+
+# Facilitators that were previously known to be operational but are no longer
+# reachable or maintained. Kept for reference (e.g. to recognize an id someone
+# might still ask about) but excluded from FACILITATORS/list-facilitators.
+DEFUNCT_FACILITATORS: dict[str, dict[str, Any]] = {
+    "coinbase": dict(
+        name="Coinbase (public facilitator)",
+        api="generic",
+        base_url="https://facilitator.cdp.coinbase.com",
+        docs_url="https://docs.cdp.coinbase.com/x402/welcome",
+        access="public",
+        fee=0,
+        networks=["base", "solana"],
+        auth={"type": "none"},
+        notes=(
+            "Coinbase's free, unauthenticated x402 facilitator (implemented the "
+            "generic /verify, /settle, /supported contract). Host no longer "
+            "resolves. Distinct from the authenticated CDP Platform API, see "
+            "'coinbase-cdp'."
+        ),
+    ),
+    "openx402": dict(
+        name="OpenX402",
+        api="generic",
+        base_url="https://open.x402.host",
+        docs_url="https://open.x402.host",
+        access="public",
+        fee=0,
+        networks=["base", "solana"],
+        auth={"type": "none"},
+        notes="TLS certificate no longer matches the host.",
+    ),
     "virtuals": dict(
         name="Virtuals Protocol",
         api="generic",
@@ -293,16 +423,7 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "none"},
-    ),
-    "x402rs": dict(
-        name="X402rs",
-        api="generic",
-        base_url="https://facilitator.x402.rs",
-        docs_url="https://x402.rs",
-        access="public",
-        fee=0,
-        networks=["base", "polygon"],
-        auth={"type": "none"},
+        notes="/supported now 404s against what looks like a Strapi CMS, not an x402 facilitator.",
     ),
     "xecho": dict(
         name="xEcho",
@@ -313,6 +434,29 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "none"},
+        notes="Deployment disabled on Vercel (DEPLOYMENT_DISABLED).",
+    ),
+    "corbits": dict(
+        name="Corbits",
+        api="generic",
+        base_url="https://facilitator.corbits.dev",
+        docs_url="https://corbits.dev",
+        access="public",
+        fee=0,
+        networks=["solana"],
+        auth={"type": "none"},
+        notes="Host no longer resolves.",
+    ),
+    "auto": dict(
+        name="Auto (x402scan)",
+        api="generic",
+        base_url="https://facilitators.x402scan.com",
+        docs_url="https://facilitators.x402scan.com",
+        access="public",
+        fee=0,
+        networks=["base"],
+        auth={"type": "none"},
+        notes="Routes to whichever underlying facilitator x402scan selects.",
     ),
 }
 

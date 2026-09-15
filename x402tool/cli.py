@@ -163,8 +163,7 @@ def _short_networks(networks: list[str], limit: int = 4) -> str:
     return ", ".join(names[:limit]) + f", +{len(names) - limit} more"
 
 
-def cmd_list_facilitators(args: argparse.Namespace) -> int:
-    entries = registry.FACILITATORS
+def _list_facilitators(args: argparse.Namespace, entries: dict[str, Any]) -> int:
     rows = []
     for fid in sorted(entries):
         entry = entries[fid]
@@ -187,6 +186,14 @@ def cmd_list_facilitators(args: argparse.Namespace) -> int:
     )
     print(f"\n{registry.SOURCE_NOTE}")
     return 0
+
+
+def cmd_list_facilitators(args: argparse.Namespace) -> int:
+    return _list_facilitators(args, registry.FACILITATORS)
+
+
+def cmd_list_defunct_facilitators(args: argparse.Namespace) -> int:
+    return _list_facilitators(args, registry.DEFUNCT_FACILITATORS)
 
 
 def cmd_show(args: argparse.Namespace) -> int:
@@ -443,11 +450,22 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-v", "--verbose", action="store_true", help="print outgoing requests")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_list = sub.add_parser("list-facilitators", help="list known x402 facilitators")
+    p_list = sub.add_parser(
+        "list-facilitators", help="list known operational x402 facilitators"
+    )
     p_list.add_argument("--access", choices=("public", "gated", "gated_paid"))
     p_list.add_argument("--network", help="filter by substring match against a network name")
     _add_common_output_args(p_list)
     p_list.set_defaults(func=cmd_list_facilitators)
+
+    p_list_defunct = sub.add_parser(
+        "list-defunct-facil",
+        help="list known x402 facilitators that are no longer operational",
+    )
+    p_list_defunct.add_argument("--access", choices=("public", "gated", "gated_paid"))
+    p_list_defunct.add_argument("--network", help="filter by substring match against a network name")
+    _add_common_output_args(p_list_defunct)
+    p_list_defunct.set_defaults(func=cmd_list_defunct_facilitators)
 
     p_show = sub.add_parser("show", help="show details for one known facilitator")
     p_show.add_argument("facilitator", help="facilitator id, see `list-facilitators`")

@@ -18,9 +18,10 @@ This installs the `x402tool` command (also runnable as `python -m x402tool`).
 ## Facilitator registry
 
 ```bash
-x402tool list-facilitators                 # table of all known facilitators
+x402tool list-facilitators                 # table of known, operational facilitators
 x402tool list-facilitators --access public # filter by access type
 x402tool list-facilitators --network solana
+x402tool list-defunct-facil                # facilitators no longer reachable/maintained
 x402tool show coinbase-cdp                 # full detail for one facilitator
 ```
 
@@ -29,15 +30,14 @@ The registry is compiled from the community-maintained
 Coinbase's CDP API reference, as a snapshot — facilitator infrastructure moves
 fast, so treat entries as a starting point and confirm with `supported`.
 
-Two Coinbase entries are listed separately:
-
-- `coinbase` - the free, unauthenticated public facilitator
-  (`facilitator.cdp.coinbase.com`), speaking the plain x402 facilitator
-  contract (`/verify`, `/settle`, `/supported`).
-- `coinbase-cdp` - Coinbase's authenticated CDP Platform API
-  (`api.cdp.coinbase.com/platform/v2/x402/*`), which additionally exposes
-  bazaar discovery, MCP, and endpoint-validation routes. Requires a CDP API
-  key pair.
+Coinbase has two entries: `coinbase-cdp`, the operational, authenticated CDP
+Platform API (`api.cdp.coinbase.com/platform/v2/x402/*`), which also exposes
+bazaar discovery, MCP, and endpoint-validation routes and requires a CDP API
+key pair; and `coinbase`, the free, unauthenticated public facilitator that
+previously ran at `facilitator.cdp.coinbase.com` speaking the plain x402
+facilitator contract (`/verify`, `/settle`, `/supported`) - its host no longer
+resolves, so it now lives in `list-defunct-facil` rather than
+`list-facilitators`.
 
 ## Exercising the core x402 facilitator API
 
