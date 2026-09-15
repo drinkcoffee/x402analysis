@@ -23,7 +23,12 @@ x402tool list-facilitators --access public # filter by access type
 x402tool list-facilitators --network solana
 x402tool list-defunct-facil                # facilitators no longer reachable/maintained
 x402tool show coinbase-cdp                 # full detail for one facilitator
+x402tool list-fac-domains                  # CSV of every facilitator's API/doc domains
 ```
+
+`list-fac-domains` prints `name,type,url` for every operational facilitator
+- one `API` row (its `base_url`) and one `doc` row (its `docs_url`, or the
+literal word `same` when the two URLs are identical).
 
 The registry is compiled from the community-maintained
 [Swader/x402facilitators](https://github.com/Swader/x402facilitators) list and
@@ -100,6 +105,61 @@ x402tool supported coinbase-cdp
 or pass `--api-key-id`/`--api-key-secret` directly. Get a key pair from the
 [CDP Portal](https://portal.cdp.coinbase.com/).
 
+## Infrastructure analysis
+
+`analyse-facilitators` passively fingerprints the hosts behind each
+facilitator's API and docs URLs - no requests are sent to the facilitators'
+x402 endpoints themselves. For each host it resolves the IP, geolocates it
+(ip-api.com), inspects the TLS certificate's subject/issuer/SAN fields, and
+looks up domain WHOIS via RDAP; per facilitator it reports names and
+locations derived from the certificate subject, from IP geolocation, and
+from WHOIS (registrar/registrant), plus reverse DNS, hosting/datacenter
+flags, and certificate expiry. Same methodology as the sibling
+`domain-check` tool, but run in parallel across every known facilitator and
+batched against ip-api.com's `/batch` endpoint instead of one call per host.
+
+```bash
+x402tool analyse-facilitators                  # sweep every operational facilitator
+x402tool analyse-facilitators --id celo --id t54
+x402tool analyse-facilitators --defunct        # sweep the defunct list instead
+x402tool analyse-facilitators --json
+x402tool analyse-facilitators --summary        # just a name/API-country/docs-country table
+```
+
+## Blockchain address screening
+
+`analyse-facilitators-bc` pulls each facilitator's `/supported` response,
+extracts every blockchain address referenced in it (`signers`, and
+`extra.facilitatorAddress` / `receiverAuthorizer` / `feePayer` on individual
+scheme entries), merges in any addresses hand-curated in the registry's
+`known_addresses` field (for facilitators whose `/supported` doesn't publish
+one - either it's gated, or its response is just missing a `signers`/`extra`
+block), and screens each one against Cloudbric Labs' Threat DB "Hacker
+Wallet" list ([labs.cloudbric.com/threatdb/view#tab3](https://labs.cloudbric.com/threatdb/view#tab3)).
+That page has no published API - `cloudbric_threatdb.py` reverse-engineers
+the JSON endpoint its own search box calls (`POST
+/threatdb/gethackerwalletlist`, a jQuery DataTables backend) and reports each
+address's threat level (Low/Medium/High/Very High), report count, and last
+activity date, or that it wasn't found in the database. That endpoint is
+unauthenticated but explicitly rate-limited, so lookups run one at a time
+with a delay between them (`--lookup-delay`, default 1s) and retry with
+backoff on failure - never in parallel, unlike the `/supported` fetches
+(`--workers`) that gather the addresses in the first place.
+
+Output is a four-column table - facilitator name, `S`/`D` (whether that row's
+address is a static `known_addresses` fallback or was pulled live from
+`/supported`; an address found both ways counts as `D`), address, Cloudbric
+ThreatDB info - sorted alphabetically by facilitator and then ascending by
+address; a facilitator with no addresses at all (from either source) gets
+one row reading "none available".
+
+```bash
+x402tool analyse-facilitators-bc
+x402tool analyse-facilitators-bc --id payai --id celo
+x402tool analyse-facilitators-bc --lookup-delay 2.0   # even gentler
+x402tool analyse-facilitators-bc --json
+```
+
 ## Layout
 
 ```
@@ -108,6 +168,9 @@ x402tool/
   cdp_auth.py          CDP bearer JWT signing
   cdp_client.py        client for api.cdp.coinbase.com/platform/v2/x402/*
   generic_client.py     client for the plain /verify, /settle, /supported contract
+  net_analysis.py       passive IP/SSL/WHOIS fingerprinting for analyse-facilitators
+  blockchain_addresses.py  address extraction from a /supported response
+  cloudbric_threatdb.py  Cloudbric Labs Threat DB client for analyse-facilitators-bc
   formatting.py         table/JSON output helpers
   cli.py                argparse wiring
 ```

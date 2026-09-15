@@ -8,11 +8,12 @@ import json
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Optional
 
 import requests
 
-from . import registry
+from . import blockchain_addresses, cloudbric_threatdb, net_analysis, registry
 from .cdp_client import CdpClient, CdpClientError
 from .formatting import print_error, print_response, print_table, response_body
 from .generic_client import GenericFacilitatorClient
@@ -194,6 +195,22 @@ def cmd_list_facilitators(args: argparse.Namespace) -> int:
 
 def cmd_list_defunct_facilitators(args: argparse.Namespace) -> int:
     return _list_facilitators(args, registry.DEFUNCT_FACILITATORS)
+
+
+_LIST_FAC_DOMAINS_CSV_COLUMNS = ("name", "type", "url")
+
+
+def cmd_list_fac_domains(args: argparse.Namespace) -> int:
+    writer = csv.writer(sys.stdout)
+    writer.writerow(_LIST_FAC_DOMAINS_CSV_COLUMNS)
+    for fid in sorted(registry.FACILITATORS, key=lambda i: registry.FACILITATORS[i]["name"].lower()):
+        entry = registry.FACILITATORS[fid]
+        name = entry["name"]
+        base_url = entry["base_url"]
+        docs_url = entry["docs_url"]
+        writer.writerow([name, "API", base_url])
+        writer.writerow([name, "doc", "same" if docs_url == base_url else docs_url])
+    return 0
 
 
 def cmd_show(args: argparse.Namespace) -> int:
@@ -442,6 +459,226 @@ def cmd_cdp_validate(args: argparse.Namespace) -> int:
 # --------------------------------------------------------------------------
 
 
+def _print_facilitator_analysis(result: dict[str, Any]) -> None:
+    print(f"\n=== {result['id']}: {result['name']} ===")
+    for host in result["hosts"]:
+        print(f"  {host['hostname']}  ({host.get('role', '?')})")
+        if host.get("error"):
+            print(f"    error        : {host['error']}")
+            continue
+
+        ip = host.get("ip")
+        print(f"    ip           : {ip or 'could not resolve'}")
+        if host.get("reverse_dns"):
+            print(f"    reverse dns  : {host['reverse_dns']}")
+
+        geo = host.get("geo") or {}
+        if geo.get("status") == "success":
+            loc = ", ".join(p for p in (geo.get("city"), geo.get("regionName"), geo.get("country")) if p)
+            print(f"    ip geo       : {loc or 'unknown'}")
+            org_bits = ", ".join(p for p in (geo.get("isp"), geo.get("org"), geo.get("as")) if p)
+            if org_bits:
+                print(f"    ip org/isp   : {org_bits}")
+            if geo.get("hosting"):
+                print("    ip hosting   : yes (datacenter/hosting IP)")
+        elif geo:
+            print(f"    ip geo       : lookup failed ({geo.get('message', 'unknown error')})")
+
+        ssl_info = host.get("ssl") or {}
+        if ssl_info.get("valid"):
+            names = ", ".join(
+                f"{k}={v}" for k, v in (("CN", ssl_info.get("subject_cn")), ("O", ssl_info.get("subject_o"))) if v
+            )
+            print(f"    ssl subject  : {names or 'n/a'}")
+            locs = ", ".join(
+                f"{k}={v}"
+                for k, v in (
+                    ("L", ssl_info.get("subject_locality")),
+                    ("ST", ssl_info.get("subject_state")),
+                    ("C", ssl_info.get("subject_country")),
+                )
+                if v
+            )
+            print(f"    ssl location : {locs or 'not present (typical for a DV certificate)'}")
+            print(
+                f"    ssl issuer   : {ssl_info.get('issuer_o') or ssl_info.get('issuer_cn') or 'n/a'}"
+                f"  (expires in {ssl_info.get('days_until_expiry', '?')} days)"
+            )
+        else:
+            print(f"    ssl          : {ssl_info.get('error', 'unavailable')}")
+
+    for domain, w in result["whois"].items():
+        print(f"  whois ({domain}):")
+        if w.get("error"):
+            print(f"    error        : {w['error']}")
+            continue
+        print(f"    registrar    : {w.get('registrar_name') or 'n/a'}")
+        print(f"    registrant   : {w.get('registrant_name') or 'n/a (often redacted)'}")
+        print(f"    country      : {w.get('registrant_country') or 'n/a'}")
+        age = w.get("age_days")
+        print(f"    domain age   : {f'{age} days' if age is not None else 'n/a'}")
+
+
+def _host_geo_country(host: dict[str, Any]) -> Optional[str]:
+    geo = host.get("geo") or {}
+    if geo.get("status") == "success":
+        return geo.get("country")
+    return None
+
+
+def _summary_row(result: dict[str, Any]) -> tuple[str, Optional[str], Optional[str]]:
+    api_country = docs_country = None
+    for host in result["hosts"]:
+        if host.get("role") == "api":
+            api_country = _host_geo_country(host)
+        elif host.get("role") == "docs":
+            docs_country = _host_geo_country(host)
+    # base_url and docs_url often share one hostname (deduped to a single
+    # "api"-role host); in that case the docs country is the api country.
+    if docs_country is None and len(result["hosts"]) == 1:
+        docs_country = api_country
+    return result["name"], api_country, docs_country
+
+
+def cmd_analyse_facilitators(args: argparse.Namespace) -> int:
+    if args.defunct:
+        entries = registry.DEFUNCT_FACILITATORS
+    else:
+        entries = registry.FACILITATORS
+    if args.id:
+        unknown = [fid for fid in args.id if fid not in entries]
+        if unknown:
+            return print_error(f"unknown facilitator id(s): {', '.join(unknown)}")
+        entries = {fid: entries[fid] for fid in args.id}
+
+    results = net_analysis.analyse_facilitators(entries, timeout=args.probe_timeout, max_workers=args.workers)
+
+    if args.summary:
+        rows = [_summary_row(r) for r in results]
+        if args.json:
+            print(
+                json.dumps(
+                    [
+                        {"name": name, "api_country": api, "docs_country": docs}
+                        for name, api, docs in rows
+                    ],
+                    indent=2,
+                )
+            )
+            return 0
+        print_table(
+            ["FACILITATOR", "API URL COUNTRY", "DOCS URL COUNTRY"],
+            [(name, api or "unknown", docs or "unknown") for name, api, docs in rows],
+        )
+        return 0
+
+    if args.json:
+        print(json.dumps(results, indent=2, default=str))
+        return 0
+
+    for result in results:
+        _print_facilitator_analysis(result)
+    return 0
+
+
+def _fetch_supported_addresses(
+    fid: str, entry: dict[str, Any], timeout: float
+) -> tuple[str, list[tuple[str, str]]]:
+    """Best-effort /supported fetch, merged with any registry known_addresses.
+
+    Returns (fid, [(address, source), ...]) where source is "D" (pulled live
+    from /supported) or "S" (a static fallback from the registry's
+    known_addresses, only used for an address /supported didn't also report).
+
+    Failures fetching /supported (network error, auth required, bad JSON)
+    just mean no *dynamic* addresses were recoverable - not a hard error for
+    the whole command - so they fall back to known_addresses alone.
+    """
+    dynamic: list[str] = []
+    try:
+        if entry["api"] == "cdp":
+            client = CdpClient(
+                key_id=os.environ.get("CDP_API_KEY_ID"),
+                key_secret=os.environ.get("CDP_API_KEY_SECRET"),
+                timeout=timeout,
+            )
+        else:
+            base_url, headers = registry.resolve_generic_target(entry)
+            client = GenericFacilitatorClient(base_url, headers=headers, timeout=timeout)
+        response = client.supported()
+        if response.ok:
+            dynamic = blockchain_addresses.extract_addresses(response.json())
+    except Exception:  # noqa: BLE001 - this is a best-effort sweep
+        pass
+
+    combined: dict[str, tuple[str, str]] = {addr.lower(): (addr, "D") for addr in dynamic}
+    for addr in entry.get("known_addresses") or []:
+        combined.setdefault(addr.lower(), (addr, "S"))
+
+    return fid, sorted(combined.values(), key=lambda pair: pair[0].lower())
+
+
+def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
+    print("analysis started")
+
+    entries = registry.DEFUNCT_FACILITATORS if args.defunct else registry.FACILITATORS
+    if args.id:
+        unknown = [fid for fid in args.id if fid not in entries]
+        if unknown:
+            return print_error(f"unknown facilitator id(s): {', '.join(unknown)}")
+        entries = {fid: entries[fid] for fid in args.id}
+
+    addresses_by_fid: dict[str, list[tuple[str, str]]] = {}
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(_fetch_supported_addresses, fid, entry, args.probe_timeout): fid
+            for fid, entry in entries.items()
+        }
+        for future in as_completed(futures):
+            fid, addrs = future.result()
+            addresses_by_fid[fid] = addrs
+
+    threatdb = cloudbric_threatdb.CloudbricThreatDbClient(
+        timeout=args.probe_timeout, delay=args.lookup_delay
+    )
+
+    # Dedupe lookups (the same address can recur across facilitators), and
+    # query them one at a time - this endpoint is unauthenticated and
+    # explicitly rate-limited, so no concurrency here.
+    unique_addresses = sorted({addr for addrs in addresses_by_fid.values() for addr, _src in addrs})
+    info_by_address: dict[str, str] = {}
+    for addr in unique_addresses:
+        try:
+            info_by_address[addr] = threatdb.describe(addr)
+        except Exception as exc:  # noqa: BLE001
+            info_by_address[addr] = f"Cloudbric ThreatDB lookup failed: {exc}"
+
+    rows: list[tuple[str, str, str, str]] = []
+    for fid in sorted(entries, key=lambda i: entries[i]["name"].lower()):
+        name = entries[fid]["name"]
+        addrs = sorted(addresses_by_fid.get(fid, []), key=lambda pair: pair[0].lower())
+        if not addrs:
+            rows.append((name, "", "none available", ""))
+            continue
+        for addr, source in addrs:
+            rows.append((name, source, addr, info_by_address.get(addr, "")))
+
+    if args.json:
+        print(
+            json.dumps(
+                [
+                    {"name": n, "source": s, "address": a, "cloudbric_threatdb": i}
+                    for n, s, a, i in rows
+                ],
+                indent=2,
+            )
+        )
+        return 0
+
+    print_table(["FACILITATOR", "S/D", "ADDRESS", "CLOUDBRIC THREATDB INFO"], rows)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="x402tool", description="Analyze and exercise x402 payment protocol facilitators."
@@ -466,6 +703,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_list_defunct.add_argument("--network", help="filter by substring match against a network name")
     _add_common_output_args(p_list_defunct)
     p_list_defunct.set_defaults(func=cmd_list_defunct_facilitators)
+
+    p_list_domains = sub.add_parser(
+        "list-fac-domains",
+        help="output every operational facilitator's API/doc domains as CSV",
+    )
+    p_list_domains.set_defaults(func=cmd_list_fac_domains)
 
     p_show = sub.add_parser("show", help="show details for one known facilitator")
     p_show.add_argument("facilitator", help="facilitator id, see `list-facilitators`")
@@ -598,6 +841,78 @@ def build_parser() -> argparse.ArgumentParser:
     _add_cdp_auth_args(p_validate)
     _add_common_output_args(p_validate)
     p_validate.set_defaults(func=cmd_cdp_validate)
+
+    p_analyse = sub.add_parser(
+        "analyse-facilitators",
+        help="passively geolocate/fingerprint facilitator hosts: IP geo, SSL cert subject, WHOIS",
+    )
+    p_analyse.add_argument(
+        "--id",
+        action="append",
+        default=[],
+        help="only analyse this facilitator id; may be repeated (default: all)",
+    )
+    p_analyse.add_argument(
+        "--defunct",
+        action="store_true",
+        help="analyse the defunct facilitator list instead of the operational one",
+    )
+    p_analyse.add_argument(
+        "--workers", type=int, default=10, help="parallel network probes (default: 10)"
+    )
+    p_analyse.add_argument(
+        "--probe-timeout",
+        type=float,
+        default=8.0,
+        help="per-host timeout in seconds for DNS/SSL probes (default: 8)",
+    )
+    p_analyse.add_argument(
+        "--summary",
+        action="store_true",
+        help="print just a table of facilitator name, API URL geolocated country, "
+        "and docs URL geolocated country",
+    )
+    _add_common_output_args(p_analyse)
+    p_analyse.set_defaults(func=cmd_analyse_facilitators)
+
+    p_bc = sub.add_parser(
+        "analyse-facilitators-bc",
+        help="gather each facilitator's blockchain addresses from /supported and "
+        "screen them via Cloudbric's Hacker Wallet threat DB",
+    )
+    p_bc.add_argument(
+        "--id",
+        action="append",
+        default=[],
+        help="only analyse this facilitator id; may be repeated (default: all)",
+    )
+    p_bc.add_argument(
+        "--defunct",
+        action="store_true",
+        help="analyse the defunct facilitator list instead of the operational one",
+    )
+    p_bc.add_argument(
+        "--workers",
+        type=int,
+        default=10,
+        help="parallel /supported requests across facilitators (default: 10); "
+        "Cloudbric ThreatDB lookups always run one at a time regardless",
+    )
+    p_bc.add_argument(
+        "--probe-timeout",
+        type=float,
+        default=15.0,
+        help="per-request timeout in seconds (default: 15)",
+    )
+    p_bc.add_argument(
+        "--lookup-delay",
+        type=float,
+        default=1.0,
+        help="seconds to wait before each Cloudbric ThreatDB lookup, since that "
+        "endpoint is unauthenticated and rate-limited (default: 1.0)",
+    )
+    _add_common_output_args(p_bc)
+    p_bc.set_defaults(func=cmd_analyse_facilitators_bc)
 
     return parser
 
