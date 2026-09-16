@@ -58,6 +58,17 @@ def hostnames_for_facilitator(entry: dict[str, Any]) -> list[tuple[str, str]]:
     return hosts
 
 
+def parse_hostname(value: str) -> Optional[str]:
+    """Hostname from either a full URL or a bare domain (with or without a
+    path)."""
+    value = (value or "").strip()
+    if not value:
+        return None
+    if "//" not in value:
+        value = f"//{value}"
+    return urlparse(value).hostname
+
+
 # ── DNS / IP ──────────────────────────────────────────────────────────────
 
 
@@ -310,3 +321,23 @@ def analyse_facilitators(
             }
         )
     return out
+
+
+def analyse_single_domain(domain: str, timeout: float = 8.0) -> dict[str, Any]:
+    """Same IP/geo + SSL subject + WHOIS analysis as analyse_facilitators,
+    for one arbitrary domain rather than a registry entry."""
+    host_result = analyse_host(domain, timeout=timeout)
+    host_result["role"] = "domain"
+
+    if host_result.get("ip"):
+        geo_by_ip = geolocate_batch([host_result["ip"]])
+        host_result["geo"] = geo_by_ip.get(host_result["ip"])
+
+    whois_result = rdap_lookup(host_result["registrable_domain"], timeout=timeout * 2)
+
+    return {
+        "id": domain,
+        "name": domain,
+        "hosts": [host_result],
+        "whois": {host_result["registrable_domain"]: whois_result},
+    }

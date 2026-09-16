@@ -237,6 +237,75 @@ def cmd_show(args: argparse.Namespace) -> int:
     return 0
 
 
+def _print_payment_required(body: dict[str, Any]) -> None:
+    """Print an x402 402-response body: {x402Version, accepts[], resource?, error?, extensions?}."""
+    print(f"x402Version: {body.get('x402Version', 'n/a')}")
+
+    resource = body.get("resource")
+    if isinstance(resource, dict):
+        print(f"resource:    {resource.get('url', 'n/a')}")
+        if resource.get("description"):
+            print(f"description: {resource['description']}")
+        if resource.get("mimeType"):
+            print(f"mime type:   {resource['mimeType']}")
+
+    if body.get("error"):
+        print(f"error:       {body['error']}")
+
+    extensions = body.get("extensions")
+    if extensions:
+        keys = ", ".join(extensions.keys()) if isinstance(extensions, dict) else str(extensions)
+        print(f"extensions:  {keys}")
+
+    accepts = body.get("accepts") or []
+    print(f"\n{len(accepts)} accepted payment option(s):")
+    for i, opt in enumerate(accepts, 1):
+        print(f"\n  [{i}] scheme={opt.get('scheme')}  network={opt.get('network')}")
+        amount = opt.get("amount", opt.get("maxAmountRequired"))
+        print(f"      amount:          {amount}")
+        print(f"      asset:           {opt.get('asset')}")
+        print(f"      pay to:          {opt.get('payTo')}")
+        print(f"      max timeout (s): {opt.get('maxTimeoutSeconds')}")
+        if opt.get("description"):
+            print(f"      description:     {opt['description']}")
+        if opt.get("mimeType"):
+            print(f"      mime type:       {opt['mimeType']}")
+        extra = opt.get("extra")
+        if extra:
+            print(f"      extra:           {json.dumps(extra)}")
+
+
+def cmd_request(args: argparse.Namespace) -> int:
+    headers = dict(args.header)
+    try:
+        response = requests.request(args.method, args.url, headers=headers, timeout=args.timeout)
+    except requests.exceptions.RequestException as exc:
+        return print_error(f"request failed: {exc}")
+
+    body = response_body(response)
+
+    if args.json:
+        print(json.dumps({"status": response.status_code, "body": body}, indent=2, default=str))
+        return 0 if response.status_code == 402 else 1
+
+    if response.status_code != 402:
+        print_error(f"expected HTTP 402 Payment Required, got HTTP {response.status_code}")
+        if isinstance(body, (dict, list)):
+            print(json.dumps(body, indent=2, default=str))
+        else:
+            print(body)
+        return 1
+
+    if not isinstance(body, dict):
+        print_error("402 response body was not JSON")
+        print(body)
+        return 1
+
+    print(f"HTTP 402 Payment Required - {args.url}\n")
+    _print_payment_required(body)
+    return 0
+
+
 def cmd_supported(args: argparse.Namespace) -> int:
     client, label = _resolve_target(args)
     if client is None:
@@ -339,6 +408,86 @@ def cmd_cdp_discover_resources_csv(args: argparse.Namespace) -> int:
                     accept.get("scheme", ""),
                 ]
             )
+    return 0
+
+
+_DISCOVER_RESOURCES_CSV2_RATE_SECONDS = 1.0
+
+
+def cmd_cdp_discover_resources_csv2(args: argparse.Namespace) -> int:
+    """Like `cdp discover-resources-csv`, but pages through the *entire*
+    result set: after each call it counts the resources returned and moves
+    the offset forward by that count, rate-limited to one call per second,
+    printing one "." per call so a long download stays visible."""
+    client = _cdp_client_from_args(args)
+    offset = args.offset or 0
+    total_written = 0
+    first_call = True
+
+    try:
+        output_fh = open(args.output, "w", newline="", encoding="utf-8")
+    except OSError as exc:
+        return print_error(f"could not write {args.output}: {exc}")
+
+    try:
+        with output_fh as fh:
+            writer = csv.writer(fh)
+            writer.writerow(_DISCOVER_RESOURCES_CSV_COLUMNS)
+
+            while True:
+                if not first_call:
+                    time.sleep(_DISCOVER_RESOURCES_CSV2_RATE_SECONDS)
+                first_call = False
+
+                response = client.discovery_resources(type_=args.type, limit=args.limit, offset=offset)
+                body = response_body(response)
+                print(".", end="", flush=True)
+
+                if not response.ok:
+                    print()
+                    return print_error(
+                        f"CDP /discovery/resources returned HTTP {response.status_code} "
+                        f"at offset={offset}: {body}"
+                    )
+
+                items = body.get("items", []) if isinstance(body, dict) else []
+                for item in items:
+                    description = item.get("description", "")
+                    resource = item.get("resource", "")
+                    quality = item.get("quality") or {}
+                    l30_days_total_calls = quality.get("l30DaysTotalCalls", "")
+                    l30_days_unique_payers = quality.get("l30DaysUniquePayers", "")
+                    for accept in item.get("accepts", []):
+                        extra = accept.get("extra") or {}
+                        writer.writerow(
+                            [
+                                accept.get("amount", ""),
+                                accept.get("asset", ""),
+                                accept.get("network", ""),
+                                accept.get("payTo", ""),
+                                l30_days_total_calls,
+                                l30_days_unique_payers,
+                                description,
+                                resource,
+                                extra.get("receiverAuthorizer", ""),
+                                accept.get("scheme", ""),
+                            ]
+                        )
+                fh.flush()
+
+                returned = len(items)
+                total_written += returned
+                offset += returned
+
+                pagination = body.get("pagination") if isinstance(body, dict) else None
+                total = pagination.get("total") if isinstance(pagination, dict) else None
+
+                if returned == 0 or (total is not None and offset >= total):
+                    break
+    finally:
+        print()  # end the line of "." progress dots
+
+    print(f"wrote {total_written} resource(s) to {args.output}")
     return 0
 
 
@@ -581,6 +730,51 @@ def cmd_analyse_facilitators(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_analyse_domain(args: argparse.Namespace) -> int:
+    host = net_analysis.parse_hostname(args.domain) or args.domain
+    result = net_analysis.analyse_single_domain(host, timeout=args.probe_timeout)
+
+    if args.json:
+        print(json.dumps(result, indent=2, default=str))
+        return 0
+
+    _print_facilitator_analysis(result)
+    return 0
+
+
+def cmd_analyse_domains(args: argparse.Namespace) -> int:
+    try:
+        with open(args.file, newline="", encoding="utf-8") as fh:
+            rows = list(csv.reader(fh))
+    except OSError as exc:
+        return print_error(f"could not read {args.file}: {exc}")
+
+    urls: list[str] = []
+    for row in rows:
+        urls.append(row[args.column] if len(row) > args.column else "")
+
+    hostnames = [net_analysis.parse_hostname(url) for url in urls]
+    unique_hosts = sorted({h for h in hostnames if h})
+
+    ip_by_host: dict[str, Optional[str]] = {}
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {pool.submit(net_analysis.resolve_ip, host): host for host in unique_hosts}
+        for future in as_completed(futures):
+            ip_by_host[futures[future]] = future.result()
+
+    ips = [ip for ip in ip_by_host.values() if ip]
+    geo_by_ip = net_analysis.geolocate_batch(ips)
+
+    writer = csv.writer(sys.stdout)
+    writer.writerow(["url", "country"])
+    for url, host in zip(urls, hostnames):
+        ip = ip_by_host.get(host) if host else None
+        geo = geo_by_ip.get(ip) if ip else None
+        country = geo.get("country") if geo and geo.get("status") == "success" else ""
+        writer.writerow([url, country])
+    return 0
+
+
 def _fetch_supported_addresses(
     fid: str, entry: dict[str, Any], timeout: float
 ) -> tuple[str, list[tuple[str, str]]]:
@@ -715,6 +909,23 @@ def build_parser() -> argparse.ArgumentParser:
     _add_common_output_args(p_show)
     p_show.set_defaults(func=cmd_show)
 
+    p_request = sub.add_parser(
+        "request",
+        help="request a URL and show the x402 402 Payment Required details it returns",
+    )
+    p_request.add_argument("url", help="URL of the x402-gated resource to request")
+    p_request.add_argument("--method", default="GET", choices=("GET", "POST"))
+    p_request.add_argument(
+        "--header",
+        action="append",
+        default=[],
+        type=_parse_header,
+        metavar="'Name: Value'",
+        help="extra HTTP header to send; may be repeated",
+    )
+    _add_common_output_args(p_request)
+    p_request.set_defaults(func=cmd_request)
+
     p_supported = sub.add_parser(
         "supported", help="GET /supported (or CDP's /v2/x402/supported) for a facilitator"
     )
@@ -774,6 +985,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_dr_csv.add_argument("--offset", type=int)
     _add_cdp_auth_args(p_dr_csv)
     p_dr_csv.set_defaults(func=cmd_cdp_discover_resources_csv)
+
+    p_dr_csv2 = cdp_sub.add_parser(
+        "discover-resources-csv2",
+        help="like discover-resources-csv, but pages through every resource "
+        "(rate-limited to 1 request/sec) and writes them all to a file",
+    )
+    p_dr_csv2.add_argument("output", help="path to write the CSV output to")
+    p_dr_csv2.add_argument("--type", help='protocol type filter, e.g. "http"')
+    p_dr_csv2.add_argument("--limit", type=int, help="page size requested per call")
+    p_dr_csv2.add_argument("--offset", type=int, help="starting offset (default: 0)")
+    _add_cdp_auth_args(p_dr_csv2)
+    p_dr_csv2.set_defaults(func=cmd_cdp_discover_resources_csv2)
 
     p_dm = cdp_sub.add_parser("discover-merchant", help="list a merchant's discovered x402 resources")
     p_dm.add_argument("--pay-to", required=True, help="merchant payment address")
@@ -874,6 +1097,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_common_output_args(p_analyse)
     p_analyse.set_defaults(func=cmd_analyse_facilitators)
+
+    p_adom = sub.add_parser(
+        "analyse-domain",
+        help="run the same IP-geo/SSL-subject/WHOIS analysis as analyse-facilitators "
+        "against one arbitrary domain",
+    )
+    p_adom.add_argument("domain", help="domain or URL to analyse")
+    p_adom.add_argument(
+        "--probe-timeout",
+        type=float,
+        default=8.0,
+        help="timeout in seconds for DNS/SSL/WHOIS probes (default: 8)",
+    )
+    _add_common_output_args(p_adom)
+    p_adom.set_defaults(func=cmd_analyse_domain)
+
+    p_adoms = sub.add_parser(
+        "analyse-domains",
+        help="geolocate the IPs behind URLs in one column of a CSV file",
+    )
+    p_adoms.add_argument("file", help="path to a CSV file")
+    p_adoms.add_argument("column", type=int, help="0-indexed column number containing URLs")
+    p_adoms.add_argument(
+        "--workers", type=int, default=10, help="parallel DNS lookups (default: 10)"
+    )
+    p_adoms.set_defaults(func=cmd_analyse_domains)
 
     p_bc = sub.add_parser(
         "analyse-facilitators-bc",
