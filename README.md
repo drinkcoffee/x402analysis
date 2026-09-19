@@ -179,7 +179,11 @@ x402tool list-fac-domains > domains.csv && x402tool analyse-domains domains.csv 
 
 It prints `url,country` CSV, one row per input row in order; a row whose
 column is empty, unresolvable, or not a real URL (e.g. `list-fac-domains`'
-`same` placeholder) just gets a blank country rather than an error.
+`same` placeholder) just gets a blank country rather than an error. After
+those rows, it appends a blank line followed by a `country,count` summary -
+one row per country, sorted by count descending, counting each unique host
+once (so duplicate/blank/invalid rows don't skew it) - so a domain list also
+tells you at a glance where those servers are hosted.
 
 ## Blockchain address screening
 
@@ -215,6 +219,82 @@ x402tool analyse-facilitators-bc --lookup-delay 2.0   # even gentler
 x402tool analyse-facilitators-bc --json
 ```
 
+`list-fac-bc` is the raw address data behind `analyse-facilitators-bc`,
+without the ThreatDB lookups: `facilitator,source,blockchain,address` CSV,
+one row per (address, network) pair - so an address reused across networks
+(e.g. the same EVM address for both Base and Polygon) gets one row per
+network rather than being collapsed. `source` is `S`/`D` as above.
+
+```bash
+x402tool list-fac-bc
+x402tool list-fac-bc --id payai --id celo > addresses.csv
+```
+
+`check-sanctions <file.csv> <column> --output out.csv` screens addresses
+from any CSV file (not just this tool's own output) against
+[ChainQuery's public Sanctions Check API](https://chainquery.com/products/sanctions-api)
+(`GET /api/sanctions/check/<address>`, unauthenticated, no key). ChainQuery
+describes this as an educational research tool aggregating OFAC/UK
+OFSI/OpenSanctions feeds - explicitly not a compliance product. It writes
+`address,status` CSV (`clear`, `sanctioned (N sources)`, `invalid address`,
+or `error: ...`), printing a `.` per API call for progress; a repeated
+address only gets looked up once, and a blank cell is reported as `no
+address` without a network call. Calls are paced one at a time,
+`--rate-delay` seconds apart (default 1.0) - note that's far more
+aggressive than ChainQuery's own published limit of 30 requests/hour/IP, so
+expect HTTP 429s on any nontrivial list; a 429 waits out the server's
+`Retry-After` once and retries before giving up on that address.
+
+```bash
+x402tool check-sanctions addresses.csv 1 --output results.csv
+x402tool check-sanctions addresses.csv 0 --output results.csv --rate-delay 5.0
+```
+
+## Scraping x402scan.com's server directory
+
+`scrape-servers` scrapes [x402scan.com](https://www.x402scan.com/)'s server/service
+directory, which has no documented public API. x402scan is a Next.js app;
+its server list and per-server resource data are embedded directly in each
+page's HTML as React Server Component payload, so `x402scan_scraper.py`
+fetches the plain HTML (no browser needed) and parses that embedded JSON
+rather than screen-scraping rendered markup. This is a third-party site's
+internal implementation detail, not a stable contract - it can break if
+x402scan changes their data model.
+
+For each server it reports: name/description, an inferred API URL, a doc
+URL (x402scan groups multiple domains - e.g. an `api.`/`x402.` subdomain
+plus a bare marketing domain - under one server; the non-API one is
+reported as the doc link, or it's the same URL when there's only one), the
+full list of resources/endpoints (URL, method, price, description, tags),
+and every settlement address referenced across those resources.
+
+```bash
+x402tool scrape-servers                      # print JSON for every server to stdout
+x402tool scrape-servers servers.json         # write it to a file instead
+x402tool scrape-servers --limit 10           # just the first 10, for a quick look
+x402tool scrape-servers servers.json --workers 8 --delay 0.2
+```
+
+A full run visits x402scan's homepage once plus one page per server
+(~350+ as of this writing), so it takes a few minutes; `--workers` controls
+how many of those run concurrently and `--delay` adds a pause before each
+one if you want to be gentler on their site.
+
+`extract-domains <file.json>` pulls every unique domain referenced by a URL
+in any JSON file - `scrape-servers` output or otherwise - and prints them
+one per line, alphabetically (e.g. `https://api.example.com/foo` and
+`https://api.example.com/bar` both collapse to `api.example.com`; a
+subdomain like `sub.example.com` stays distinct from `example.com`). It
+walks the whole JSON structure (objects, arrays, and URLs embedded inside
+longer text values, e.g. a description that mentions one) rather than
+looking at specific known fields, so it works on arbitrary JSON, not just
+this tool's own output.
+
+```bash
+x402tool scrape-servers servers.json && x402tool extract-domains servers.json
+x402tool extract-domains some-other-file.json
+```
+
 ## Layout
 
 ```
@@ -226,6 +306,8 @@ x402tool/
   net_analysis.py       passive IP/SSL/WHOIS fingerprinting for analyse-facilitators
   blockchain_addresses.py  address extraction from a /supported response
   cloudbric_threatdb.py  Cloudbric Labs Threat DB client for analyse-facilitators-bc
+  chainquery_client.py  ChainQuery Sanctions API client for check-sanctions
+  x402scan_scraper.py   x402scan.com server-directory scraper for scrape-servers
   formatting.py         table/JSON output helpers
   cli.py                argparse wiring
 ```

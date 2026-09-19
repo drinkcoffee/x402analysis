@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import os
+import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,7 +14,7 @@ from typing import Any, Optional
 
 import requests
 
-from . import blockchain_addresses, cloudbric_threatdb, net_analysis, registry
+from . import blockchain_addresses, chainquery_client, cloudbric_threatdb, net_analysis, registry, x402scan_scraper
 from .cdp_client import CdpClient, CdpClientError
 from .formatting import print_error, print_response, print_table, response_body
 from .generic_client import GenericFacilitatorClient
@@ -772,23 +773,142 @@ def cmd_analyse_domains(args: argparse.Namespace) -> int:
         geo = geo_by_ip.get(ip) if ip else None
         country = geo.get("country") if geo and geo.get("status") == "success" else ""
         writer.writerow([url, country])
+
+    # Summary: one row per country, counting unique hosts (i.e. servers)
+    # rather than input rows, so duplicate/blank/invalid rows don't skew it.
+    counts: dict[str, int] = {}
+    for host in unique_hosts:
+        ip = ip_by_host.get(host)
+        geo = geo_by_ip.get(ip) if ip else None
+        country = geo.get("country") if geo and geo.get("status") == "success" else "unknown"
+        counts[country] = counts.get(country, 0) + 1
+
+    print()
+    for country, count in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0].lower())):
+        writer.writerow([country, count])
+    return 0
+
+
+def cmd_scrape_servers(args: argparse.Namespace) -> int:
+    def on_progress() -> None:
+        print(".", end="", flush=True)
+
+    try:
+        results = x402scan_scraper.scrape_all(
+            limit=args.limit,
+            max_workers=args.workers,
+            timeout=args.probe_timeout,
+            delay=args.delay,
+            on_progress=on_progress,
+        )
+    except requests.exceptions.RequestException as exc:
+        print()
+        return print_error(f"could not fetch x402scan.com: {exc}")
+    print()  # end the line of "." progress dots
+
+    payload = json.dumps(results, indent=2, default=str)
+    if args.output:
+        try:
+            with open(args.output, "w", encoding="utf-8") as fh:
+                fh.write(payload)
+        except OSError as exc:
+            return print_error(f"could not write {args.output}: {exc}")
+        print(f"wrote {len(results)} server(s) to {args.output}")
+    else:
+        print(payload)
+    return 0
+
+
+_URL_RE = re.compile(r"https?://[^\s\"'<>]+")
+
+
+def _extract_domains(obj: Any, found: set[str]) -> None:
+    if isinstance(obj, str):
+        for match in _URL_RE.finditer(obj):
+            url = match.group().rstrip(".,;:!?)]}'\"")
+            host = net_analysis.parse_hostname(url)
+            if host:
+                found.add(host.lower())
+    elif isinstance(obj, dict):
+        for value in obj.values():
+            _extract_domains(value, found)
+    elif isinstance(obj, list):
+        for value in obj:
+            _extract_domains(value, found)
+
+
+def cmd_extract_domains(args: argparse.Namespace) -> int:
+    try:
+        with open(args.file, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except OSError as exc:
+        return print_error(f"could not read {args.file}: {exc}")
+    except json.JSONDecodeError as exc:
+        return print_error(f"could not parse {args.file} as JSON: {exc}")
+
+    domains_set: set[str] = set()
+    _extract_domains(data, domains_set)
+    for domain in sorted(domains_set):
+        print(domain)
+    return 0
+
+
+def cmd_check_sanctions(args: argparse.Namespace) -> int:
+    try:
+        with open(args.file, newline="", encoding="utf-8") as fh:
+            rows = list(csv.reader(fh))
+    except OSError as exc:
+        return print_error(f"could not read {args.file}: {exc}")
+
+    addresses = [row[args.column].strip() if len(row) > args.column else "" for row in rows]
+
+    try:
+        output_fh = open(args.output, "w", newline="", encoding="utf-8")
+    except OSError as exc:
+        return print_error(f"could not write {args.output}: {exc}")
+
+    client = chainquery_client.ChainQueryClient(timeout=args.probe_timeout)
+    status_by_address: dict[str, str] = {}
+    first_call = True
+
+    try:
+        with output_fh as fh:
+            writer = csv.writer(fh)
+            writer.writerow(["address", "status"])
+            for address in addresses:
+                if not address:
+                    writer.writerow([address, "no address"])
+                    continue
+                if address not in status_by_address:
+                    if not first_call:
+                        time.sleep(args.rate_delay)
+                    first_call = False
+                    status_by_address[address] = client.describe(address)
+                    print(".", end="", flush=True)
+                writer.writerow([address, status_by_address[address]])
+                fh.flush()
+    finally:
+        print()  # end the line of "." progress dots
+
+    print(f"wrote {len(addresses)} row(s) to {args.output}")
     return 0
 
 
 def _fetch_supported_addresses(
     fid: str, entry: dict[str, Any], timeout: float
-) -> tuple[str, list[tuple[str, str]]]:
+) -> tuple[str, list[tuple[str, str, str]]]:
     """Best-effort /supported fetch, merged with any registry known_addresses.
 
-    Returns (fid, [(address, source), ...]) where source is "D" (pulled live
-    from /supported) or "S" (a static fallback from the registry's
-    known_addresses, only used for an address /supported didn't also report).
+    Returns (fid, [(address, source, network), ...]) where source is "D"
+    (pulled live from /supported) or "S" (a static fallback from the
+    registry's known_addresses, only used for an (address, network) pair
+    /supported didn't also report).
 
     Failures fetching /supported (network error, auth required, bad JSON)
     just mean no *dynamic* addresses were recoverable - not a hard error for
     the whole command - so they fall back to known_addresses alone.
     """
-    dynamic: list[str] = []
+    dynamic: list[tuple[str, str]] = []
     try:
         if entry["api"] == "cdp":
             client = CdpClient(
@@ -801,15 +921,18 @@ def _fetch_supported_addresses(
             client = GenericFacilitatorClient(base_url, headers=headers, timeout=timeout)
         response = client.supported()
         if response.ok:
-            dynamic = blockchain_addresses.extract_addresses(response.json())
+            dynamic = blockchain_addresses.extract_addresses_with_network(response.json())
     except Exception:  # noqa: BLE001 - this is a best-effort sweep
         pass
 
-    combined: dict[str, tuple[str, str]] = {addr.lower(): (addr, "D") for addr in dynamic}
-    for addr in entry.get("known_addresses") or []:
-        combined.setdefault(addr.lower(), (addr, "S"))
+    combined: dict[tuple[str, str], tuple[str, str, str]] = {
+        (addr.lower(), network): (addr, "D", network) for addr, network in dynamic
+    }
+    for known in entry.get("known_addresses") or []:
+        addr, network = known["address"], known["network"]
+        combined.setdefault((addr.lower(), network), (addr, "S", network))
 
-    return fid, sorted(combined.values(), key=lambda pair: pair[0].lower())
+    return fid, sorted(combined.values(), key=lambda row: (row[0].lower(), row[2]))
 
 
 def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
@@ -822,7 +945,7 @@ def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
             return print_error(f"unknown facilitator id(s): {', '.join(unknown)}")
         entries = {fid: entries[fid] for fid in args.id}
 
-    addresses_by_fid: dict[str, list[tuple[str, str]]] = {}
+    addresses_by_fid: dict[str, list[tuple[str, str, str]]] = {}
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         futures = {
             pool.submit(_fetch_supported_addresses, fid, entry, args.probe_timeout): fid
@@ -836,10 +959,28 @@ def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
         timeout=args.probe_timeout, delay=args.lookup_delay
     )
 
+    # This command doesn't care which network(s) an address is used on, so
+    # collapse (address, source, network) rows to one per unique address per
+    # facilitator - preferring "D" if the address showed up live on any
+    # network, "S" only if every occurrence was a static fallback.
+    addrs_by_fid: dict[str, dict[str, str]] = {}
+    for fid, rows_in in addresses_by_fid.items():
+        by_addr: dict[str, str] = {}
+        for addr, source, _network in rows_in:
+            key = addr.lower()
+            if by_addr.get(key) != "D":
+                by_addr[key] = source
+        addrs_by_fid[fid] = by_addr
+    # Recover original casing for display.
+    display_addr: dict[str, str] = {}
+    for rows_in in addresses_by_fid.values():
+        for addr, _source, _network in rows_in:
+            display_addr.setdefault(addr.lower(), addr)
+
     # Dedupe lookups (the same address can recur across facilitators), and
     # query them one at a time - this endpoint is unauthenticated and
     # explicitly rate-limited, so no concurrency here.
-    unique_addresses = sorted({addr for addrs in addresses_by_fid.values() for addr, _src in addrs})
+    unique_addresses = sorted({display_addr[a] for by_addr in addrs_by_fid.values() for a in by_addr})
     info_by_address: dict[str, str] = {}
     for addr in unique_addresses:
         try:
@@ -850,11 +991,12 @@ def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
     rows: list[tuple[str, str, str, str]] = []
     for fid in sorted(entries, key=lambda i: entries[i]["name"].lower()):
         name = entries[fid]["name"]
-        addrs = sorted(addresses_by_fid.get(fid, []), key=lambda pair: pair[0].lower())
-        if not addrs:
+        by_addr = addrs_by_fid.get(fid, {})
+        if not by_addr:
             rows.append((name, "", "none available", ""))
             continue
-        for addr, source in addrs:
+        for addr_lower, source in sorted(by_addr.items()):
+            addr = display_addr[addr_lower]
             rows.append((name, source, addr, info_by_address.get(addr, "")))
 
     if args.json:
@@ -870,6 +1012,34 @@ def cmd_analyse_facilitators_bc(args: argparse.Namespace) -> int:
         return 0
 
     print_table(["FACILITATOR", "S/D", "ADDRESS", "CLOUDBRIC THREATDB INFO"], rows)
+    return 0
+
+
+def cmd_list_fac_bc(args: argparse.Namespace) -> int:
+    entries = registry.DEFUNCT_FACILITATORS if args.defunct else registry.FACILITATORS
+    if args.id:
+        unknown = [fid for fid in args.id if fid not in entries]
+        if unknown:
+            return print_error(f"unknown facilitator id(s): {', '.join(unknown)}")
+        entries = {fid: entries[fid] for fid in args.id}
+
+    addresses_by_fid: dict[str, list[tuple[str, str, str]]] = {}
+    with ThreadPoolExecutor(max_workers=args.workers) as pool:
+        futures = {
+            pool.submit(_fetch_supported_addresses, fid, entry, args.probe_timeout): fid
+            for fid, entry in entries.items()
+        }
+        for future in as_completed(futures):
+            fid, addrs = future.result()
+            addresses_by_fid[fid] = addrs
+
+    writer = csv.writer(sys.stdout)
+    writer.writerow(["facilitator", "source", "blockchain", "address"])
+    for fid in sorted(entries, key=lambda i: entries[i]["name"].lower()):
+        name = entries[fid]["name"]
+        rows = sorted(addresses_by_fid.get(fid, []), key=lambda row: (row[0].lower(), row[2]))
+        for addr, source, network in rows:
+            writer.writerow([name, source, network, addr])
     return 0
 
 
@@ -1124,6 +1294,57 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_adoms.set_defaults(func=cmd_analyse_domains)
 
+    p_scrape = sub.add_parser(
+        "scrape-servers",
+        help="scrape x402scan.com's server directory: API URL, resources, "
+        "doc link, and addresses per server",
+    )
+    p_scrape.add_argument(
+        "output", nargs="?", help="path to write the JSON output to (default: print to stdout)"
+    )
+    p_scrape.add_argument("--limit", type=int, help="only scrape this many servers (for testing)")
+    p_scrape.add_argument(
+        "--workers", type=int, default=5, help="parallel server-page fetches (default: 5)"
+    )
+    p_scrape.add_argument(
+        "--delay",
+        type=float,
+        default=0.0,
+        help="seconds to wait before each server's detail-page fetch (default: 0)",
+    )
+    p_scrape.add_argument(
+        "--probe-timeout", type=float, default=20.0, help="per-request timeout in seconds (default: 20)"
+    )
+    p_scrape.set_defaults(func=cmd_scrape_servers)
+
+    p_domains = sub.add_parser(
+        "extract-domains",
+        help="parse a JSON file (e.g. scrape-servers output) and print its unique domains, one per line",
+    )
+    p_domains.add_argument("file", help="path to a JSON file")
+    p_domains.set_defaults(func=cmd_extract_domains)
+
+    p_sanctions = sub.add_parser(
+        "check-sanctions",
+        help="check blockchain addresses in a CSV column against ChainQuery's public sanctions API",
+    )
+    p_sanctions.add_argument("file", help="path to a CSV file containing addresses")
+    p_sanctions.add_argument("column", type=int, help="0-indexed column number containing addresses")
+    p_sanctions.add_argument(
+        "--output", required=True, help="path to write the address,status CSV output to"
+    )
+    p_sanctions.add_argument(
+        "--rate-delay",
+        type=float,
+        default=1.0,
+        help="seconds between API calls (default: 1.0); note ChainQuery's own "
+        "published limit is 30/hour, far stricter than this",
+    )
+    p_sanctions.add_argument(
+        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
+    )
+    p_sanctions.set_defaults(func=cmd_check_sanctions)
+
     p_bc = sub.add_parser(
         "analyse-facilitators-bc",
         help="gather each facilitator's blockchain addresses from /supported and "
@@ -1162,6 +1383,33 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_common_output_args(p_bc)
     p_bc.set_defaults(func=cmd_analyse_facilitators_bc)
+
+    p_facbc = sub.add_parser(
+        "list-fac-bc",
+        help="output every facilitator's blockchain addresses as CSV "
+        "(facilitator, S/D, blockchain, address)",
+    )
+    p_facbc.add_argument(
+        "--id",
+        action="append",
+        default=[],
+        help="only list this facilitator id; may be repeated (default: all)",
+    )
+    p_facbc.add_argument(
+        "--defunct",
+        action="store_true",
+        help="list the defunct facilitator list instead of the operational one",
+    )
+    p_facbc.add_argument(
+        "--workers", type=int, default=10, help="parallel /supported requests (default: 10)"
+    )
+    p_facbc.add_argument(
+        "--probe-timeout",
+        type=float,
+        default=15.0,
+        help="per-request timeout in seconds (default: 15)",
+    )
+    p_facbc.set_defaults(func=cmd_list_fac_bc)
 
     return parser
 

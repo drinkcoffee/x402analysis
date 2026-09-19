@@ -34,12 +34,14 @@ Some entries carry a "known_addresses" list: settlement/signer blockchain
 addresses for that facilitator that its live /supported response doesn't
 publish (either because /supported requires credentials this registry
 doesn't have, or because it just doesn't include a `signers`/`extra` block).
-These are static, hand-curated fallbacks - sourced from
+Each entry is {"address": ..., "network": ...} - one row per address/network
+pair, so the same address can appear more than once if it's reused across
+networks. These are static, hand-curated fallbacks - sourced from
 https://github.com/Swader/x402facilitators's on-chain-observed addresses, or
 from the facilitator's own docs where cited inline - used by
-`analyse-facilitators-bc` when the live call turns up nothing. They are not
-verified against a live response the way the rest of this registry is, so
-treat them as informational rather than current truth.
+`analyse-facilitators-bc` and `list-fac-bc` when the live call turns up
+nothing. They are not verified against a live response the way the rest of
+this registry is, so treat them as informational rather than current truth.
 """
 
 from __future__ import annotations
@@ -91,7 +93,9 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "none"},
-        known_addresses=["0x73b2b8df52fbe7c40fe78db52e3dffdd5db5ad07"],
+        known_addresses=[
+            {"address": "0x73b2b8df52fbe7c40fe78db52e3dffdd5db5ad07", "network": "base"},
+        ],
     ),
     "canton": dict(
         name="Canton",
@@ -124,11 +128,11 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["base", "solana"],
         auth={"type": "none"},
         known_addresses=[
-            "0x8d8Fa42584a727488eeb0E29405AD794a105bb9b",
-            "0x87aF99356d774312B73018b3B6562e1aE0e018C9",
-            "0x65058CF664D0D07f68B663B0D4b4f12A5E331a38",
-            "0x88E13D4c764a6c840Ce722A0a3765f55A85b327E",
-            "HsozMJWWHNADoZRmhDGKzua6XW6NNfNDdQ4CkE9i5wHt",
+            {"address": "0x8d8Fa42584a727488eeb0E29405AD794a105bb9b", "network": "base"},
+            {"address": "0x87aF99356d774312B73018b3B6562e1aE0e018C9", "network": "base"},
+            {"address": "0x65058CF664D0D07f68B663B0D4b4f12A5E331a38", "network": "base"},
+            {"address": "0x88E13D4c764a6c840Ce722A0a3765f55A85b327E", "network": "base"},
+            {"address": "HsozMJWWHNADoZRmhDGKzua6XW6NNfNDdQ4CkE9i5wHt", "network": "solana"},
         ],
     ),
     "daydreams": dict(
@@ -197,8 +201,9 @@ FACILITATORS: dict[str, dict[str, Any]] = {
             "them."
         ),
         known_addresses=[
-            "0x742d35cc6634c0532925a3b844bc9e7595f0bee4",
-            "KAMiYo7XwXVQcFhkfhC4RHApURAcqRHF8tF9WoZHkYR",
+            {"address": "0x742d35cc6634c0532925a3b844bc9e7595f0bee4", "network": "base"},
+            {"address": "0x742d35cc6634c0532925a3b844bc9e7595f0bee4", "network": "polygon"},
+            {"address": "KAMiYo7XwXVQcFhkfhC4RHApURAcqRHF8tF9WoZHkYR", "network": "solana"},
         ],
     ),
     "meridian": dict(
@@ -225,7 +230,9 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         fee=0,
         networks=["base"],
         auth={"type": "none"},
-        known_addresses=["0xfe0920a0a7f0f8a1ec689146c30c3bbef439bf8a"],
+        known_addresses=[
+            {"address": "0xfe0920a0a7f0f8a1ec689146c30c3bbef439bf8a", "network": "base"},
+        ],
     ),
     "near": dict(
         name="Unknown (Near)",
@@ -300,16 +307,16 @@ FACILITATORS: dict[str, dict[str, Any]] = {
             "own SDK config."
         ),
         known_addresses=[
-            "0x724efafb051f17ae824afcdf3c0368ae312da264",
-            "0xa9a54ef09fc8b86bc747cec6ef8d6e81c38c6180",
-            "0x4638bc811c93bf5e60deed32325e93505f681576",
-            "0xd7d91a42dfadd906c5b9ccde7226d28251e4cd0f",
-            "0x4544b535938b67d2a410a98a7e3b0f8f68921ca7",
-            "0x59e8014a3b884392fbb679fe461da07b18c1ff81",
-            "0xe6123e6b389751c5f7e9349f3d626b105c1fe618",
-            "0xf70e7cb30b132fab2a0a5e80d41861aa133ea21b",
-            "0x90da501fdbec74bb0549100967eb221fed79c99b",
-            "0xce7819f0b0b871733c933d1f486533bab95ec47b",
+            {"address": "0x724efafb051f17ae824afcdf3c0368ae312da264", "network": "base"},
+            {"address": "0xa9a54ef09fc8b86bc747cec6ef8d6e81c38c6180", "network": "base"},
+            {"address": "0x4638bc811c93bf5e60deed32325e93505f681576", "network": "base"},
+            {"address": "0xd7d91a42dfadd906c5b9ccde7226d28251e4cd0f", "network": "base"},
+            {"address": "0x4544b535938b67d2a410a98a7e3b0f8f68921ca7", "network": "base"},
+            {"address": "0x59e8014a3b884392fbb679fe461da07b18c1ff81", "network": "base"},
+            {"address": "0xe6123e6b389751c5f7e9349f3d626b105c1fe618", "network": "base"},
+            {"address": "0xf70e7cb30b132fab2a0a5e80d41861aa133ea21b", "network": "base"},
+            {"address": "0x90da501fdbec74bb0549100967eb221fed79c99b", "network": "base"},
+            {"address": "0xce7819f0b0b871733c933d1f486533bab95ec47b", "network": "base"},
         ],
     ),
     "solvador": dict(
@@ -354,7 +361,10 @@ FACILITATORS: dict[str, dict[str, Any]] = {
         networks=["base", "polygon"],
         auth={"type": "header", "name": "x-secret-key"},
         notes="Requires a thirdweb secret key for verify/settle/supported.",
-        known_addresses=["0x80c08de1a05df2bd633cf520754e40fde3c794d3"],
+        known_addresses=[
+            {"address": "0x80c08de1a05df2bd633cf520754e40fde3c794d3", "network": "base"},
+            {"address": "0x80c08de1a05df2bd633cf520754e40fde3c794d3", "network": "polygon"},
+        ],
     ),
     "t54": dict(
         name="T54",
@@ -405,8 +415,8 @@ FACILITATORS: dict[str, dict[str, Any]] = {
             "key."
         ),
         known_addresses=[
-            "93syNmtT1tTd5ZtPwHqzGf6CM7fKhMmArpv4AM4FtyNX",
-            "2bogRi1wDCdT8ECp8aMrZhF4jX23vxZDUxJjaGkcasKg",
+            {"address": "93syNmtT1tTd5ZtPwHqzGf6CM7fKhMmArpv4AM4FtyNX", "network": "solana"},
+            {"address": "2bogRi1wDCdT8ECp8aMrZhF4jX23vxZDUxJjaGkcasKg", "network": "solana"},
         ],
     ),
 }
