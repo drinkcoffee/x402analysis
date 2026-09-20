@@ -1,3 +1,4 @@
 requests>=2.31
 pyjwt>=2.8
 cryptography>=42.0
+python-dotenv>=1.0

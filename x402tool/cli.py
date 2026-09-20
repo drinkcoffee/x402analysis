@@ -13,8 +13,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Optional
 
 import requests
+from dotenv import find_dotenv, load_dotenv
 
-from . import blockchain_addresses, chainquery_client, cloudbric_threatdb, net_analysis, registry, x402scan_scraper
+from . import (
+    blockchain_addresses,
+    blockscout_client,
+    chainquery_client,
+    cloudbric_threatdb,
+    etherscan_client,
+    net_analysis,
+    registry,
+    x402scan_scraper,
+)
 from .cdp_client import CdpClient, CdpClientError
 from .formatting import print_error, print_response, print_table, response_body
 from .generic_client import GenericFacilitatorClient
@@ -304,6 +314,87 @@ def cmd_request(args: argparse.Namespace) -> int:
 
     print(f"HTTP 402 Payment Required - {args.url}\n")
     _print_payment_required(body)
+    return 0
+
+
+def cmd_funded_by(args: argparse.Namespace) -> int:
+    chain_id = etherscan_client.resolve_chain_id(args.blockchain)
+    if chain_id is None:
+        return print_error(
+            f"could not resolve '{args.blockchain}' to an Etherscan chain id "
+            "(Etherscan's API only covers EVM chains; pass a chain name, a "
+            "numeric chain id, or an 'eip155:<id>' string)"
+        )
+
+    client = etherscan_client.EtherscanClient(
+        api_key=args.api_key or os.environ.get("ETHERSCAN_API_KEY"),
+        timeout=args.probe_timeout,
+    )
+    data = client.funded_by(chain_id, args.address)
+
+    if args.json:
+        print(json.dumps({"chain_id": chain_id, **data}, indent=2, default=str))
+        return 0 if "error" not in data else 1
+
+    if "error" in data:
+        return print_error(data["error"])
+
+    result = data.get("result") or {}
+    print(f"address:         {args.address}")
+    print(f"chain id:        {chain_id}")
+    print(f"funding address: {result.get('fundingAddress')}")
+    print(f"funding tx:      {result.get('fundingTxn')}")
+    print(f"block:           {result.get('block')}")
+    print(f"timestamp:       {result.get('timeStamp')}")
+    print(f"value (wei):     {result.get('value')}")
+    return 0
+
+
+def cmd_assoc_txs_blockscout(args: argparse.Namespace) -> int:
+    chain_id = etherscan_client.resolve_chain_id(args.blockchain)
+    if chain_id is None:
+        return print_error(
+            f"could not resolve '{args.blockchain}' to a chain id "
+            "(Blockscout covers EVM chains; pass a chain name, a numeric "
+            "chain id, or an 'eip155:<id>' string)"
+        )
+
+    client = blockscout_client.BlockscoutClient(
+        api_key=args.api_key or os.environ.get("BLOCKSCOUT_API_KEY"),
+        timeout=args.probe_timeout,
+    )
+
+    max_pages = None if args.all_pages else args.pages
+    try:
+        transactions = list(client.iter_transactions(chain_id, args.address, max_pages=max_pages))
+    except (requests.exceptions.RequestException, RuntimeError) as exc:
+        return print_error(str(exc))
+
+    if args.json:
+        print(json.dumps(transactions, indent=2, default=str))
+        return 0
+
+    if not transactions:
+        print(f"No transactions found for {args.address} on chain {chain_id}.")
+        return 0
+
+    rows = []
+    for tx in transactions:
+        from_addr = (tx.get("from") or {}).get("hash", "")
+        to_addr = (tx.get("to") or {}).get("hash", "") if tx.get("to") else ""
+        rows.append(
+            [
+                tx.get("timestamp", ""),
+                tx.get("hash", ""),
+                tx.get("method") or "",
+                from_addr,
+                to_addr,
+                tx.get("value", ""),
+                tx.get("status", ""),
+            ]
+        )
+    print_table(["TIMESTAMP", "HASH", "METHOD", "FROM", "TO", "VALUE", "STATUS"], rows)
+    print(f"\n{len(transactions)} transaction(s)")
     return 0
 
 
@@ -1051,189 +1142,31 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-v", "--verbose", action="store_true", help="print outgoing requests")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    p_list = sub.add_parser(
-        "list-facilitators", help="list known operational x402 facilitators"
+    p_adom = sub.add_parser(
+        "analyse-domain",
+        help="run the same IP-geo/SSL-subject/WHOIS analysis as analyse-facilitators "
+        "against one arbitrary domain",
     )
-    p_list.add_argument("--access", choices=("public", "gated", "gated_paid"))
-    p_list.add_argument("--network", help="filter by substring match against a network name")
-    _add_common_output_args(p_list)
-    p_list.set_defaults(func=cmd_list_facilitators)
-
-    p_list_defunct = sub.add_parser(
-        "list-defunct-facil",
-        help="list known x402 facilitators that are no longer operational",
+    p_adom.add_argument("domain", help="domain or URL to analyse")
+    p_adom.add_argument(
+        "--probe-timeout",
+        type=float,
+        default=8.0,
+        help="timeout in seconds for DNS/SSL/WHOIS probes (default: 8)",
     )
-    p_list_defunct.add_argument("--access", choices=("public", "gated", "gated_paid"))
-    p_list_defunct.add_argument("--network", help="filter by substring match against a network name")
-    _add_common_output_args(p_list_defunct)
-    p_list_defunct.set_defaults(func=cmd_list_defunct_facilitators)
+    _add_common_output_args(p_adom)
+    p_adom.set_defaults(func=cmd_analyse_domain)
 
-    p_list_domains = sub.add_parser(
-        "list-fac-domains",
-        help="output every operational facilitator's API/doc domains as CSV",
+    p_adoms = sub.add_parser(
+        "analyse-domains",
+        help="geolocate the IPs behind URLs in one column of a CSV file",
     )
-    p_list_domains.set_defaults(func=cmd_list_fac_domains)
-
-    p_show = sub.add_parser("show", help="show details for one known facilitator")
-    p_show.add_argument("facilitator", help="facilitator id, see `list-facilitators`")
-    _add_common_output_args(p_show)
-    p_show.set_defaults(func=cmd_show)
-
-    p_request = sub.add_parser(
-        "request",
-        help="request a URL and show the x402 402 Payment Required details it returns",
+    p_adoms.add_argument("file", help="path to a CSV file")
+    p_adoms.add_argument("column", type=int, help="0-indexed column number containing URLs")
+    p_adoms.add_argument(
+        "--workers", type=int, default=10, help="parallel DNS lookups (default: 10)"
     )
-    p_request.add_argument("url", help="URL of the x402-gated resource to request")
-    p_request.add_argument("--method", default="GET", choices=("GET", "POST"))
-    p_request.add_argument(
-        "--header",
-        action="append",
-        default=[],
-        type=_parse_header,
-        metavar="'Name: Value'",
-        help="extra HTTP header to send; may be repeated",
-    )
-    _add_common_output_args(p_request)
-    p_request.set_defaults(func=cmd_request)
-
-    p_supported = sub.add_parser(
-        "supported", help="GET /supported (or CDP's /v2/x402/supported) for a facilitator"
-    )
-    p_supported.add_argument(
-        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
-    )
-    _add_generic_auth_args(p_supported)
-    _add_cdp_auth_args(p_supported)
-    _add_common_output_args(p_supported)
-    p_supported.set_defaults(func=cmd_supported)
-
-    p_verify = sub.add_parser(
-        "verify",
-        help="POST /verify (or CDP's /v2/x402/verify) with a pre-built, already-signed payment",
-    )
-    p_verify.add_argument(
-        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
-    )
-    _add_generic_auth_args(p_verify)
-    _add_cdp_auth_args(p_verify)
-    _add_payment_body_args(p_verify)
-    _add_common_output_args(p_verify)
-    p_verify.set_defaults(func=cmd_verify)
-
-    p_settle = sub.add_parser(
-        "settle",
-        help="POST /settle (or CDP's /v2/x402/settle) with a pre-built, already-signed payment",
-    )
-    p_settle.add_argument(
-        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
-    )
-    _add_generic_auth_args(p_settle)
-    _add_cdp_auth_args(p_settle)
-    _add_payment_body_args(p_settle)
-    _add_common_output_args(p_settle)
-    p_settle.set_defaults(func=cmd_settle)
-
-    p_cdp = sub.add_parser(
-        "cdp", help="Coinbase CDP-only extensions: bazaar discovery, MCP, endpoint validation"
-    )
-    cdp_sub = p_cdp.add_subparsers(dest="cdp_command", required=True)
-
-    p_dr = cdp_sub.add_parser("discover-resources", help="list active discovered x402 resources")
-    p_dr.add_argument("--type", help='protocol type filter, e.g. "http"')
-    p_dr.add_argument("--limit", type=int)
-    p_dr.add_argument("--offset", type=int)
-    _add_cdp_auth_args(p_dr)
-    _add_common_output_args(p_dr)
-    p_dr.set_defaults(func=cmd_cdp_discover_resources)
-
-    p_dr_csv = cdp_sub.add_parser(
-        "discover-resources-csv",
-        help="list active discovered x402 resources as CSV (one row per accepted payment option)",
-    )
-    p_dr_csv.add_argument("--type", help='protocol type filter, e.g. "http"')
-    p_dr_csv.add_argument("--limit", type=int)
-    p_dr_csv.add_argument("--offset", type=int)
-    _add_cdp_auth_args(p_dr_csv)
-    p_dr_csv.set_defaults(func=cmd_cdp_discover_resources_csv)
-
-    p_dr_csv2 = cdp_sub.add_parser(
-        "discover-resources-csv2",
-        help="like discover-resources-csv, but pages through every resource "
-        "(rate-limited to 1 request/sec) and writes them all to a file",
-    )
-    p_dr_csv2.add_argument("output", help="path to write the CSV output to")
-    p_dr_csv2.add_argument("--type", help='protocol type filter, e.g. "http"')
-    p_dr_csv2.add_argument("--limit", type=int, help="page size requested per call")
-    p_dr_csv2.add_argument("--offset", type=int, help="starting offset (default: 0)")
-    _add_cdp_auth_args(p_dr_csv2)
-    p_dr_csv2.set_defaults(func=cmd_cdp_discover_resources_csv2)
-
-    p_dm = cdp_sub.add_parser("discover-merchant", help="list a merchant's discovered x402 resources")
-    p_dm.add_argument("--pay-to", required=True, help="merchant payment address")
-    p_dm.add_argument("--limit", type=int)
-    p_dm.add_argument("--offset", type=int)
-    _add_cdp_auth_args(p_dm)
-    _add_common_output_args(p_dm)
-    p_dm.set_defaults(func=cmd_cdp_discover_merchant)
-
-    p_dm_csv = cdp_sub.add_parser(
-        "discover-merchant-csv",
-        help="list merchants' discovered x402 resources as CSV (one row per accepted payment option)",
-    )
-    p_dm_csv.add_argument(
-        "--pay-to",
-        required=True,
-        help="merchant payment address, or a comma-separated list to query one at a time",
-    )
-    p_dm_csv.add_argument("--limit", type=int)
-    p_dm_csv.add_argument("--offset", type=int)
-    _add_cdp_auth_args(p_dm_csv)
-    p_dm_csv.set_defaults(func=cmd_cdp_discover_merchant_csv)
-
-    p_search = cdp_sub.add_parser("search", help="search active discovered x402 resources")
-    p_search.add_argument("--query", help="full-text/semantic search query")
-    p_search.add_argument("--network", help="CAIP-2 or legacy network name filter")
-    p_search.add_argument("--asset", help="asset address filter")
-    p_search.add_argument("--scheme", help='payment scheme filter, e.g. "exact"')
-    p_search.add_argument("--pay-to", help="merchant payment address filter")
-    p_search.add_argument("--url-substring", help="case-insensitive substring match against resource URL")
-    p_search.add_argument("--max-usd-price", help="max USD price filter")
-    p_search.add_argument("--extensions", action="append", default=[], help="protocol extension filter; repeatable")
-    p_search.add_argument("--tags", action="append", default=[], help="provider tag filter; repeatable")
-    p_search.add_argument("--bundle-slugs", action="append", default=[], help="curated bundle slug filter; repeatable")
-    p_search.add_argument("--curated-only", action="store_true", help="restrict to Coinbase-curated resources")
-    p_search.add_argument("--limit", type=int, help="max results, 1-20 (default 20)")
-    _add_cdp_auth_args(p_search)
-    _add_common_output_args(p_search)
-    p_search.set_defaults(func=cmd_cdp_search)
-
-    p_bundles = cdp_sub.add_parser("bundles", help="list curated x402 workflow bundles")
-    _add_cdp_auth_args(p_bundles)
-    _add_common_output_args(p_bundles)
-    p_bundles.set_defaults(func=cmd_cdp_bundles)
-
-    p_bundle = cdp_sub.add_parser("bundle", help="get a single curated x402 workflow bundle")
-    p_bundle.add_argument("slug", help="bundle slug, see `cdp bundles`")
-    _add_cdp_auth_args(p_bundle)
-    _add_common_output_args(p_bundle)
-    p_bundle.set_defaults(func=cmd_cdp_bundle)
-
-    p_mcp = cdp_sub.add_parser("mcp", help="send a JSON-RPC MCP request to the discovery endpoint")
-    p_mcp.add_argument("--method", required=True, help='MCP method, e.g. "tools/list"')
-    p_mcp.add_argument("--params", help="JSON object of method params")
-    p_mcp.add_argument("--id", default=1, help="JSON-RPC request id")
-    _add_cdp_auth_args(p_mcp)
-    _add_common_output_args(p_mcp)
-    p_mcp.set_defaults(func=cmd_cdp_mcp)
-
-    p_validate = cdp_sub.add_parser(
-        "validate", help="probe a seller's endpoint live for bazaar-discovery readiness"
-    )
-    p_validate.add_argument("--resource", required=True, help="HTTPS URL of the x402 endpoint to validate")
-    p_validate.add_argument("--method", default="GET", choices=("GET", "POST"))
-    _add_cdp_auth_args(p_validate)
-    _add_common_output_args(p_validate)
-    p_validate.set_defaults(func=cmd_cdp_validate)
+    p_adoms.set_defaults(func=cmd_analyse_domains)
 
     p_analyse = sub.add_parser(
         "analyse-facilitators",
@@ -1267,83 +1200,6 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_common_output_args(p_analyse)
     p_analyse.set_defaults(func=cmd_analyse_facilitators)
-
-    p_adom = sub.add_parser(
-        "analyse-domain",
-        help="run the same IP-geo/SSL-subject/WHOIS analysis as analyse-facilitators "
-        "against one arbitrary domain",
-    )
-    p_adom.add_argument("domain", help="domain or URL to analyse")
-    p_adom.add_argument(
-        "--probe-timeout",
-        type=float,
-        default=8.0,
-        help="timeout in seconds for DNS/SSL/WHOIS probes (default: 8)",
-    )
-    _add_common_output_args(p_adom)
-    p_adom.set_defaults(func=cmd_analyse_domain)
-
-    p_adoms = sub.add_parser(
-        "analyse-domains",
-        help="geolocate the IPs behind URLs in one column of a CSV file",
-    )
-    p_adoms.add_argument("file", help="path to a CSV file")
-    p_adoms.add_argument("column", type=int, help="0-indexed column number containing URLs")
-    p_adoms.add_argument(
-        "--workers", type=int, default=10, help="parallel DNS lookups (default: 10)"
-    )
-    p_adoms.set_defaults(func=cmd_analyse_domains)
-
-    p_scrape = sub.add_parser(
-        "scrape-servers",
-        help="scrape x402scan.com's server directory: API URL, resources, "
-        "doc link, and addresses per server",
-    )
-    p_scrape.add_argument(
-        "output", nargs="?", help="path to write the JSON output to (default: print to stdout)"
-    )
-    p_scrape.add_argument("--limit", type=int, help="only scrape this many servers (for testing)")
-    p_scrape.add_argument(
-        "--workers", type=int, default=5, help="parallel server-page fetches (default: 5)"
-    )
-    p_scrape.add_argument(
-        "--delay",
-        type=float,
-        default=0.0,
-        help="seconds to wait before each server's detail-page fetch (default: 0)",
-    )
-    p_scrape.add_argument(
-        "--probe-timeout", type=float, default=20.0, help="per-request timeout in seconds (default: 20)"
-    )
-    p_scrape.set_defaults(func=cmd_scrape_servers)
-
-    p_domains = sub.add_parser(
-        "extract-domains",
-        help="parse a JSON file (e.g. scrape-servers output) and print its unique domains, one per line",
-    )
-    p_domains.add_argument("file", help="path to a JSON file")
-    p_domains.set_defaults(func=cmd_extract_domains)
-
-    p_sanctions = sub.add_parser(
-        "check-sanctions",
-        help="check blockchain addresses in a CSV column against ChainQuery's public sanctions API",
-    )
-    p_sanctions.add_argument("file", help="path to a CSV file containing addresses")
-    p_sanctions.add_argument("column", type=int, help="0-indexed column number containing addresses")
-    p_sanctions.add_argument(
-        "--output", required=True, help="path to write the address,status CSV output to"
-    )
-    p_sanctions.add_argument(
-        "--rate-delay",
-        type=float,
-        default=1.0,
-        help="seconds between API calls (default: 1.0); note ChainQuery's own "
-        "published limit is 30/hour, far stricter than this",
-    )
-    p_sanctions.add_argument(
-        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
-    )
-    p_sanctions.set_defaults(func=cmd_check_sanctions)
 
     p_bc = sub.add_parser(
         "analyse-facilitators-bc",
@@ -1384,6 +1240,181 @@ def build_parser() -> argparse.ArgumentParser:
     _add_common_output_args(p_bc)
     p_bc.set_defaults(func=cmd_analyse_facilitators_bc)
 
+    p_assoc = sub.add_parser(
+        "assoc-txs-blockscout",
+        help="list transactions to/from an address via Blockscout's Pro API",
+    )
+    p_assoc.add_argument(
+        "blockchain", help="chain name (base, polygon, ethereum, ...), numeric chain id, or eip155:<id>"
+    )
+    p_assoc.add_argument("address", help="address to fetch transactions for")
+    p_assoc.add_argument("--api-key", help="Blockscout API key (default: $BLOCKSCOUT_API_KEY)")
+    p_assoc.add_argument(
+        "--pages", type=int, default=1, help="number of pages to fetch, 50 txs/page (default: 1)"
+    )
+    p_assoc.add_argument(
+        "--all-pages", action="store_true", help="fetch every page (overrides --pages)"
+    )
+    p_assoc.add_argument(
+        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
+    )
+    _add_common_output_args(p_assoc)
+    p_assoc.set_defaults(func=cmd_assoc_txs_blockscout)
+
+    p_cdp = sub.add_parser(
+        "cdp", help="Coinbase CDP-only extensions: bazaar discovery, MCP, endpoint validation"
+    )
+    cdp_sub = p_cdp.add_subparsers(dest="cdp_command", required=True)
+
+    p_bundle = cdp_sub.add_parser("bundle", help="get a single curated x402 workflow bundle")
+    p_bundle.add_argument("slug", help="bundle slug, see `cdp bundles`")
+    _add_cdp_auth_args(p_bundle)
+    _add_common_output_args(p_bundle)
+    p_bundle.set_defaults(func=cmd_cdp_bundle)
+
+    p_bundles = cdp_sub.add_parser("bundles", help="list curated x402 workflow bundles")
+    _add_cdp_auth_args(p_bundles)
+    _add_common_output_args(p_bundles)
+    p_bundles.set_defaults(func=cmd_cdp_bundles)
+
+    p_dm = cdp_sub.add_parser("discover-merchant", help="list a merchant's discovered x402 resources")
+    p_dm.add_argument("--pay-to", required=True, help="merchant payment address")
+    p_dm.add_argument("--limit", type=int)
+    p_dm.add_argument("--offset", type=int)
+    _add_cdp_auth_args(p_dm)
+    _add_common_output_args(p_dm)
+    p_dm.set_defaults(func=cmd_cdp_discover_merchant)
+
+    p_dm_csv = cdp_sub.add_parser(
+        "discover-merchant-csv",
+        help="list merchants' discovered x402 resources as CSV (one row per accepted payment option)",
+    )
+    p_dm_csv.add_argument(
+        "--pay-to",
+        required=True,
+        help="merchant payment address, or a comma-separated list to query one at a time",
+    )
+    p_dm_csv.add_argument("--limit", type=int)
+    p_dm_csv.add_argument("--offset", type=int)
+    _add_cdp_auth_args(p_dm_csv)
+    p_dm_csv.set_defaults(func=cmd_cdp_discover_merchant_csv)
+
+    p_dr = cdp_sub.add_parser("discover-resources", help="list active discovered x402 resources")
+    p_dr.add_argument("--type", help='protocol type filter, e.g. "http"')
+    p_dr.add_argument("--limit", type=int)
+    p_dr.add_argument("--offset", type=int)
+    _add_cdp_auth_args(p_dr)
+    _add_common_output_args(p_dr)
+    p_dr.set_defaults(func=cmd_cdp_discover_resources)
+
+    p_dr_csv = cdp_sub.add_parser(
+        "discover-resources-csv",
+        help="list active discovered x402 resources as CSV (one row per accepted payment option)",
+    )
+    p_dr_csv.add_argument("--type", help='protocol type filter, e.g. "http"')
+    p_dr_csv.add_argument("--limit", type=int)
+    p_dr_csv.add_argument("--offset", type=int)
+    _add_cdp_auth_args(p_dr_csv)
+    p_dr_csv.set_defaults(func=cmd_cdp_discover_resources_csv)
+
+    p_dr_csv2 = cdp_sub.add_parser(
+        "discover-resources-csv2",
+        help="like discover-resources-csv, but pages through every resource "
+        "(rate-limited to 1 request/sec) and writes them all to a file",
+    )
+    p_dr_csv2.add_argument("output", help="path to write the CSV output to")
+    p_dr_csv2.add_argument("--type", help='protocol type filter, e.g. "http"')
+    p_dr_csv2.add_argument("--limit", type=int, help="page size requested per call")
+    p_dr_csv2.add_argument("--offset", type=int, help="starting offset (default: 0)")
+    _add_cdp_auth_args(p_dr_csv2)
+    p_dr_csv2.set_defaults(func=cmd_cdp_discover_resources_csv2)
+
+    p_mcp = cdp_sub.add_parser("mcp", help="send a JSON-RPC MCP request to the discovery endpoint")
+    p_mcp.add_argument("--method", required=True, help='MCP method, e.g. "tools/list"')
+    p_mcp.add_argument("--params", help="JSON object of method params")
+    p_mcp.add_argument("--id", default=1, help="JSON-RPC request id")
+    _add_cdp_auth_args(p_mcp)
+    _add_common_output_args(p_mcp)
+    p_mcp.set_defaults(func=cmd_cdp_mcp)
+
+    p_search = cdp_sub.add_parser("search", help="search active discovered x402 resources")
+    p_search.add_argument("--query", help="full-text/semantic search query")
+    p_search.add_argument("--network", help="CAIP-2 or legacy network name filter")
+    p_search.add_argument("--asset", help="asset address filter")
+    p_search.add_argument("--scheme", help='payment scheme filter, e.g. "exact"')
+    p_search.add_argument("--pay-to", help="merchant payment address filter")
+    p_search.add_argument("--url-substring", help="case-insensitive substring match against resource URL")
+    p_search.add_argument("--max-usd-price", help="max USD price filter")
+    p_search.add_argument("--extensions", action="append", default=[], help="protocol extension filter; repeatable")
+    p_search.add_argument("--tags", action="append", default=[], help="provider tag filter; repeatable")
+    p_search.add_argument("--bundle-slugs", action="append", default=[], help="curated bundle slug filter; repeatable")
+    p_search.add_argument("--curated-only", action="store_true", help="restrict to Coinbase-curated resources")
+    p_search.add_argument("--limit", type=int, help="max results, 1-20 (default 20)")
+    _add_cdp_auth_args(p_search)
+    _add_common_output_args(p_search)
+    p_search.set_defaults(func=cmd_cdp_search)
+
+    p_validate = cdp_sub.add_parser(
+        "validate", help="probe a seller's endpoint live for bazaar-discovery readiness"
+    )
+    p_validate.add_argument("--resource", required=True, help="HTTPS URL of the x402 endpoint to validate")
+    p_validate.add_argument("--method", default="GET", choices=("GET", "POST"))
+    _add_cdp_auth_args(p_validate)
+    _add_common_output_args(p_validate)
+    p_validate.set_defaults(func=cmd_cdp_validate)
+
+    p_sanctions = sub.add_parser(
+        "check-sanctions",
+        help="check blockchain addresses in a CSV column against ChainQuery's public sanctions API",
+    )
+    p_sanctions.add_argument("file", help="path to a CSV file containing addresses")
+    p_sanctions.add_argument("column", type=int, help="0-indexed column number containing addresses")
+    p_sanctions.add_argument(
+        "--output", required=True, help="path to write the address,status CSV output to"
+    )
+    p_sanctions.add_argument(
+        "--rate-delay",
+        type=float,
+        default=1.0,
+        help="seconds between API calls (default: 1.0); note ChainQuery's own "
+        "published limit is 30/hour, far stricter than this",
+    )
+    p_sanctions.add_argument(
+        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
+    )
+    p_sanctions.set_defaults(func=cmd_check_sanctions)
+
+    p_domains = sub.add_parser(
+        "extract-domains",
+        help="parse a JSON file (e.g. scrape-servers output) and print its unique domains, one per line",
+    )
+    p_domains.add_argument("file", help="path to a JSON file")
+    p_domains.set_defaults(func=cmd_extract_domains)
+
+    p_funded = sub.add_parser(
+        "funded-by-etherscan",
+        help="look up an EVM EOA's original funding source via Etherscan's fundedby API",
+    )
+    p_funded.add_argument(
+        "blockchain", help="chain name (base, polygon, ethereum, ...), numeric chain id, or eip155:<id>"
+    )
+    p_funded.add_argument("address", help="EOA address to look up (doesn't work for contracts)")
+    p_funded.add_argument("--api-key", help="Etherscan API key (default: $ETHERSCAN_API_KEY)")
+    p_funded.add_argument(
+        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
+    )
+    _add_common_output_args(p_funded)
+    p_funded.set_defaults(func=cmd_funded_by)
+
+    p_list_defunct = sub.add_parser(
+        "list-defunct-facil",
+        help="list known x402 facilitators that are no longer operational",
+    )
+    p_list_defunct.add_argument("--access", choices=("public", "gated", "gated_paid"))
+    p_list_defunct.add_argument("--network", help="filter by substring match against a network name")
+    _add_common_output_args(p_list_defunct)
+    p_list_defunct.set_defaults(func=cmd_list_defunct_facilitators)
+
     p_facbc = sub.add_parser(
         "list-fac-bc",
         help="output every facilitator's blockchain addresses as CSV "
@@ -1411,10 +1442,113 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_facbc.set_defaults(func=cmd_list_fac_bc)
 
+    p_list_domains = sub.add_parser(
+        "list-fac-domains",
+        help="output every operational facilitator's API/doc domains as CSV",
+    )
+    p_list_domains.set_defaults(func=cmd_list_fac_domains)
+
+    p_list = sub.add_parser(
+        "list-facilitators", help="list known operational x402 facilitators"
+    )
+    p_list.add_argument("--access", choices=("public", "gated", "gated_paid"))
+    p_list.add_argument("--network", help="filter by substring match against a network name")
+    _add_common_output_args(p_list)
+    p_list.set_defaults(func=cmd_list_facilitators)
+
+    p_request = sub.add_parser(
+        "request",
+        help="request a URL and show the x402 402 Payment Required details it returns",
+    )
+    p_request.add_argument("url", help="URL of the x402-gated resource to request")
+    p_request.add_argument("--method", default="GET", choices=("GET", "POST"))
+    p_request.add_argument(
+        "--header",
+        action="append",
+        default=[],
+        type=_parse_header,
+        metavar="'Name: Value'",
+        help="extra HTTP header to send; may be repeated",
+    )
+    _add_common_output_args(p_request)
+    p_request.set_defaults(func=cmd_request)
+
+    p_scrape = sub.add_parser(
+        "scrape-servers",
+        help="scrape x402scan.com's server directory: API URL, resources, "
+        "doc link, and addresses per server",
+    )
+    p_scrape.add_argument(
+        "output", nargs="?", help="path to write the JSON output to (default: print to stdout)"
+    )
+    p_scrape.add_argument("--limit", type=int, help="only scrape this many servers (for testing)")
+    p_scrape.add_argument(
+        "--workers", type=int, default=5, help="parallel server-page fetches (default: 5)"
+    )
+    p_scrape.add_argument(
+        "--delay",
+        type=float,
+        default=0.0,
+        help="seconds to wait before each server's detail-page fetch (default: 0)",
+    )
+    p_scrape.add_argument(
+        "--probe-timeout", type=float, default=20.0, help="per-request timeout in seconds (default: 20)"
+    )
+    p_scrape.set_defaults(func=cmd_scrape_servers)
+
+    p_settle = sub.add_parser(
+        "settle",
+        help="POST /settle (or CDP's /v2/x402/settle) with a pre-built, already-signed payment",
+    )
+    p_settle.add_argument(
+        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
+    )
+    _add_generic_auth_args(p_settle)
+    _add_cdp_auth_args(p_settle)
+    _add_payment_body_args(p_settle)
+    _add_common_output_args(p_settle)
+    p_settle.set_defaults(func=cmd_settle)
+
+    p_show = sub.add_parser("show", help="show details for one known facilitator")
+    p_show.add_argument("facilitator", help="facilitator id, see `list-facilitators`")
+    _add_common_output_args(p_show)
+    p_show.set_defaults(func=cmd_show)
+
+    p_supported = sub.add_parser(
+        "supported", help="GET /supported (or CDP's /v2/x402/supported) for a facilitator"
+    )
+    p_supported.add_argument(
+        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
+    )
+    _add_generic_auth_args(p_supported)
+    _add_cdp_auth_args(p_supported)
+    _add_common_output_args(p_supported)
+    p_supported.set_defaults(func=cmd_supported)
+
+    p_verify = sub.add_parser(
+        "verify",
+        help="POST /verify (or CDP's /v2/x402/verify) with a pre-built, already-signed payment",
+    )
+    p_verify.add_argument(
+        "facilitator", help="facilitator id (see `list-facilitators`) or a raw base URL"
+    )
+    _add_generic_auth_args(p_verify)
+    _add_cdp_auth_args(p_verify)
+    _add_payment_body_args(p_verify)
+    _add_common_output_args(p_verify)
+    p_verify.set_defaults(func=cmd_verify)
+
     return parser
 
 
 def main(argv: Optional[list[str]] = None) -> int:
+    # Load API keys (CDP_API_KEY_ID, ETHERSCAN_API_KEY, etc.) from a .env
+    # file in the current directory (or a parent of it) if one exists.
+    # Explicit --api-key/--api-key-id flags and real environment variables
+    # still take precedence, since python-dotenv defaults to not overriding
+    # already-set variables.
+    load_dotenv(find_dotenv(usecwd=True))
+
     parser = build_parser()
     args = parser.parse_args(argv)
     try:

@@ -15,6 +15,16 @@ pip install -e .
 
 This installs the `x402tool` command (also runnable as `python -m x402tool`).
 
+### API keys
+
+Copy `.env.example` to `.env` and fill in whichever keys the commands you
+use need (`CDP_API_KEY_ID`/`CDP_API_KEY_SECRET`, `ETHERSCAN_API_KEY`,
+`X402_API_KEY`) - `x402tool` loads `.env` automatically from the current
+directory (or a parent of it), no extra setup needed. `.env` is gitignored;
+never commit your real keys. An explicit `--api-key`/`--api-key-id` flag, or
+a real environment variable already set in your shell, always takes
+precedence over `.env`.
+
 ## Facilitator registry
 
 ```bash
@@ -60,6 +70,53 @@ x402tool request https://api.example.com/some/paid/endpoint --method POST --head
 
 If the server responds with something other than `402`, it prints a warning
 and dumps whatever it did return instead, with a non-zero exit code.
+
+## Tracing an address's funding source
+
+`funded-by-etherscan <blockchain> <address>` calls Etherscan's unified V2
+["Get Address Funded By"](https://docs.etherscan.io/api-reference/endpoint/fundedby)
+API to trace an EOA's original funding source: the address, transaction,
+block, and timestamp that first sent it value. It's a PRO-tier Etherscan
+endpoint (Standard plan and above) and only works for EOAs, not contract
+addresses. Requires an Etherscan API key - pass `--api-key` or set
+`$ETHERSCAN_API_KEY`.
+
+`<blockchain>` accepts a chain name (`base`, `polygon`, `ethereum`, ...), a
+bare numeric chain id, or an `eip155:<id>` CAIP-2 string - Etherscan's API
+only covers EVM chains, so non-EVM ones (Solana, XRPL, NEAR, Stellar,
+Canton, ...) aren't supported and are rejected up front with a clear error.
+
+```bash
+export ETHERSCAN_API_KEY=...
+x402tool funded-by-etherscan base 0x742d35Cc6634C0532925a3b844Bc454e4438f44e
+x402tool funded-by-etherscan eip155:1 0x742d35Cc6634C0532925a3b844Bc454e4438f44e --json
+```
+
+## Listing an address's transactions
+
+`assoc-txs-blockscout <blockchain> <address>` calls
+[Blockscout's Pro API](https://www.blog.blockscout.com/blockscout-pro-api-postman/)
+to list transactions to or from an address, one unified endpoint across
+every Blockscout-indexed EVM chain. `<blockchain>` takes the same chain
+name/numeric-id/`eip155:<id>` forms as `funded-by-etherscan`. Requires a
+Blockscout API key - pass `--api-key` or set `$BLOCKSCOUT_API_KEY` (free
+tier: 100K credits/day, 5 req/s, no card required, from
+[dev.blockscout.com](https://dev.blockscout.com/)).
+
+Notably, this specific endpoint is itself x402-gated: hit it with no
+recognized key and Blockscout responds `402` with its own x402
+payment-required envelope, offering to accept an on-chain USDC payment as
+an alternative to an API key. This client only ever takes the API-key
+route.
+
+Pagination is 50 transactions per page; `--pages N` (default 1) fetches N
+pages, or `--all-pages` fetches every page the API has.
+
+```bash
+export BLOCKSCOUT_API_KEY=...
+x402tool assoc-txs-blockscout base 0x742d35Cc6634C0532925a3b844Bc454e4438f44e
+x402tool assoc-txs-blockscout ethereum 0x742d35Cc6634C0532925a3b844Bc454e4438f44e --pages 3 --json
+```
 
 ## Exercising the core x402 facilitator API
 
@@ -307,6 +364,8 @@ x402tool/
   blockchain_addresses.py  address extraction from a /supported response
   cloudbric_threatdb.py  Cloudbric Labs Threat DB client for analyse-facilitators-bc
   chainquery_client.py  ChainQuery Sanctions API client for check-sanctions
+  etherscan_client.py   Etherscan V2 "fundedby" client for funded-by-etherscan
+  blockscout_client.py  Blockscout Pro API client for assoc-txs-blockscout
   x402scan_scraper.py   x402scan.com server-directory scraper for scrape-servers
   formatting.py         table/JSON output helpers
   cli.py                argparse wiring
