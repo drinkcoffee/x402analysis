@@ -398,6 +398,80 @@ def cmd_assoc_txs_blockscout(args: argparse.Namespace) -> int:
     return 0
 
 
+def _format_token_total(total: Any) -> str:
+    """total's shape varies by token type (ERC-20: {value, decimals}; NFTs:
+    {token_id, ...}); just render whatever's there compactly."""
+    if not isinstance(total, dict):
+        return str(total) if total is not None else ""
+    value = total.get("value")
+    decimals = total.get("decimals")
+    if value is not None and decimals is not None:
+        try:
+            amount = int(value) / (10 ** int(decimals))
+            return f"{amount:g}"
+        except (TypeError, ValueError):
+            pass
+    return json.dumps(total)
+
+
+def cmd_assoc_erc20_blockscout(args: argparse.Namespace) -> int:
+    chain_id = etherscan_client.resolve_chain_id(args.blockchain)
+    if chain_id is None:
+        return print_error(
+            f"could not resolve '{args.blockchain}' to a chain id "
+            "(Blockscout covers EVM chains; pass a chain name, a numeric "
+            "chain id, or an 'eip155:<id>' string)"
+        )
+
+    client = blockscout_client.BlockscoutClient(
+        api_key=args.api_key or os.environ.get("BLOCKSCOUT_API_KEY"),
+        timeout=args.probe_timeout,
+    )
+
+    max_pages = None if args.all_pages else args.pages
+    try:
+        transfers = list(
+            client.iter_token_transfers(
+                chain_id,
+                args.address,
+                token_types=["ERC-20"],
+                direction=args.filter,
+                token=args.token,
+                max_pages=max_pages,
+            )
+        )
+    except (requests.exceptions.RequestException, RuntimeError) as exc:
+        return print_error(str(exc))
+
+    if args.json:
+        print(json.dumps(transfers, indent=2, default=str))
+        return 0
+
+    if not transfers:
+        print(f"No ERC-20 transfers found for {args.address} on chain {chain_id}.")
+        return 0
+
+    rows = []
+    for xfer in transfers:
+        from_addr = (xfer.get("from") or {}).get("hash", "")
+        to_addr = (xfer.get("to") or {}).get("hash", "")
+        token = xfer.get("token") or {}
+        symbol = token.get("symbol") or token.get("address_hash", "")
+        rows.append(
+            [
+                xfer.get("timestamp", ""),
+                xfer.get("transaction_hash", ""),
+                symbol,
+                from_addr,
+                to_addr,
+                _format_token_total(xfer.get("total")),
+            ]
+        )
+    print_table(["TIMESTAMP", "TX HASH", "TOKEN", "FROM", "TO", "AMOUNT"], rows)
+    print(f"\n{len(transfers)} transfer(s)")
+    return 0
+
+
 def cmd_supported(args: argparse.Namespace) -> int:
     client, label = _resolve_target(args)
     if client is None:
@@ -1239,6 +1313,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_common_output_args(p_bc)
     p_bc.set_defaults(func=cmd_analyse_facilitators_bc)
+
+    p_assoc_erc20 = sub.add_parser(
+        "assoc-erc20-blockscout",
+        help="list ERC-20 token transfers involving an address via Blockscout's Pro API",
+    )
+    p_assoc_erc20.add_argument(
+        "blockchain", help="chain name (base, polygon, ethereum, ...), numeric chain id, or eip155:<id>"
+    )
+    p_assoc_erc20.add_argument("address", help="address to fetch ERC-20 transfers for")
+    p_assoc_erc20.add_argument(
+        "--filter",
+        choices=("to", "from"),
+        help="direction filter: 'to' (incoming only) or 'from' (outgoing only); omit for both",
+    )
+    p_assoc_erc20.add_argument(
+        "--token", help="restrict to transfers of one specific ERC-20 token contract address"
+    )
+    p_assoc_erc20.add_argument("--api-key", help="Blockscout API key (default: $BLOCKSCOUT_API_KEY)")
+    p_assoc_erc20.add_argument(
+        "--pages", type=int, default=1, help="number of pages to fetch, 50 transfers/page (default: 1)"
+    )
+    p_assoc_erc20.add_argument(
+        "--all-pages", action="store_true", help="fetch every page (overrides --pages)"
+    )
+    p_assoc_erc20.add_argument(
+        "--probe-timeout", type=float, default=15.0, help="per-request timeout in seconds (default: 15)"
+    )
+    _add_common_output_args(p_assoc_erc20)
+    p_assoc_erc20.set_defaults(func=cmd_assoc_erc20_blockscout)
 
     p_assoc = sub.add_parser(
         "assoc-txs-blockscout",

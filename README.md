@@ -118,6 +118,21 @@ x402tool assoc-txs-blockscout base 0x742d35Cc6634C0532925a3b844Bc454e4438f44e
 x402tool assoc-txs-blockscout ethereum 0x742d35Cc6634C0532925a3b844Bc454e4438f44e --pages 3 --json
 ```
 
+`assoc-erc20-blockscout <blockchain> <address>` is the same idea against
+Blockscout's
+["list token transfers involving a specific address"](https://docs.blockscout.com/api-reference/addresses/list-token-transfers-involving-a-specific-address-with-filtering-options)
+endpoint, filtered to ERC-20 transfers. Same chain-argument forms, same
+`--api-key`/`$BLOCKSCOUT_API_KEY`, and same `--pages`/`--all-pages`
+pagination as `assoc-txs-blockscout`. Two more of that endpoint's filters
+are exposed directly: `--filter to|from` (direction; omit for both) and
+`--token <contract address>` (restrict to one specific ERC-20 token).
+
+```bash
+x402tool assoc-erc20-blockscout base 0x742d35Cc6634C0532925a3b844Bc454e4438f44e
+x402tool assoc-erc20-blockscout ethereum 0x742d35Cc6634C0532925a3b844Bc454e4438f44e \
+  --filter to --token 0xdAC17F958D2ee523a2206206994597C13D831ec7 --json
+```
+
 ## Exercising the core x402 facilitator API
 
 Every facilitator (generic or CDP) supports the same three verbs:
@@ -365,7 +380,7 @@ x402tool/
   cloudbric_threatdb.py  Cloudbric Labs Threat DB client for analyse-facilitators-bc
   chainquery_client.py  ChainQuery Sanctions API client for check-sanctions
   etherscan_client.py   Etherscan V2 "fundedby" client for funded-by-etherscan
-  blockscout_client.py  Blockscout Pro API client for assoc-txs-blockscout
+  blockscout_client.py  Blockscout Pro API client for assoc-txs-blockscout and assoc-erc20-blockscout
   x402scan_scraper.py   x402scan.com server-directory scraper for scrape-servers
   formatting.py         table/JSON output helpers
   cli.py                argparse wiring
