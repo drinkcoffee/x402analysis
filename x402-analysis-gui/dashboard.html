@@ -87,19 +87,18 @@
       font-weight: 600;
       white-space: nowrap;
     }
-    header.topbar .user-type {
-      margin-left: 1.5rem;
-      color: var(--muted);
-      font-size: 0.9rem;
-      white-space: nowrap;
-    }
     header.topbar .user-email {
       margin-left: auto;
-      padding-left: 1rem;
       color: var(--muted);
       font-size: 0.9rem;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    header.topbar .user-type {
+      margin-left: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
       white-space: nowrap;
     }
     button.menu-button {
@@ -189,8 +188,8 @@
       <img class="logo" src="/assets/icon-192.png" alt="x402 Analysis logo" />
       <span class="site-name">x402 Analysis</span>
     </a>
-    <span class="user-type">User Type</span>
     <span class="user-email">{{USER_EMAIL}}</span>
+    <span class="user-type">User Type</span>
     <button class="menu-button" id="menu-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
