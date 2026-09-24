@@ -180,6 +180,47 @@
     .tab-panel {
       max-width: 720px;
     }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.data-table th,
+    table.data-table td {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data-table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    table.data-table th[data-sort-col] {
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    table.data-table th[data-sort-col]:hover {
+      color: var(--ink);
+    }
+    .sort-arrow {
+      display: inline-block;
+      margin-left: 0.3rem;
+      font-size: 0.7em;
+      color: var(--muted);
+    }
+    .sort-arrow.active {
+      color: var(--accent);
+    }
+    .active-yes {
+      color: #1a8a3d;
+      font-weight: 700;
+    }
+    .active-no {
+      color: var(--accent);
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -212,12 +253,77 @@
   <main>
     <div class="tab-panel" id="tab-servers" role="tabpanel">This is the Servers tab</div>
     <div class="tab-panel" id="tab-services" role="tabpanel" hidden>This is the Services tab</div>
-    <div class="tab-panel" id="tab-facilitators" role="tabpanel" hidden>This is the Facilitators tab</div>
+    <div class="tab-panel" id="tab-facilitators" role="tabpanel" hidden>
+      <table class="data-table" id="facilitators-table">
+        <thead>
+          <tr>
+            <th data-sort-col="name" data-sort-type="string">Name<span class="sort-arrow">▼</span></th>
+            <th data-sort-col="riskScore" data-sort-type="number">Risk Score<span class="sort-arrow">▼</span></th>
+            <th data-sort-col="txVolume" data-sort-type="number">Tx Volume (week)<span class="sort-arrow">▼</span></th>
+            <th data-sort-col="numServers" data-sort-type="number">#Servers<span class="sort-arrow">▼</span></th>
+            <th data-sort-col="active" data-sort-type="string">Active<span class="sort-arrow">▼</span></th>
+          </tr>
+        </thead>
+        <tbody id="facilitators-tbody"></tbody>
+      </table>
+    </div>
     <div class="tab-panel" id="tab-clients" role="tabpanel" hidden>This is the Clients tab</div>
     <div class="tab-panel" id="tab-funders" role="tabpanel" hidden>This is the Funders tab</div>
   </main>
 
   <script>
+    const facilitatorsData = [
+      { name: 'TestFac', riskScore: 10, txVolume: 1000, numServers: 10000, active: 'YES' },
+      { name: 'Dexter', riskScore: 0, txVolume: 700, numServers: 15000, active: 'NO' },
+    ];
+
+    function renderFacilitatorsRows(rows) {
+      const tbody = document.getElementById('facilitators-tbody');
+      tbody.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.name}</td>
+          <td>${row.riskScore}</td>
+          <td>${row.txVolume}</td>
+          <td>${row.numServers}</td>
+          <td class="${row.active === 'YES' ? 'active-yes' : 'active-no'}">${row.active}</td>
+        </tr>
+      `).join('');
+    }
+
+    renderFacilitatorsRows(facilitatorsData);
+
+    let facilitatorsSortCol = null;
+    let facilitatorsSortDir = 'asc';
+    const facilitatorsHeaders = document.querySelectorAll('#facilitators-table th[data-sort-col]');
+
+    facilitatorsHeaders.forEach((th) => {
+      th.addEventListener('click', () => {
+        const col = th.dataset.sortCol;
+        const type = th.dataset.sortType;
+        facilitatorsSortDir = (facilitatorsSortCol === col && facilitatorsSortDir === 'asc') ? 'desc' : 'asc';
+        facilitatorsSortCol = col;
+
+        const sorted = [...facilitatorsData].sort((a, b) => {
+          const cmp = type === 'number'
+            ? a[col] - b[col]
+            : String(a[col]).localeCompare(String(b[col]));
+          return facilitatorsSortDir === 'asc' ? cmp : -cmp;
+        });
+        renderFacilitatorsRows(sorted);
+
+        facilitatorsHeaders.forEach((h) => {
+          const arrow = h.querySelector('.sort-arrow');
+          if (h === th) {
+            arrow.textContent = facilitatorsSortDir === 'asc' ? '▼' : '▲';
+            arrow.classList.add('active');
+          } else {
+            arrow.textContent = '▼';
+            arrow.classList.remove('active');
+          }
+        });
+      });
+    });
+
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
     tabButtons.forEach((btn) => {
