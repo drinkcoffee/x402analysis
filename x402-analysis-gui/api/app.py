@@ -11,8 +11,11 @@ Routes:
     GET  /auth/login      starts the Auth0 login flow
     GET  /auth/callback   Auth0 redirects back here with the auth code
     GET  /auth/logout     clears the session + Auth0 logout
-    GET  /dashboard       the OAuth-gated page (dashboard.html) -- just says
-                          "You have arrived"
+    GET  /dashboard       the OAuth-gated page (dashboard.html) -- header bar
+                          (logo, site name, user type, the logged-in user's
+                          email, a hamburger menu with Log out) plus tabs
+                          (Servers/Services/Facilitators/Clients/Funders),
+                          each currently showing placeholder content
     GET  /assets/*        static files (favicons, the site logo) from
                           assets/, mounted via StaticFiles
 
@@ -25,6 +28,7 @@ from __future__ import annotations
 
 import logging
 import sys
+from html import escape
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -126,4 +130,5 @@ def dashboard(request: Request):
     if not email or not is_email_allowed(email):
         logger.info("dashboard: no valid session (email=%s); redirecting to the public landing page", email)
         return RedirectResponse(url="/")
-    return HTMLResponse(DASHBOARD_HTML_PATH.read_text())
+    page = DASHBOARD_HTML_PATH.read_text().replace("{{USER_EMAIL}}", escape(email))
+    return HTMLResponse(page)
