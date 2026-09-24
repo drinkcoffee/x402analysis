@@ -180,6 +180,17 @@
     .tab-panel {
       max-width: 720px;
     }
+    #tab-services {
+      max-width: none;
+    }
+    .table-scroll {
+      overflow-x: auto;
+    }
+    table.data-table td.services-url {
+      color: var(--muted);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
 
     table.data-table {
       width: 100%;
@@ -258,7 +269,24 @@
 
   <main>
     <div class="tab-panel" id="tab-servers" role="tabpanel">This is the Servers tab</div>
-    <div class="tab-panel" id="tab-services" role="tabpanel" hidden>This is the Services tab</div>
+    <div class="tab-panel" id="tab-services" role="tabpanel" hidden>
+      <div class="table-scroll">
+        <table class="data-table" id="services-table">
+          <thead>
+            <tr>
+              <th>Server</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Tags</th>
+              <th>Active</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody id="services-tbody"></tbody>
+        </table>
+      </div>
+    </div>
     <div class="tab-panel" id="tab-facilitators" role="tabpanel" hidden>
       <table class="data-table" id="facilitators-table">
         <thead>
@@ -369,6 +397,82 @@
     const initialSortCol = validSortCols.includes(urlSortCol) ? urlSortCol : 'name';
     const initialSortDir = (urlSortDir === 'asc' || urlSortDir === 'desc') ? urlSortDir : 'asc';
     setFacilitatorsSort(initialSortCol, initialSortDir, { updateUrl: false });
+
+    function escapeHtml(value) {
+      const div = document.createElement('div');
+      div.textContent = String(value);
+      return div.innerHTML;
+    }
+
+    // If a service's description is missing or just "Route", fall back to
+    // the last segment of its URL path instead.
+    function descriptionFor(service) {
+      if (service.description && service.description !== 'Route') {
+        return service.description;
+      }
+      const segments = new URL(service.url).pathname.split('/').filter(Boolean);
+      return segments.length ? segments[segments.length - 1] : service.url;
+    }
+
+    // The URL's first path segment after "/api/" (e.g. "ai", "aviation")
+    // doubles as a technical grouping distinct from the service's
+    // functional tags (Search/AI/Utility/...).
+    function categoryFromUrl(url) {
+      const segments = new URL(url).pathname.split('/').filter(Boolean);
+      const apiIndex = segments.indexOf('api');
+      const category = apiIndex >= 0 ? segments[apiIndex + 1] : segments[0];
+      if (!category) return '';
+      return category.toLowerCase() === 'ai' ? 'AI' : category.charAt(0).toUpperCase() + category.slice(1);
+    }
+
+    // Demo data for the one hardcoded server so far, drawn from a sample of
+    // its real published endpoints -- there's no servers/services table in
+    // Neon yet.
+    const twoSServer = '2s — the (most) everything API';
+    const servicesData = [
+      { url: 'https://2s.io/api/agent/knowledge-delta', description: "What's happened in a given topic since a given date?", price: '0.150000 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/agriculture/drought', description: 'US Drought Monitor severity for a county (5-digit FIPS) or...', price: '0.002500 USD', tags: ['Utility'] },
+      { url: 'https://2s.io/api/agriculture/stats', description: 'USDA NASS QuickStats - authoritative US agricultural...', price: '0.002500 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/ai/chat', description: 'OpenAI-compatible chat completions across every frontier...', price: '0.002500-50.000000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/classify', description: 'Zero-shot text classification.', price: '0.045000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/council', description: 'Ask several frontier models the same question and get one...', price: '0.030000-50.000000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/describe-image', description: 'Describe an image. POST { imageUrl, instruction? }. Returns...', price: '0.045000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/entities', description: 'Named-entity recognition.', price: '0.090000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/extract', description: 'Extract structured data from a webpage.', price: '0.187500 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/image', description: "Generate images from a text prompt across the gateway's...", price: '0.090000-50.000000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/moderate', description: 'Content moderation. POST { text }. Flags content across...', price: '0.045000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/ocr', description: 'OCR + layout extraction.', price: '0.090000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/pii', description: 'PII detection. POST { text }. Finds personally identifiable...', price: '0.075000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/research', description: 'Grounded research brief.', price: '0.105000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/screenshot', description: 'Render a URL as a screenshot.', price: '0.018750 USD', tags: ['Utility'] },
+      { url: 'https://2s.io/api/ai/sentiment', description: 'Sentiment analysis. POST { text }. Returns overall...', price: '0.045000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/summarize', description: 'Summarize a webpage. POST { url, instruction? }. Returns {...', price: '0.157500 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/translate', description: 'Translate text. POST { text, targetLanguage...', price: '0.070500 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/web-answer', description: 'Answer a question from the live web.', price: '0.082500 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/aircraft/lookup', description: 'Look up a US-registered aircraft by tail number (N-number, e.g.', price: '0.003600 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/aircraft/profile', description: 'Identify a US-registered aircraft by tail (N-number) or...', price: '0.010800 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/airport/lookup', description: 'Look up an airport by 3-letter IATA (e.g.', price: '0.002500 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/airport/near', description: 'Airports within a radius of a coordinate, sorted by distance.', price: '0.002500 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/aviation/accidents', description: 'Search the NTSB civil aviation accident & incident database...', price: '0.003000 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/aviation/metar', description: 'Current aviation weather observation (METAR) for one or...', price: '0.003000 USD', tags: ['Utility'] },
+      { url: 'https://2s.io/api/aviation/sigmet', description: 'Active in-flight weather hazard advisories (SIGMETs and...', price: '0.002700 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/aviation/taf', description: 'Terminal Aerodrome Forecast (TAF) for one or more airports...', price: '0.003000 USD', tags: ['Utility'] },
+      { url: 'https://2s.io/api/bank/lookup', description: 'FDIC-insured US bank directory lookup.', price: '0.003000 USD', tags: ['Search'] },
+      { url: 'https://2s.io/api/barcode/generate', description: 'Generate QR / Aztec / Data Matrix / PDF417 codes from...', price: '0.002500 USD', tags: ['Utility'] },
+      { url: 'https://2s.io/api/batch/run', description: 'Run up to 50 endpoint calls behind ONE x402 payment.', price: '0.003000-50.000000 USD', tags: ['Utility'] },
+    ].map((service) => ({ ...service, server: twoSServer, active: true }));
+
+    document.getElementById('services-tbody').innerHTML = servicesData.map((service) => `
+      <tr>
+        <td>${escapeHtml(service.server)}</td>
+        <td>${escapeHtml(categoryFromUrl(service.url))}</td>
+        <td>${escapeHtml(descriptionFor(service))}</td>
+        <td>${escapeHtml(service.price)}</td>
+        <td>${escapeHtml(service.tags.join(', '))}</td>
+        <td class="${service.active ? 'active-yes' : 'active-no'}">${service.active ? 'YES' : 'NO'}</td>
+        <td class="services-url">${escapeHtml(service.url)}</td>
+      </tr>
+    `).join('');
 
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
