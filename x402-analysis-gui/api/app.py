@@ -13,6 +13,8 @@ Routes:
     GET  /auth/logout     clears the session + Auth0 logout
     GET  /dashboard       the OAuth-gated page (dashboard.html) -- just says
                           "You have arrived"
+    GET  /assets/*        static files (favicons, the site logo) from
+                          assets/, mounted via StaticFiles
 
 Logging: configured (via gui.app_setup.configure_app) so every logger.info()/
 logger.exception() call in this module reaches stderr, which Vercel captures
@@ -36,6 +38,7 @@ logger = logging.getLogger("x402_gui.api")
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
@@ -54,6 +57,9 @@ configure_app(app, logger)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 INDEX_HTML_PATH = PROJECT_ROOT / "index.html"
 DASHBOARD_HTML_PATH = PROJECT_ROOT / "dashboard.html"
+
+# Site icon/logo (favicon variants + the logo shown on the landing page).
+app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "assets")), name="assets")
 
 
 # --- Public landing page -----------------------------------------------------
