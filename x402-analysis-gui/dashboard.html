@@ -232,6 +232,10 @@
       color: var(--accent);
       font-weight: 700;
     }
+    .risk-score-high {
+      color: var(--accent);
+      font-weight: 700;
+    }
     #facilitators-tbody tr {
       cursor: pointer;
     }
@@ -275,6 +279,7 @@
           <thead>
             <tr>
               <th>Server</th>
+              <th>Risk Score</th>
               <th>Category</th>
               <th>Description</th>
               <th>Price</th>
@@ -436,7 +441,7 @@
       { url: 'https://2s.io/api/ai/chat', description: 'OpenAI-compatible chat completions across every frontier...', price: '0.002500-50.000000 USD', tags: ['AI'] },
       { url: 'https://2s.io/api/ai/classify', description: 'Zero-shot text classification.', price: '0.045000 USD', tags: ['AI'] },
       { url: 'https://2s.io/api/ai/council', description: 'Ask several frontier models the same question and get one...', price: '0.030000-50.000000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/describe-image', description: 'Describe an image. POST { imageUrl, instruction? }. Returns...', price: '0.045000 USD', tags: ['AI'] },
+      { url: 'https://2s.io/api/ai/describe-image', description: 'Describe an image. POST { imageUrl, instruction? }. Returns...', price: '0.045000 USD', tags: ['AI'], riskScore: 50 },
       { url: 'https://2s.io/api/ai/entities', description: 'Named-entity recognition.', price: '0.090000 USD', tags: ['AI'] },
       { url: 'https://2s.io/api/ai/extract', description: 'Extract structured data from a webpage.', price: '0.187500 USD', tags: ['AI'] },
       { url: 'https://2s.io/api/ai/image', description: "Generate images from a text prompt across the gateway's...", price: '0.090000-50.000000 USD', tags: ['AI'] },
@@ -460,11 +465,12 @@
       { url: 'https://2s.io/api/bank/lookup', description: 'FDIC-insured US bank directory lookup.', price: '0.003000 USD', tags: ['Search'] },
       { url: 'https://2s.io/api/barcode/generate', description: 'Generate QR / Aztec / Data Matrix / PDF417 codes from...', price: '0.002500 USD', tags: ['Utility'] },
       { url: 'https://2s.io/api/batch/run', description: 'Run up to 50 endpoint calls behind ONE x402 payment.', price: '0.003000-50.000000 USD', tags: ['Utility'] },
-    ].map((service) => ({ ...service, server: twoSServer, active: true }));
+    ].map((service) => ({ riskScore: 0, ...service, server: twoSServer, active: true }));
 
     document.getElementById('services-tbody').innerHTML = servicesData.map((service) => `
       <tr>
         <td>${escapeHtml(service.server)}</td>
+        <td class="${service.riskScore > 10 ? 'risk-score-high' : ''}">${service.riskScore}</td>
         <td>${escapeHtml(categoryFromUrl(service.url))}</td>
         <td>${escapeHtml(descriptionFor(service))}</td>
         <td>${escapeHtml(service.price)}</td>
