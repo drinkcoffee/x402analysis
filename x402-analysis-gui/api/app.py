@@ -27,6 +27,11 @@ Routes:
     POST /admin/users          Admin-only: adds (or updates the user_type of)
                                an authorised user, with light_mode defaulting
                                to auto
+    GET  /risk-score-factors   Admin/Advanced only: a placeholder page
+                               (risk_score_factors.html). Standard users
+                               don't see the "Risk Score Factors" menu item
+                               and are redirected to /dashboard if they hit
+                               the URL directly.
     GET  /assets/*             static files (favicons, the site logo) from
                                assets/, mounted via StaticFiles
 
@@ -80,6 +85,7 @@ INDEX_HTML_PATH = PROJECT_ROOT / "index.html"
 DASHBOARD_HTML_PATH = PROJECT_ROOT / "dashboard.html"
 SETTINGS_HTML_PATH = PROJECT_ROOT / "settings.html"
 USER_ADMIN_HTML_PATH = PROJECT_ROOT / "user_admin.html"
+RISK_SCORE_HTML_PATH = PROJECT_ROOT / "risk_score_factors.html"
 
 # Site icon/logo (favicon variants + the logo shown on the landing page).
 app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "assets")), name="assets")
@@ -115,11 +121,28 @@ def _require_admin(request: Request) -> tuple[Optional[str], Optional[dict]]:
     return email, user
 
 
+def _require_admin_or_advanced(request: Request) -> tuple[Optional[str], Optional[dict]]:
+    """Like _require_user, but also returns (email, None) if the signed-in
+    user is a Standard user."""
+    email, user = _require_user(request)
+    if user and user["user_type"] not in (db.USER_TYPE_ADMIN, db.USER_TYPE_ADVANCED):
+        return email, None
+    return email, user
+
+
 def _admin_menu_item(user: dict) -> str:
     """The "User Administration" menu link, shown only to Admins."""
     if user["user_type"] != db.USER_TYPE_ADMIN:
         return ""
     return '<a href="/admin/users">User Administration</a>'
+
+
+def _risk_score_menu_item(user: dict) -> str:
+    """The "Risk Score Factors" menu link, shown only to Admins and
+    Advanced users."""
+    if user["user_type"] not in (db.USER_TYPE_ADMIN, db.USER_TYPE_ADVANCED):
+        return ""
+    return '<a href="/risk-score-factors">Risk Score Factors</a>'
 
 
 def _render_user_rows() -> str:
@@ -204,6 +227,7 @@ def dashboard(request: Request):
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
     page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
     page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
     return HTMLResponse(page)
 
@@ -218,6 +242,7 @@ def settings_page(request: Request):
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
     page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
     page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
     for mode, placeholder in (
         (db.LIGHT_MODE_AUTO, "AUTO_SELECTED"),
@@ -238,6 +263,7 @@ def admin_users_page(request: Request):
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
     page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
     page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
     page = page.replace("{{USER_ROWS}}", _render_user_rows())
     return HTMLResponse(page)
@@ -264,6 +290,21 @@ async def admin_add_user(request: Request):
         logger.info("admin/users POST: admin=%s added/updated user=%s user_type=%s", email, new_email, new_user_type)
 
     return RedirectResponse(url="/admin/users", status_code=303)
+
+
+@app.get("/risk-score-factors")
+def risk_score_factors_page(request: Request):
+    email, user = _require_admin_or_advanced(request)
+    if not user:
+        logger.info("risk-score-factors: no valid session or standard user (email=%s); redirecting", email)
+        return RedirectResponse(url="/dashboard" if email else "/")
+    page = RISK_SCORE_HTML_PATH.read_text()
+    page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
+    page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
+    page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
+    return HTMLResponse(page)
 
 
 @app.post("/settings/light-mode")

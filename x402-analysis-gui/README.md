@@ -16,6 +16,9 @@ rather than an env var.
   hamburger menu, shown only to Admins). Add a new authorised email address
   and set its user type; new users always start with light_mode = auto. Also
   lists the currently authorised users.
+- `/risk-score-factors` — Auth0-gated, Admin and Advanced users only ("Risk
+  Score Factors" in the hamburger menu, hidden from Standard users).
+  Currently a placeholder: "Risk Score Factors screen is coming soon."
 
 ## How it's structured
 
@@ -31,10 +34,12 @@ x402-analysis-gui/
   dashboard.html      the tabbed, Auth0-gated home page
   settings.html        the Auth0-gated light-mode settings page
   user_admin.html       the Auth0-gated, Admin-only user administration page
+  risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
   api/
     app.py             every route: /, /auth/login, /auth/callback,
                        /auth/logout, /dashboard, /settings,
-                       /settings/light-mode, /admin/users
+                       /settings/light-mode, /admin/users,
+                       /risk-score-factors
   gui/
     oauth.py            Auth0 login/callback/logout
     db.py               Neon access: find/add/update/remove/list users
