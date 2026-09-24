@@ -223,7 +223,7 @@
   </header>
 
   <main>
-    <a class="back-link" href="/dashboard">&larr; Back to Facilitators</a>
+    <a class="back-link" id="back-link" href="/dashboard">&larr; Back to Facilitators</a>
 
     <div class="facilitator-panel" id="facilitator-panel" hidden>
       <h1>Facilitator: <span id="fac-name"></span></h1>
@@ -309,6 +309,15 @@
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
     const data = name && Object.prototype.hasOwnProperty.call(FACILITATORS, name) ? FACILITATORS[name] : null;
+
+    // Carry the dashboard's tab/sort state (present in this page's own
+    // query string, since the Facilitators row link forwards it) back with
+    // us, so returning to the dashboard restores the Facilitators tab and
+    // sort order the user had rather than resetting to the default.
+    const backParams = new URLSearchParams(window.location.search);
+    backParams.delete('name');
+    const backQuery = backParams.toString();
+    document.getElementById('back-link').href = '/dashboard' + (backQuery ? '?' + backQuery : '');
 
     if (!data) {
       document.getElementById('facilitator-not-found').hidden = false;

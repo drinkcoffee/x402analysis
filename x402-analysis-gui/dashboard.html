@@ -278,6 +278,23 @@
   </main>
 
   <script>
+    // Dashboard view state (active tab, Facilitators sort column/direction)
+    // is mirrored into the URL's query string via history.replaceState as
+    // the user interacts, so that leaving the page (e.g. to a facilitator's
+    // detail page) and coming back -- via a link built from that same query
+    // string -- restores exactly what was showing, without adding extra
+    // browser-history entries for every click.
+    const initialParams = new URLSearchParams(window.location.search);
+
+    function updateDashboardUrl(overrides) {
+      const params = new URLSearchParams(window.location.search);
+      Object.entries(overrides).forEach(([key, value]) => {
+        params.set(key, value);
+      });
+      const query = params.toString();
+      history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+    }
+
     const facilitatorsData = [
       { name: 'TestFac', riskScore: 10, txVolume: 1000, numServers: 10000, active: 'YES' },
       { name: 'Dexter', riskScore: 0, txVolume: 700, numServers: 15000, active: 'NO' },
@@ -299,59 +316,85 @@
     document.getElementById('facilitators-tbody').addEventListener('click', (event) => {
       const row = event.target.closest('tr[data-name]');
       if (!row) return;
-      window.location.href = '/facilitator?name=' + encodeURIComponent(row.dataset.name);
+      const params = new URLSearchParams(window.location.search);
+      params.set('name', row.dataset.name);
+      window.location.href = '/facilitator?' + params.toString();
     });
 
     let facilitatorsSortCol = null;
     let facilitatorsSortDir = 'asc';
     const facilitatorsHeaders = document.querySelectorAll('#facilitators-table th[data-sort-col]');
+    const validSortCols = Array.from(facilitatorsHeaders).map((h) => h.dataset.sortCol);
 
-    function applyFacilitatorsSort(th) {
-      const col = th.dataset.sortCol;
+    function setFacilitatorsSort(col, dir, { updateUrl = true } = {}) {
+      const th = document.querySelector('#facilitators-table th[data-sort-col="' + col + '"]');
       const type = th.dataset.sortType;
-      facilitatorsSortDir = (facilitatorsSortCol === col && facilitatorsSortDir === 'asc') ? 'desc' : 'asc';
       facilitatorsSortCol = col;
+      facilitatorsSortDir = dir;
 
       const sorted = [...facilitatorsData].sort((a, b) => {
         const cmp = type === 'number'
           ? a[col] - b[col]
           : String(a[col]).localeCompare(String(b[col]));
-        return facilitatorsSortDir === 'asc' ? cmp : -cmp;
+        return dir === 'asc' ? cmp : -cmp;
       });
       renderFacilitatorsRows(sorted);
 
       facilitatorsHeaders.forEach((h) => {
         const arrow = h.querySelector('.sort-arrow');
         if (h === th) {
-          arrow.textContent = facilitatorsSortDir === 'asc' ? '▼' : '▲';
+          arrow.textContent = dir === 'asc' ? '▼' : '▲';
           arrow.classList.add('active');
         } else {
           arrow.textContent = '▼';
           arrow.classList.remove('active');
         }
       });
+
+      if (updateUrl) {
+        updateDashboardUrl({ sort: col, dir: dir });
+      }
     }
 
     facilitatorsHeaders.forEach((th) => {
-      th.addEventListener('click', () => applyFacilitatorsSort(th));
+      th.addEventListener('click', () => {
+        const col = th.dataset.sortCol;
+        const nextDir = (facilitatorsSortCol === col && facilitatorsSortDir === 'asc') ? 'desc' : 'asc';
+        setFacilitatorsSort(col, nextDir);
+      });
     });
 
-    applyFacilitatorsSort(document.querySelector('#facilitators-table th[data-sort-col="name"]'));
+    const urlSortCol = initialParams.get('sort');
+    const urlSortDir = initialParams.get('dir');
+    const initialSortCol = validSortCols.includes(urlSortCol) ? urlSortCol : 'name';
+    const initialSortDir = (urlSortDir === 'asc' || urlSortDir === 'desc') ? urlSortDir : 'asc';
+    setFacilitatorsSort(initialSortCol, initialSortDir, { updateUrl: false });
 
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
-    tabButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        tabButtons.forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        tabPanels.forEach((p) => { p.hidden = true; });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        document.getElementById('tab-' + btn.dataset.tab).hidden = false;
+    const validTabs = Array.from(tabButtons).map((b) => b.dataset.tab);
+
+    function activateTab(tabName, { updateUrl = true } = {}) {
+      tabButtons.forEach((b) => {
+        const isActive = b.dataset.tab === tabName;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-selected', String(isActive));
       });
+      tabPanels.forEach((p) => { p.hidden = true; });
+      document.getElementById('tab-' + tabName).hidden = false;
+      if (updateUrl) {
+        updateDashboardUrl({ tab: tabName });
+      }
+    }
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
+
+    const urlTab = initialParams.get('tab');
+    if (validTabs.includes(urlTab)) {
+      activateTab(urlTab, { updateUrl: false });
+    }
 
     const menuButton = document.getElementById('menu-button');
     const menuDropdown = document.getElementById('menu-dropdown');
