@@ -6,8 +6,8 @@ in, their role, and their theme preference live in a Neon Postgres database
 rather than an env var.
 
 - `/` — public landing page, no login needed.
-- `/dashboard` — Auth0-gated. A header bar (logo, site name, user type, your
-  email, a hamburger menu) plus tabs (Servers/Services/Facilitators/
+- `/dashboard` — Auth0-gated. A header bar (logo, site name, your email, your
+  user type, a hamburger menu) plus tabs (Servers/Services/Facilitators/
   Clients/Funders), each currently showing placeholder content.
 - `/settings` — Auth0-gated. Currently just one control: your light/dark/
   auto theme preference, stored in the database and applied on every page
@@ -94,36 +94,39 @@ Neon decides *whether you're let in*.
 
 ### Encryption
 
-The `email` column in `user_settings` is encrypted at rest with AES-256-GCM
-before being written to Neon (see `gui/crypto.py`) — Neon's own
-infrastructure-level encryption protects the whole database at rest, but
-this adds an application-level layer specifically on the one column that's
-personally identifying. Lookups (`WHERE email = ...` at login) go via a
-separate deterministic HMAC-SHA256 hash of the normalized email instead of
-the (randomized, non-searchable) ciphertext; both the AES-GCM key and the
-HMAC key are derived from a single 256-bit master key via HKDF-SHA256, so
-the same secret is never reused across two different cryptographic
-purposes.
+The `email` and `user_type` columns in `user_settings` are encrypted at rest
+with AES-256-GCM before being written to Neon (see `gui/crypto.py`) — Neon's
+own infrastructure-level encryption protects the whole database at rest, but
+this adds an application-level layer on the columns that are personally
+identifying or access-control-sensitive. Lookups (`WHERE email = ...` at
+login) go via a separate deterministic HMAC-SHA256 hash of the normalized
+email instead of the (randomized, non-searchable) ciphertext; `user_type`
+needs no such lookup hash since nothing ever queries by its value — it's
+decrypted for display whenever a user's row is read. Both the AES-GCM key
+and the HMAC key are derived from a single 256-bit master key via
+HKDF-SHA256, so the same secret is never reused across two different
+cryptographic purposes.
 
 Generate the master key:
 ```bash
 python -c "import secrets, base64; print(base64.b64encode(secrets.token_bytes(32)).decode())"
 ```
-Set it as `DB_ENCRYPTION_KEY`. **Losing this key makes every stored email
-unrecoverable** — there's no way to look up or display who a row belongs to
-without it. Back it up somewhere safe outside of Vercel/Neon themselves.
+Set it as `DB_ENCRYPTION_KEY`. **Losing this key makes every stored email and
+user type unrecoverable** — there's no way to look up or display who a row
+belongs to, or what role they have, without it. Back it up somewhere safe
+outside of Vercel/Neon themselves.
 
 ### Schema
 
 ```sql
 CREATE TABLE user_settings (
-    id               SERIAL PRIMARY KEY,
-    email_hash       TEXT NOT NULL UNIQUE,   -- HMAC-SHA256(email), for lookups
-    email_encrypted  TEXT NOT NULL,          -- AES-256-GCM ciphertext
-    user_type        SMALLINT NOT NULL DEFAULT 2,  -- 0=Admin, 1=Advanced, 2=Standard
-    light_mode       SMALLINT NOT NULL DEFAULT 0,  -- 0=auto, 1=light, 2=dark
-    created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+    id                   SERIAL PRIMARY KEY,
+    email_hash           TEXT NOT NULL UNIQUE,   -- HMAC-SHA256(email), for lookups
+    email_encrypted      TEXT NOT NULL,          -- AES-256-GCM ciphertext
+    user_type_encrypted  TEXT NOT NULL,          -- AES-256-GCM ciphertext of "0"/"1"/"2" (0=Admin, 1=Advanced, 2=Standard)
+    light_mode           SMALLINT NOT NULL DEFAULT 0,  -- 0=auto, 1=light, 2=dark
+    created_at           TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at           TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 ```
 

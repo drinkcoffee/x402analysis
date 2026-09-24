@@ -12,9 +12,9 @@ Routes:
     GET  /auth/callback        Auth0 redirects back here with the auth code
     GET  /auth/logout          clears the session + Auth0 logout
     GET  /dashboard            the OAuth-gated page (dashboard.html) -- header
-                               bar (logo, site name, user type, the logged-in
-                               user's email, a hamburger menu with Settings +
-                               Log out) plus tabs
+                               bar (logo, site name, the logged-in user's
+                               email, their user type, a hamburger menu with
+                               Settings + Log out) plus tabs
                                (Servers/Services/Facilitators/Clients/Funders),
                                each currently showing placeholder content
     GET  /settings             the OAuth-gated settings page -- currently just
@@ -165,6 +165,7 @@ def dashboard(request: Request):
     page = DASHBOARD_HTML_PATH.read_text()
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
     return HTMLResponse(page)
 
 
@@ -177,6 +178,7 @@ def settings_page(request: Request):
     page = SETTINGS_HTML_PATH.read_text()
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
     for mode, placeholder in (
         (db.LIGHT_MODE_AUTO, "AUTO_SELECTED"),
         (db.LIGHT_MODE_LIGHT, "LIGHT_SELECTED"),

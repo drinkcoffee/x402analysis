@@ -2,11 +2,13 @@
 addresses authorised to log into x402-analysis-gui, plus each one's role
 (user_type) and theme preference (light_mode).
 
-The `email` column is never stored in plaintext -- see gui/crypto.py.
-Lookups go by `email_hash` (a keyed HMAC-SHA256 of the normalized email);
-`email_encrypted` (AES-256-GCM) is only decrypted for display/audit
-purposes -- the normal login/settings path never needs it, since the
-session already carries the plaintext email from Auth0.
+The `email` and `user_type` columns are never stored in plaintext -- see
+gui/crypto.py. Lookups go by `email_hash` (a keyed HMAC-SHA256 of the
+normalized email); `email_encrypted` (AES-256-GCM) is only decrypted for
+display/audit purposes -- the normal login/settings path never needs it,
+since the session already carries the plaintext email from Auth0.
+`user_type_encrypted` (also AES-256-GCM, of the digit "0"/"1"/"2") is
+decrypted on every lookup since the GUI displays it.
 
 Each function opens and closes its own connection rather than pooling
 in-process: Vercel serverless functions are short-lived and stateless, so
@@ -76,11 +78,13 @@ def find_user_by_email(email: str) -> Optional[dict]:
     with _connect() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(
-                "SELECT user_type, light_mode FROM user_settings WHERE email_hash = %s",
+                "SELECT user_type_encrypted, light_mode FROM user_settings WHERE email_hash = %s",
                 (lookup_hash(email),),
             )
             row = cur.fetchone()
-    return dict(row) if row else None
+    if not row:
+        return None
+    return {"user_type": int(decrypt(row["user_type_encrypted"])), "light_mode": row["light_mode"]}
 
 
 def update_light_mode(email: str, light_mode: int) -> bool:
@@ -111,15 +115,15 @@ def add_user(email: str, user_type: int = USER_TYPE_STANDARD, light_mode: int = 
         with conn.cursor() as cur:
             cur.execute(
                 """
-                INSERT INTO user_settings (email_hash, email_encrypted, user_type, light_mode)
+                INSERT INTO user_settings (email_hash, email_encrypted, user_type_encrypted, light_mode)
                 VALUES (%s, %s, %s, %s)
                 ON CONFLICT (email_hash) DO UPDATE
                     SET email_encrypted = EXCLUDED.email_encrypted,
-                        user_type = EXCLUDED.user_type,
+                        user_type_encrypted = EXCLUDED.user_type_encrypted,
                         light_mode = EXCLUDED.light_mode,
                         updated_at = now()
                 """,
-                (lookup_hash(email), encrypt(email), user_type, light_mode),
+                (lookup_hash(email), encrypt(email), encrypt(str(user_type)), light_mode),
             )
 
 
@@ -139,10 +143,14 @@ def list_users() -> list[dict]:
     with _connect() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(
-                "SELECT email_encrypted, user_type, light_mode FROM user_settings ORDER BY created_at"
+                "SELECT email_encrypted, user_type_encrypted, light_mode FROM user_settings ORDER BY created_at"
             )
             rows = cur.fetchall()
     return [
-        {"email": decrypt(row["email_encrypted"]), "user_type": row["user_type"], "light_mode": row["light_mode"]}
+        {
+            "email": decrypt(row["email_encrypted"]),
+            "user_type": int(decrypt(row["user_type_encrypted"])),
+            "light_mode": row["light_mode"],
+        }
         for row in rows
     ]
