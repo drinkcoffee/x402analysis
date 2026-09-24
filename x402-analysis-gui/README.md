@@ -12,6 +12,10 @@ rather than an env var.
 - `/settings` — Auth0-gated. Currently just one control: your light/dark/
   auto theme preference, stored in the database and applied on every page
   load from then on.
+- `/admin/users` — Auth0-gated, Admin only ("User Administration" in the
+  hamburger menu, shown only to Admins). Add a new authorised email address
+  and set its user type; new users always start with light_mode = auto. Also
+  lists the currently authorised users.
 
 ## How it's structured
 
@@ -26,10 +30,11 @@ x402-analysis-gui/
   index.html          public landing page
   dashboard.html      the tabbed, Auth0-gated home page
   settings.html        the Auth0-gated light-mode settings page
+  user_admin.html       the Auth0-gated, Admin-only user administration page
   api/
     app.py             every route: /, /auth/login, /auth/callback,
                        /auth/logout, /dashboard, /settings,
-                       /settings/light-mode
+                       /settings/light-mode, /admin/users
   gui/
     oauth.py            Auth0 login/callback/logout
     db.py               Neon access: find/add/update/remove/list users
@@ -90,7 +95,9 @@ Neon decides *whether you're let in*.
    ```
    Run `python scripts/add_user.py --help` for the full set of options
    (`--user-type {admin,advanced,standard}`, `--light-mode {auto,light,dark}`,
-   `--remove`, `--list`).
+   `--remove`, `--list`). This script is still how you seed the first Admin
+   (and the only way to remove someone) — once that first Admin can log in,
+   they can add further users from `/admin/users` in the app itself.
 
 ### Encryption
 
@@ -165,5 +172,6 @@ Then open `http://localhost:8000`.
    real deployed `PUBLIC_BASE_URL` (do this before or right after your first
    deploy — login won't work until they match exactly).
 5. Run `scripts/init_db.py` and `scripts/add_user.py` locally (pointed at
-   the same `DATABASE_URL`/`DB_ENCRYPTION_KEY` you set on Vercel) — there's
-   no in-app UI for either yet.
+   the same `DATABASE_URL`/`DB_ENCRYPTION_KEY` you set on Vercel) to create
+   the table and seed the first Admin — after that, further users can be
+   added from `/admin/users` in the app.
