@@ -8,7 +8,16 @@ rather than an env var.
 - `/` — public landing page, no login needed.
 - `/dashboard` — Auth0-gated. A header bar (logo, site name, your email, your
   user type, a hamburger menu) plus tabs (Servers/Services/Facilitators/
-  Clients/Funders), each currently showing placeholder content.
+  Clients/Funders), each currently showing placeholder content except
+  Facilitators, which has a sortable table (click a column heading to sort,
+  click again to reverse) of two hardcoded rows; clicking a row opens
+  `/facilitator`.
+- `/facilitator?name=...` — Auth0-gated, any authenticated user. Detail page
+  for one facilitator: Name/Risk Score/Transaction Volume/Servers Settling
+  Transactions/Services Settling Transactions, then a Web Domains table and
+  a Blockchain Addresses table. Populated client-side from a hardcoded demo
+  dataset in `facilitator.html` (there's no facilitators table in Neon yet)
+  keyed by the `name` query parameter.
 - `/settings` — Auth0-gated. Currently just one control: your light/dark/
   auto theme preference, stored in the database and applied on every page
   load from then on.
@@ -35,11 +44,12 @@ x402-analysis-gui/
   settings.html        the Auth0-gated light-mode settings page
   user_admin.html       the Auth0-gated, Admin-only user administration page
   risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
+  facilitator.html       the Auth0-gated facilitator detail page (demo data)
   api/
     app.py             every route: /, /auth/login, /auth/callback,
                        /auth/logout, /dashboard, /settings,
                        /settings/light-mode, /admin/users,
-                       /risk-score-factors
+                       /risk-score-factors, /facilitator
   gui/
     oauth.py            Auth0 login/callback/logout
     db.py               Neon access: find/add/update/remove/list users

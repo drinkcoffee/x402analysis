@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en"{{THEME_ATTR}}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facilitator — x402 Analysis</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f9f9f9;
+      --ink: #000000;
+      --muted: #4a4a4a;
+      --accent: #d33839;
+      --panel: #ffffff;
+      --border: #e2e2e2;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --ink: #f9f9f9;
+        --muted: #b5b5b5;
+        --accent: #d33839;
+        --panel: #121212;
+        --border: #2a2a2a;
+      }
+    }
+    /* A signed-in user's stored light_mode preference forces the theme via
+       this data-theme attribute on <html>, overriding the OS-level
+       prefers-color-scheme above -- see dashboard.html for the same rule. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f9f9f9;
+      --ink: #000000;
+      --muted: #4a4a4a;
+      --accent: #d33839;
+      --panel: #ffffff;
+      --border: #e2e2e2;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #000000;
+      --ink: #f9f9f9;
+      --muted: #b5b5b5;
+      --accent: #d33839;
+      --panel: #121212;
+      --border: #2a2a2a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    header.topbar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1.25rem;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    header.topbar a.home-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    header.topbar img.logo {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    header.topbar .site-name {
+      font-family: Garamond, "EB Garamond", "Apple Garamond", serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    header.topbar .user-email {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    header.topbar .user-type {
+      margin-left: 1.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    button.menu-button {
+      margin-left: 0.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    button.menu-button span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+    }
+    .menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 1.25rem;
+      margin-top: 0.25rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      min-width: 140px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      z-index: 10;
+    }
+    .menu-dropdown[hidden] { display: none; }
+    .menu-dropdown a {
+      display: block;
+      padding: 0.65rem 1rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .menu-dropdown a:hover {
+      background: var(--bg);
+      color: var(--accent);
+    }
+
+    main {
+      padding: 2rem 1.25rem;
+    }
+    .facilitator-panel {
+      max-width: 800px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.25rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .back-link:hover {
+      color: var(--accent);
+    }
+    .facilitator-panel h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+    .summary-list {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 0.5rem 1.5rem;
+      margin: 0 0 2.5rem;
+    }
+    .summary-list dt {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .summary-list dd {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    section.table-section {
+      margin-bottom: 2.5rem;
+    }
+    section.table-section h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.05rem;
+      letter-spacing: -0.01em;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.data-table th,
+    table.data-table td {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    table.data-table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="home-link" href="/dashboard">
+      <img class="logo" src="/assets/icon-192.png" alt="x402 Analysis logo" />
+      <span class="site-name">x402 Analysis</span>
+    </a>
+    <span class="user-email">{{USER_EMAIL}}</span>
+    <span class="user-type">{{USER_TYPE}}</span>
+    <button class="menu-button" id="menu-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="menu-dropdown" id="menu-dropdown" hidden>
+      <a href="/settings">Settings</a>
+      {{RISK_SCORE_MENU_ITEM}}
+      {{ADMIN_MENU_ITEM}}
+      <a href="/auth/logout">Log out</a>
+    </div>
+  </header>
+
+  <main>
+    <a class="back-link" href="/dashboard">&larr; Back to Facilitators</a>
+
+    <div class="facilitator-panel" id="facilitator-panel" hidden>
+      <h1>Facilitator Details</h1>
+      <dl class="summary-list">
+        <dt>Name</dt><dd id="fac-name"></dd>
+        <dt>Risk Score</dt><dd id="fac-risk-score"></dd>
+        <dt>Transaction Volume (week)</dt><dd id="fac-tx-volume"></dd>
+        <dt>Servers Settling Transactions</dt><dd id="fac-servers-settling"></dd>
+        <dt>Services Settling Transactions</dt><dd id="fac-services-settling"></dd>
+      </dl>
+
+      <section class="table-section">
+        <h2>Web Domains</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>URL</th>
+              <th>IP</th>
+              <th>Location</th>
+              <th>TLS Subject Name</th>
+            </tr>
+          </thead>
+          <tbody id="web-domains-tbody"></tbody>
+        </table>
+      </section>
+
+      <section class="table-section">
+        <h2>Blockchain Addresses</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Usage</th>
+              <th>Blockchain</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody id="blockchain-addresses-tbody"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <p id="facilitator-not-found" hidden>Facilitator not found.</p>
+  </main>
+
+  <script>
+    // Demo data for the two hardcoded facilitators shown on the dashboard's
+    // Facilitators tab. There's no backing data store for this yet, so this
+    // detail page is populated client-side from the facilitator name in the
+    // URL's ?name= query parameter.
+    const FACILITATORS = {
+      TestFac: {
+        riskScore: 10,
+        txVolume: 1000,
+        serversSettling: 10000,
+        servicesSettling: 240,
+        webDomains: [
+          { type: 'API', url: 'https://api.testfac.io', ip: '203.0.113.10', location: 'US-East (N. Virginia)', tlsSubject: 'api.testfac.io' },
+          { type: 'Documentation', url: 'https://docs.testfac.io', ip: '203.0.113.11', location: 'US-East (N. Virginia)', tlsSubject: 'docs.testfac.io' },
+          { type: 'Website', url: 'https://testfac.io', ip: '203.0.113.12', location: 'US-East (N. Virginia)', tlsSubject: 'testfac.io' },
+        ],
+        blockchainAddresses: [
+          { usage: 'Signing', blockchain: 'Base', address: '0xfac1fac1fac1fac1fac1fac1fac1fac1fac1fac1' },
+          { usage: 'Payment', blockchain: 'Base', address: '0xfac2fac2fac2fac2fac2fac2fac2fac2fac2fac2' },
+          { usage: 'Payment', blockchain: 'Solana', address: '0xfac3fac3fac3fac3fac3fac3fac3fac3fac3fac3' },
+          { usage: 'Signing', blockchain: '*', address: '0xfac4fac4fac4fac4fac4fac4fac4fac4fac4fac4' },
+        ],
+      },
+      Dexter: {
+        riskScore: 0,
+        txVolume: 700,
+        serversSettling: 15000,
+        servicesSettling: 85,
+        webDomains: [
+          { type: 'API', url: 'https://api.dexter.io', ip: '198.51.100.20', location: 'EU-West (Dublin)', tlsSubject: 'api.dexter.io' },
+        ],
+        blockchainAddresses: [
+          { usage: 'Signing', blockchain: 'Base', address: '0xdec1dec1dec1dec1dec1dec1dec1dec1dec1dec1' },
+          { usage: 'Payment', blockchain: '*', address: '0xdec2dec2dec2dec2dec2dec2dec2dec2dec2dec2' },
+        ],
+      },
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    const data = name && Object.prototype.hasOwnProperty.call(FACILITATORS, name) ? FACILITATORS[name] : null;
+
+    if (!data) {
+      document.getElementById('facilitator-not-found').hidden = false;
+    } else {
+      document.getElementById('facilitator-panel').hidden = false;
+      document.getElementById('fac-name').textContent = name;
+      document.getElementById('fac-risk-score').textContent = data.riskScore;
+      document.getElementById('fac-tx-volume').textContent = data.txVolume;
+      document.getElementById('fac-servers-settling').textContent = data.serversSettling;
+      document.getElementById('fac-services-settling').textContent = data.servicesSettling;
+
+      document.getElementById('web-domains-tbody').innerHTML = data.webDomains.map((d) => `
+        <tr>
+          <td>${d.type}</td>
+          <td>${d.url}</td>
+          <td>${d.ip}</td>
+          <td>${d.location}</td>
+          <td>${d.tlsSubject}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('blockchain-addresses-tbody').innerHTML = data.blockchainAddresses.map((a) => `
+        <tr>
+          <td>${a.usage}</td>
+          <td>${a.blockchain}</td>
+          <td>${a.address}</td>
+        </tr>
+      `).join('');
+    }
+
+    const menuButton = document.getElementById('menu-button');
+    const menuDropdown = document.getElementById('menu-dropdown');
+    menuButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const isOpen = !menuDropdown.hidden;
+      menuDropdown.hidden = isOpen;
+      menuButton.setAttribute('aria-expanded', String(!isOpen));
+    });
+    document.addEventListener('click', () => {
+      menuDropdown.hidden = true;
+      menuButton.setAttribute('aria-expanded', 'false');
+    });
+  </script>
+</body>
+</html>

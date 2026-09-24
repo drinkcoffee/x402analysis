@@ -32,6 +32,13 @@ Routes:
                                don't see the "Risk Score Factors" menu item
                                and are redirected to /dashboard if they hit
                                the URL directly.
+    GET  /facilitator          OAuth-gated (any authenticated user):
+                               facilitator.html, a detail page for one row
+                               of the dashboard's Facilitators tab, reached
+                               by clicking that row. Which facilitator to
+                               show is passed as ?name=... and resolved
+                               client-side against a small hardcoded demo
+                               dataset (no facilitators table in Neon yet).
     GET  /assets/*             static files (favicons, the site logo) from
                                assets/, mounted via StaticFiles
 
@@ -86,6 +93,7 @@ DASHBOARD_HTML_PATH = PROJECT_ROOT / "dashboard.html"
 SETTINGS_HTML_PATH = PROJECT_ROOT / "settings.html"
 USER_ADMIN_HTML_PATH = PROJECT_ROOT / "user_admin.html"
 RISK_SCORE_HTML_PATH = PROJECT_ROOT / "risk_score_factors.html"
+FACILITATOR_HTML_PATH = PROJECT_ROOT / "facilitator.html"
 
 # Site icon/logo (favicon variants + the logo shown on the landing page).
 app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "assets")), name="assets")
@@ -299,6 +307,21 @@ def risk_score_factors_page(request: Request):
         logger.info("risk-score-factors: no valid session or standard user (email=%s); redirecting", email)
         return RedirectResponse(url="/dashboard" if email else "/")
     page = RISK_SCORE_HTML_PATH.read_text()
+    page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
+    page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
+    page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
+    return HTMLResponse(page)
+
+
+@app.get("/facilitator")
+def facilitator_page(request: Request):
+    email, user = _require_user(request)
+    if not user:
+        logger.info("facilitator: no valid session (email=%s); redirecting to the public landing page", email)
+        return RedirectResponse(url="/")
+    page = FACILITATOR_HTML_PATH.read_text()
     page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
     page = page.replace("{{USER_EMAIL}}", escape(email))
     page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))

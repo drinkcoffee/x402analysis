@@ -221,6 +221,12 @@
       color: var(--accent);
       font-weight: 700;
     }
+    #facilitators-tbody tr {
+      cursor: pointer;
+    }
+    #facilitators-tbody tr:hover {
+      background: var(--bg);
+    }
   </style>
 </head>
 <body>
@@ -280,7 +286,7 @@
     function renderFacilitatorsRows(rows) {
       const tbody = document.getElementById('facilitators-tbody');
       tbody.innerHTML = rows.map((row) => `
-        <tr>
+        <tr data-name="${row.name}">
           <td>${row.name}</td>
           <td>${row.riskScore}</td>
           <td>${row.txVolume}</td>
@@ -289,6 +295,12 @@
         </tr>
       `).join('');
     }
+
+    document.getElementById('facilitators-tbody').addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-name]');
+      if (!row) return;
+      window.location.href = '/facilitator?name=' + encodeURIComponent(row.dataset.name);
+    });
 
     let facilitatorsSortCol = null;
     let facilitatorsSortDir = 'asc';
