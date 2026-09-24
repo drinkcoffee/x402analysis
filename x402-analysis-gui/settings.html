@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>x402 Analysis</title>
+  <title>Settings — x402 Analysis</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
@@ -27,12 +27,9 @@
         --border: #2a2a2a;
       }
     }
-    /* A signed-in user's stored light_mode preference (Settings page)
-       forces the theme via this data-theme attribute on <html>, overriding
-       the OS-level prefers-color-scheme above -- higher-specificity
-       :root[data-theme=...] selectors win regardless of source order. No
-       attribute at all (light_mode = auto) leaves the media query in
-       charge. */
+    /* A signed-in user's stored light_mode preference forces the theme via
+       this data-theme attribute on <html>, overriding the OS-level
+       prefers-color-scheme above -- see dashboard.html for the same rule. */
     :root[data-theme="light"] {
       color-scheme: light;
       --bg: #f9f9f9;
@@ -69,17 +66,17 @@
       border-bottom: 1px solid var(--border);
       position: relative;
     }
-    header.topbar img.logo {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
     header.topbar a.home-link {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       text-decoration: none;
       color: inherit;
+    }
+    header.topbar img.logo {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
     }
     header.topbar .site-name {
       font-family: Garamond, "EB Garamond", "Apple Garamond", serif;
@@ -146,40 +143,55 @@
       color: var(--accent);
     }
 
-    nav.tabs {
-      display: flex;
-      gap: 0.25rem;
-      padding: 0 1.25rem;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-    }
-    nav.tabs button {
-      appearance: none;
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: var(--muted);
-      font-size: 0.95rem;
-      font-weight: 500;
-      padding: 0.85rem 1rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    nav.tabs button.active {
-      color: var(--ink);
-      border-bottom-color: var(--accent);
-    }
-    nav.tabs button:hover {
-      color: var(--ink);
-    }
-
     main {
       padding: 2rem 1.25rem;
+      display: flex;
+      justify-content: center;
     }
-    .tab-panel[hidden] { display: none; }
-    .tab-panel {
-      max-width: 720px;
+    .settings-panel {
+      width: 100%;
+      max-width: 420px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+    }
+    .settings-panel h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.3rem;
+      letter-spacing: -0.01em;
+    }
+    .settings-panel label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .settings-panel select {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 1.25rem;
+    }
+    .settings-panel button {
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .settings-panel button:hover {
+      opacity: 0.9;
     }
   </style>
 </head>
@@ -200,38 +212,22 @@
     </div>
   </header>
 
-  <nav class="tabs" role="tablist">
-    <button class="tab-button active" type="button" data-tab="servers" role="tab" aria-selected="true">Servers</button>
-    <button class="tab-button" type="button" data-tab="services" role="tab" aria-selected="false">Services</button>
-    <button class="tab-button" type="button" data-tab="facilitators" role="tab" aria-selected="false">Facilitators</button>
-    <button class="tab-button" type="button" data-tab="clients" role="tab" aria-selected="false">Clients</button>
-    <button class="tab-button" type="button" data-tab="funders" role="tab" aria-selected="false">Funders</button>
-  </nav>
-
   <main>
-    <div class="tab-panel" id="tab-servers" role="tabpanel">This is the Servers tab</div>
-    <div class="tab-panel" id="tab-services" role="tabpanel" hidden>This is the Services tab</div>
-    <div class="tab-panel" id="tab-facilitators" role="tabpanel" hidden>This is the Facilitators tab</div>
-    <div class="tab-panel" id="tab-clients" role="tabpanel" hidden>This is the Clients tab</div>
-    <div class="tab-panel" id="tab-funders" role="tabpanel" hidden>This is the Funders tab</div>
+    <div class="settings-panel">
+      <h1>Settings</h1>
+      <form method="post" action="/settings/light-mode">
+        <label for="light_mode">Light mode</label>
+        <select id="light_mode" name="light_mode">
+          <option value="0" {{AUTO_SELECTED}}>Auto (match device)</option>
+          <option value="1" {{LIGHT_SELECTED}}>Light</option>
+          <option value="2" {{DARK_SELECTED}}>Dark</option>
+        </select>
+        <button type="submit">Save</button>
+      </form>
+    </div>
   </main>
 
   <script>
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabPanels = document.querySelectorAll('.tab-panel');
-    tabButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        tabButtons.forEach((b) => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        tabPanels.forEach((p) => { p.hidden = true; });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        document.getElementById('tab-' + btn.dataset.tab).hidden = false;
-      });
-    });
-
     const menuButton = document.getElementById('menu-button');
     const menuDropdown = document.getElementById('menu-dropdown');
     menuButton.addEventListener('click', (event) => {

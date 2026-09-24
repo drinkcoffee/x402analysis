@@ -3,3 +3,6 @@ uvicorn
 itsdangerous
 requests
 python-dotenv
+python-multipart
+psycopg2-binary
+cryptography

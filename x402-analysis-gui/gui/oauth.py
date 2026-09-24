@@ -1,12 +1,14 @@
-"""Auth0 login (OAuth2/OIDC Authorization Code flow) + email allowlist check.
+"""Auth0 login: OAuth2/OIDC Authorization Code flow against your tenant.
 
-Standard flow against your Auth0 tenant:
+Standard flow:
     1. build_authorize_url(state) -- send the browser here to log in
     2. Auth0 redirects back to PUBLIC_BASE_URL + "/auth/callback" with
        ?code=...&state=...
     3. exchange_code_for_email(code) -- trades the code for an access token,
        then calls Auth0's /userinfo endpoint to get the verified email
-    4. is_email_allowed(email) -- checks it against ALLOWED_EMAILS
+    4. gui.db.find_user_by_email(email) -- checks it against the
+       user_settings table in Neon (not handled here; see api/app.py's
+       callback route)
     5. build_logout_url() -- also ends the Auth0-side SSO session, not just
        our own cookie (see the /auth/logout route in api/app.py)
 
@@ -21,9 +23,6 @@ Env vars:
                           must be listed in the Auth0 application's Allowed
                           Callback URLs, and PUBLIC_BASE_URL itself in its
                           Allowed Logout URLs
-    ALLOWED_EMAILS        required -- comma-separated list of email addresses
-                          permitted to log in; anyone else who successfully
-                          authenticates is still denied
 """
 
 from __future__ import annotations
@@ -115,8 +114,3 @@ def exchange_code_for_email(code: str) -> str:
     email = userinfo["email"]
     logger.info("oauth: exchanged code for email=%s", email)
     return email
-
-
-def is_email_allowed(email: str) -> bool:
-    allowed = {e.strip().lower() for e in os.getenv("ALLOWED_EMAILS", "").split(",") if e.strip()}
-    return email.strip().lower() in allowed
