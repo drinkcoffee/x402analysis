@@ -290,39 +290,41 @@
       `).join('');
     }
 
-    renderFacilitatorsRows(facilitatorsData);
-
     let facilitatorsSortCol = null;
     let facilitatorsSortDir = 'asc';
     const facilitatorsHeaders = document.querySelectorAll('#facilitators-table th[data-sort-col]');
 
-    facilitatorsHeaders.forEach((th) => {
-      th.addEventListener('click', () => {
-        const col = th.dataset.sortCol;
-        const type = th.dataset.sortType;
-        facilitatorsSortDir = (facilitatorsSortCol === col && facilitatorsSortDir === 'asc') ? 'desc' : 'asc';
-        facilitatorsSortCol = col;
+    function applyFacilitatorsSort(th) {
+      const col = th.dataset.sortCol;
+      const type = th.dataset.sortType;
+      facilitatorsSortDir = (facilitatorsSortCol === col && facilitatorsSortDir === 'asc') ? 'desc' : 'asc';
+      facilitatorsSortCol = col;
 
-        const sorted = [...facilitatorsData].sort((a, b) => {
-          const cmp = type === 'number'
-            ? a[col] - b[col]
-            : String(a[col]).localeCompare(String(b[col]));
-          return facilitatorsSortDir === 'asc' ? cmp : -cmp;
-        });
-        renderFacilitatorsRows(sorted);
-
-        facilitatorsHeaders.forEach((h) => {
-          const arrow = h.querySelector('.sort-arrow');
-          if (h === th) {
-            arrow.textContent = facilitatorsSortDir === 'asc' ? '▼' : '▲';
-            arrow.classList.add('active');
-          } else {
-            arrow.textContent = '▼';
-            arrow.classList.remove('active');
-          }
-        });
+      const sorted = [...facilitatorsData].sort((a, b) => {
+        const cmp = type === 'number'
+          ? a[col] - b[col]
+          : String(a[col]).localeCompare(String(b[col]));
+        return facilitatorsSortDir === 'asc' ? cmp : -cmp;
       });
+      renderFacilitatorsRows(sorted);
+
+      facilitatorsHeaders.forEach((h) => {
+        const arrow = h.querySelector('.sort-arrow');
+        if (h === th) {
+          arrow.textContent = facilitatorsSortDir === 'asc' ? '▼' : '▲';
+          arrow.classList.add('active');
+        } else {
+          arrow.textContent = '▼';
+          arrow.classList.remove('active');
+        }
+      });
+    }
+
+    facilitatorsHeaders.forEach((th) => {
+      th.addEventListener('click', () => applyFacilitatorsSort(th));
     });
+
+    applyFacilitatorsSort(document.querySelector('#facilitators-table th[data-sort-col="name"]'));
 
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
