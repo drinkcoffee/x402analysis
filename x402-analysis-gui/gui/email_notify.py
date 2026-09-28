@@ -66,6 +66,18 @@ def send_access_request(requester_email: str) -> bool:
             timeout=10,
         )
         resp.raise_for_status()
+    except requests.exceptions.HTTPError:
+        # Resend's response body explains *why* (e.g. an unverified sending
+        # domain, or the shared sandbox "from" address only being allowed to
+        # deliver to the Resend account's own email) -- surface it instead
+        # of just the bare status code from raise_for_status().
+        logger.error(
+            "email_notify: failed to send access-request email for %s: %s %s",
+            requester_email,
+            resp.status_code,
+            resp.text,
+        )
+        return False
     except requests.exceptions.RequestException:
         logger.exception("email_notify: failed to send access-request email for %s", requester_email)
         return False
