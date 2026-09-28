@@ -21,9 +21,12 @@ the entrypoint's own directory tree -- but the name change is what actually
 fixed this particular failure.
 
 Routes:
-    GET  /         unauthenticated -- a one-line pointer to API.md
-    GET  /status   unauthenticated -- checks the Neon connection and
-                   reports whether the server and database are online
+    GET  /             unauthenticated -- a one-line pointer to API.md
+    GET  /status       unauthenticated -- checks the Neon connection and
+                       reports whether the server and database are online
+    GET  /favicon.ico  unauthenticated -- the browser-tab icon
+                       (api/assets/favicon.ico, generated from
+                       api/assets/icon.png)
 
 Everything else requires an API key sent as an `X-API-Key` header (see
 api/apilib/auth.py: require_read_access / require_read_write_access) -- but
@@ -55,7 +58,7 @@ logger = logging.getLogger("x402_api")
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
 load_dotenv()
 
@@ -64,6 +67,8 @@ from apilib.app_setup import configure_app  # noqa: E402
 
 app = FastAPI(title="x402 Analysis API")
 configure_app(app, logger)
+
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
 HOME_MESSAGE = (
     "x402 Analysis API Server. See "
@@ -75,6 +80,11 @@ HOME_MESSAGE = (
 @app.get("/")
 def home() -> PlainTextResponse:
     return PlainTextResponse(HOME_MESSAGE)
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon() -> FileResponse:
+    return FileResponse(ASSETS_DIR / "favicon.ico", media_type="image/vnd.microsoft.icon")
 
 
 @app.get("/status")

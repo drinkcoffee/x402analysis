@@ -11,6 +11,8 @@ request/response contract each endpoint exposes, see [API.md](API.md).
 - `GET /` — unauthenticated. A one-line pointer to `API.md`.
 - `GET /status` — unauthenticated. Checks the Neon connection and reports
   whether the server and database are online.
+- `GET /favicon.ico` — unauthenticated. The browser-tab icon, generated
+  from `api/assets/icon.png`.
 - Everything else requires an API key (see below) sent as an `X-API-Key`
   header. There are no other endpoints yet.
 
@@ -46,10 +48,19 @@ project root) is also a good idea on its own merits, since Vercel's Python
 build only reliably bundles files under the entrypoint's own directory
 tree — but the name change is what actually avoids the failure.
 
+`api/assets/` (favicon, source icon) lives under `api/` for the same
+reason as `apilib/` above -- so it's guaranteed to be part of what Vercel
+actually deploys.
+
 ```
 x402-analysis-api/
   api/
-    app.py               every route: /, /status
+    app.py               every route: /, /status, /favicon.ico
+    assets/
+      icon.png              source icon
+      favicon.ico            generated from icon.png -- served at /favicon.ico
+      favicon-16.png          \_ generated alongside favicon.ico, not
+      favicon-32.png          /  currently referenced by any route
     apilib/
       db.py                Neon access: the api_keys table + the connection
                            check GET /status uses
