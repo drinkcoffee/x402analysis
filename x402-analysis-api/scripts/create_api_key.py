@@ -23,14 +23,15 @@ import secrets
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT / "api"))  # apilib/ lives under api/, see api/app.py's docstring
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(PROJECT_ROOT / ".env")
 
-from lib.auth import hash_api_key  # noqa: E402
-from lib.db import add_api_key, list_api_keys, revoke_api_key  # noqa: E402
+from apilib.auth import hash_api_key  # noqa: E402
+from apilib.db import add_api_key, list_api_keys, revoke_api_key  # noqa: E402
 
 # Purely a human-readable hint of a key's access level at a glance (e.g. in
 # logs) -- the server never trusts this prefix, only the api_keys row its

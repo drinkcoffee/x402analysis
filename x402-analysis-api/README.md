@@ -23,8 +23,8 @@ Two access levels, both stored (hashed, never in plaintext) in the
 - `read_write` — can call read-only *and* read-write endpoints.
 
 A key is a high-entropy random token, so only its SHA-256 hash is ever
-stored (see `lib/auth.py`) — there's no way to recover a lost key, only
-revoke it and mint a new one.
+stored (see `api/apilib/auth.py`) — there's no way to recover a lost key,
+only revoke it and mint a new one.
 
 ## How it's structured
 
@@ -35,18 +35,30 @@ files exist, so every route lives in that one module rather than being
 split across files (see the sibling `x402-analysis-gui` project for a
 longer account of that gotcha).
 
+Shared code (`apilib/`) lives *inside* `api/`, not at the project root, and
+is deliberately not named `lib`: the repo's root `.gitignore` has a bare
+`lib/` rule (standard Python-venv boilerplate, matching a directory of that
+name at any depth), so a package called `lib/` anywhere in this repo never
+actually gets committed — it works fine locally, then breaks in production
+with `ModuleNotFoundError: No module named 'lib'`, because the module was
+silently never pushed. Keeping shared code under `api/` (rather than the
+project root) is also a good idea on its own merits, since Vercel's Python
+build only reliably bundles files under the entrypoint's own directory
+tree — but the name change is what actually avoids the failure.
+
 ```
 x402-analysis-api/
   api/
     app.py               every route: /, /status
-  lib/
-    db.py                 Neon access: the api_keys table + the connection
-                          check GET /status uses
-    auth.py                API-key hashing + the require_read_access /
-                           require_read_write_access route dependencies
-    app_setup.py            wires request logging onto the app
+    apilib/
+      db.py                Neon access: the api_keys table + the connection
+                           check GET /status uses
+      auth.py               API-key hashing + the require_read_access /
+                            require_read_write_access route dependencies
+      app_setup.py           wires request logging onto the app
   db/
-    schema.sql             the api_keys table definition
+    schema.sql             the api_keys table definition (read only by
+                           scripts/init_db.py, not the deployed function)
   scripts/
     init_db.py              creates the table in your Neon database
     create_api_key.py        mint/list/revoke API keys

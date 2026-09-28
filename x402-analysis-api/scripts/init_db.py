@@ -14,15 +14,14 @@ import os
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(PROJECT_ROOT / ".env")
 
 import psycopg2  # noqa: E402
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_PATH = PROJECT_ROOT / "db" / "schema.sql"
 
 
