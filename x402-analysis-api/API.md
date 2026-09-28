@@ -10,7 +10,9 @@ endpoints; a `read_write` key also satisfies a `read` requirement).
 ## GET /
 
 - auth: none
-- response: `text/plain`, one line pointing to this file.
+- response: `text/html` -- a minimal page whose body is one line pointing
+  to this file (HTML rather than plain text so the browser tab favicon
+  actually shows up; see `<link rel="icon">` in the page).
 
 ## GET /status
 

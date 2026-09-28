@@ -21,7 +21,13 @@ the entrypoint's own directory tree -- but the name change is what actually
 fixed this particular failure.
 
 Routes:
-    GET  /             unauthenticated -- a one-line pointer to API.md
+    GET  /             unauthenticated -- a one-line pointer to API.md. A
+                       minimal HTML page (not plain text) so its
+                       `<link rel="icon">` actually gets the browser to show
+                       the tab favicon -- browsers only reliably probe
+                       /favicon.ico by convention for real HTML documents,
+                       not e.g. a text/plain response, and that fallback
+                       probing isn't a web standard to begin with.
     GET  /status       unauthenticated -- checks the Neon connection and
                        reports whether the server and database are online
     GET  /favicon.ico  unauthenticated -- the browser-tab icon
@@ -58,7 +64,7 @@ logger = logging.getLogger("x402_api")
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 load_dotenv()
 
@@ -76,10 +82,21 @@ HOME_MESSAGE = (
     "for instructions on how to connect to this API server."
 )
 
+HOME_HTML = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>x402 Analysis API</title>
+<link rel="icon" href="/favicon.ico" />
+</head>
+<body>{HOME_MESSAGE}</body>
+</html>
+"""
+
 
 @app.get("/")
-def home() -> PlainTextResponse:
-    return PlainTextResponse(HOME_MESSAGE)
+def home() -> HTMLResponse:
+    return HTMLResponse(HOME_HTML)
 
 
 @app.get("/favicon.ico", include_in_schema=False)
