@@ -5,7 +5,8 @@ pattern used by the sibling `worcadian-agent` project. Who's allowed to log
 in, their role, and their theme preference live in a Neon Postgres database
 rather than an env var.
 
-- `/` — public landing page, no login needed.
+- `/` — public landing page, no login needed. Has both a "Log in" and a
+  "Sign up" button (`/auth/login` and `/auth/signup`).
 - `/dashboard` — Auth0-gated. A header bar (logo, site name, your email, your
   user type, a hamburger menu) plus tabs (Servers/Services/Facilitators/
   Clients/Funders), each currently showing placeholder content except
@@ -29,6 +30,15 @@ rather than an env var.
   Score Factors" in the hamburger menu, hidden from Standard users).
   Currently a placeholder: "Risk Score Factors screen is coming soon."
 
+Signing up (`/auth/signup`) sends the user through Auth0's signup screen
+instead of its login screen (`screen_hint=signup`), but lands on the same
+`/auth/callback`. If the resulting email isn't already in `user_settings`,
+instead of the plain "access denied" a `/auth/login` attempt with an
+unapproved email gets, it emails `ADMIN_NOTIFY_EMAIL` via Resend
+(`gui/email_notify.py`) asking that the address be approved, and tells the
+user their request has been submitted. See `.env.example` for the
+`RESEND_API_KEY`/`ADMIN_NOTIFY_EMAIL`/`RESEND_FROM_EMAIL` env vars this needs.
+
 ## How it's structured
 
 The whole site is one FastAPI app (`api/app.py`), deployed as a single
@@ -46,12 +56,13 @@ x402-analysis-gui/
   risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
   facilitator.html       the Auth0-gated facilitator detail page (demo data)
   api/
-    app.py             every route: /, /auth/login, /auth/callback,
-                       /auth/logout, /dashboard, /settings,
+    app.py             every route: /, /auth/login, /auth/signup,
+                       /auth/callback, /auth/logout, /dashboard, /settings,
                        /settings/light-mode, /admin/users,
                        /risk-score-factors, /facilitator
   gui/
-    oauth.py            Auth0 login/callback/logout
+    oauth.py            Auth0 login/signup/callback/logout
+    email_notify.py      Resend "please approve this signup" email to the admin
     db.py               Neon access: find/add/update/remove/list users
     crypto.py            AES-256-GCM encryption + lookup-hash for the
                          email column
@@ -179,7 +190,8 @@ Then open `http://localhost:8000`.
 2. In the Vercel project's **Settings → Environment Variables**, add
    `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`,
    `PUBLIC_BASE_URL` (your Vercel deployment URL), `SESSION_SECRET_KEY`,
-   `DATABASE_URL`, and `DB_ENCRYPTION_KEY`.
+   `DATABASE_URL`, `DB_ENCRYPTION_KEY`, `RESEND_API_KEY`,
+   `ADMIN_NOTIFY_EMAIL`, and `RESEND_FROM_EMAIL`.
 3. Deploy. Vercel auto-detects the Python/FastAPI app from
    `requirements.txt` + `api/app.py` — no extra build config needed beyond
    `vercel.json`.

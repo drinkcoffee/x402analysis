@@ -9,6 +9,12 @@ one's structure is adapted from) for a longer account of that gotcha.
 Routes:
     GET  /                    public landing page (index.html), no login needed
     GET  /auth/login           starts the Auth0 login flow
+    GET  /auth/signup          starts the Auth0 signup flow (screen_hint=signup).
+                               If the signed-up email isn't already in
+                               user_settings, emails ADMIN_NOTIFY_EMAIL via
+                               Resend (gui/email_notify.py) requesting approval,
+                               instead of the plain "access denied" a /auth/login
+                               attempt with an unapproved email gets.
     GET  /auth/callback        Auth0 redirects back here with the auth code
     GET  /auth/logout          clears the session + Auth0 logout
     GET  /dashboard            the OAuth-gated page (dashboard.html) -- header
@@ -77,6 +83,7 @@ load_dotenv()
 
 import gui.db as db  # noqa: E402
 from gui.app_setup import configure_app  # noqa: E402
+from gui.email_notify import send_access_request  # noqa: E402
 from gui.oauth import (  # noqa: E402
     build_authorize_url,
     build_logout_url,
@@ -182,7 +189,16 @@ def landing():
 def login(request: Request):
     state = new_state()
     request.session["oauth_state"] = state
+    request.session["oauth_intent"] = "login"
     return RedirectResponse(url=build_authorize_url(state))
+
+
+@app.get("/auth/signup")
+def signup(request: Request):
+    state = new_state()
+    request.session["oauth_state"] = state
+    request.session["oauth_intent"] = "signup"
+    return RedirectResponse(url=build_authorize_url(state, screen_hint="signup"))
 
 
 @app.get("/auth/callback")
@@ -195,6 +211,7 @@ def callback(request: Request):
     code = request.query_params.get("code")
     state = request.query_params.get("state")
     expected_state = request.session.pop("oauth_state", None)
+    intent = request.session.pop("oauth_intent", "login")
     if not code or not state or not expected_state or state != expected_state:
         logger.warning("oauth callback: missing or mismatched state (possible CSRF or expired attempt)")
         return HTMLResponse("<p>Login failed: invalid or expired login attempt. Please try again.</p>", status_code=400)
@@ -207,6 +224,13 @@ def callback(request: Request):
 
     if not db.find_user_by_email(email):
         logger.warning("oauth callback: email=%s is not in user_settings", email)
+        if intent == "signup":
+            send_access_request(email)
+            return HTMLResponse(
+                "<p>Thanks for signing up! Your request for access has been sent "
+                "to the site administrator. You'll be able to log in once it's "
+                "approved.</p>"
+            )
         return HTMLResponse("<p>Access denied: this account is not authorized to use this app.</p>", status_code=403)
 
     request.session["user_email"] = email

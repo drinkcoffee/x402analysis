@@ -1,7 +1,9 @@
-"""Auth0 login: OAuth2/OIDC Authorization Code flow against your tenant.
+"""Auth0 login/signup: OAuth2/OIDC Authorization Code flow against your tenant.
 
 Standard flow:
-    1. build_authorize_url(state) -- send the browser here to log in
+    1. build_authorize_url(state) -- send the browser here to log in, or
+       build_authorize_url(state, screen_hint="signup") to land on Auth0's
+       signup form instead (used by /auth/signup; see api/app.py)
     2. Auth0 redirects back to PUBLIC_BASE_URL + "/auth/callback" with
        ?code=...&state=...
     3. exchange_code_for_email(code) -- trades the code for an access token,
@@ -30,6 +32,7 @@ from __future__ import annotations
 import logging
 import os
 import secrets
+from typing import Optional
 from urllib.parse import urlencode
 
 import requests
@@ -60,7 +63,9 @@ def new_state() -> str:
     return secrets.token_urlsafe(24)
 
 
-def build_authorize_url(state: str) -> str:
+def build_authorize_url(state: str, screen_hint: Optional[str] = None) -> str:
+    """`screen_hint="signup"` sends the user straight to Auth0's Universal
+    Login signup form instead of its login form -- used by /auth/signup."""
     params = {
         "client_id": _required_env("AUTH0_CLIENT_ID"),
         "redirect_uri": _redirect_uri(),
@@ -68,6 +73,8 @@ def build_authorize_url(state: str) -> str:
         "scope": "openid email profile",
         "state": state,
     }
+    if screen_hint:
+        params["screen_hint"] = screen_hint
     return f"https://{_domain()}/authorize?{urlencode(params)}"
 
 

@@ -65,19 +65,36 @@
       color: var(--muted);
       font-size: 0.95rem;
     }
-    a.login-button {
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    a.login-button,
+    a.signup-button {
       display: inline-block;
       padding: 0.7rem 1.75rem;
       font-size: 1rem;
       font-weight: 600;
       text-decoration: none;
-      border: 1px solid var(--accent);
       border-radius: 6px;
+    }
+    a.login-button {
+      border: 1px solid var(--accent);
       background: var(--accent);
       color: var(--accent-ink);
     }
     a.login-button:hover {
       opacity: 0.9;
+    }
+    a.signup-button {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+    }
+    a.signup-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
   </style>
 </head>
@@ -86,7 +103,10 @@
     <img class="logo" src="/assets/icon-192.png" alt="x402 Analysis logo" />
     <h1>x402 Analysis</h1>
     <p class="subtitle">Tools for the x402 payment protocol ecosystem.</p>
-    <a class="login-button" href="/auth/login">Log in</a>
+    <div class="actions">
+      <a class="login-button" href="/auth/login">Log in</a>
+      <a class="signup-button" href="/auth/signup">Sign up</a>
+    </div>
   </main>
 </body>
 </html>

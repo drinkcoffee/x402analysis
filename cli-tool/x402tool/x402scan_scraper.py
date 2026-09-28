@@ -48,6 +48,34 @@ There's no separate "documentation URL" field anywhere in this data; when a
 server group has more than one origin, the extra origin (typically the bare
 marketing domain alongside an api./x402. subdomain) is reported as the doc
 link, on the heuristic in `_pick_primary_origin`.
+
+Two more page shapes matter for facilitators:
+
+  GET https://www.x402scan.com/facilitators
+    embeds a dehydrated query shaped like:
+      {"items": [
+        {"facilitator_id": "coinbase", "tx_count": ..., "chains": [...],
+         "facilitator": {"id": "coinbase", "name": "Coinbase",
+                         "docsUrl": "https://...",
+                         "addresses": {"base": ["0x...", ...],
+                                       "solana": ["...", ...]}},
+         ...},
+        ...
+      ], "hasNextPage": ..., "total_count": ..., "total_pages": ..., "page": 0}
+    Unlike the server list, this query's own `addresses` are already
+    complete (not a sample) - but the per-facilitator detail page is
+    scraped anyway (per how this command was specified) since that's
+    where the UI actually surfaces them (behind a hover tooltip on the
+    masked "addresses" text under the facilitator's name).
+
+  GET https://www.x402scan.com/facilitator/<facilitator_id>
+    The addresses tooltip's props aren't a dehydrated React Query cache
+    entry (no `"json":` wrapper) - they're embedded directly in the
+    decoded chunk's raw React-element-tree syntax as a component's props
+    object: `{"addresses": ["0x...", ...], "className": "...", "side":
+    "bottom"}`. `_react_props_with_key` locates this the same way
+    `_json_islands` locates dehydrated query data, just without requiring
+    the `"json":` marker.
 """
 
 from __future__ import annotations
@@ -146,6 +174,48 @@ def _candidate_dicts(island: Any) -> list[dict[str, Any]]:
     if isinstance(island, list):
         return [item for item in island if isinstance(item, dict)]
     return []
+
+
+def _react_props_with_key(text: str, key: str) -> list[dict[str, Any]]:
+    """Every JSON object literal in `text` that has `key` as a top-level
+    key, found by locating `"<key>":` and walking backward to the nearest
+    enclosing `{`.
+
+    Used for component props embedded directly in a decoded chunk's raw
+    React-element-tree syntax (e.g. `{"addresses": [...], "className":
+    ..., "side": "bottom"}`), which aren't wrapped in a dehydrated
+    `"json":` query cache entry the way `_json_islands` expects.
+    """
+    marker = f'"{key}":'
+    decoder = json.JSONDecoder()
+    results: list[dict[str, Any]] = []
+    i = 0
+    while True:
+        i = text.find(marker, i)
+        if i == -1:
+            break
+        depth = 0
+        start: Optional[int] = None
+        k = i - 1
+        while k >= 0:
+            ch = text[k]
+            if ch == "}":
+                depth += 1
+            elif ch == "{":
+                if depth == 0:
+                    start = k
+                    break
+                depth -= 1
+            k -= 1
+        if start is not None:
+            try:
+                obj, _end = decoder.raw_decode(text, start)
+                if isinstance(obj, dict) and key in obj:
+                    results.append(obj)
+            except json.JSONDecodeError:
+                pass
+        i += len(marker)
+    return results
 
 
 def fetch_server_groups(timeout: float = 20.0) -> list[dict[str, Any]]:
@@ -295,6 +365,92 @@ def scrape_all(
     results: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = [pool.submit(worker, group) for group in groups]
+        for future in as_completed(futures):
+            results.append(future.result())
+
+    results.sort(key=lambda r: (r.get("name") or "").lower())
+    return results
+
+
+def fetch_facilitators(timeout: float = 20.0) -> list[dict[str, Any]]:
+    """The full list of facilitators embedded in the Facilitators page."""
+    html = _fetch_html(f"{BASE_URL}/facilitators", timeout=timeout)
+    for chunk in _decode_push_chunks(html):
+        for island in _json_islands(chunk):
+            for candidate in _candidate_dicts(island):
+                items = candidate.get("items")
+                if isinstance(items, list) and items and isinstance(items[0], dict) and "facilitator_id" in items[0]:
+                    return items
+    return []
+
+
+def fetch_facilitator_addresses(facilitator_id: str, timeout: float = 20.0) -> list[str]:
+    """The full, unmasked address list embedded in one facilitator's detail
+    page - the data behind the masked "addresses" text you'd hover over
+    just below the facilitator's name in the UI."""
+    html = _fetch_html(f"{BASE_URL}/facilitator/{facilitator_id}", timeout=timeout)
+    for chunk in _decode_push_chunks(html):
+        for props in _react_props_with_key(chunk, "addresses"):
+            addresses = props.get("addresses")
+            if isinstance(addresses, list) and addresses and all(isinstance(a, str) for a in addresses):
+                return addresses
+    return []
+
+
+def scrape_facilitator(item: dict[str, Any], timeout: float = 20.0) -> dict[str, Any]:
+    """Full scrape for one facilitator: its listing-page summary plus the
+    address list scraped from its own detail page."""
+    facilitator_id = item.get("facilitator_id")
+    info = item.get("facilitator") or {}
+    name = info.get("name") or facilitator_id
+    url = f"{BASE_URL}/facilitator/{facilitator_id}" if facilitator_id else None
+
+    result: dict[str, Any] = {
+        "name": name,
+        "id": facilitator_id,
+        "url": url,
+        "docs_url": info.get("docsUrl"),
+        "chains": item.get("chains") or [],
+        "addresses": [],
+    }
+    if not facilitator_id:
+        result["errors"] = ["listing item has no facilitator_id"]
+        return result
+
+    try:
+        addresses = fetch_facilitator_addresses(facilitator_id, timeout=timeout)
+    except requests.exceptions.RequestException as exc:
+        result["errors"] = [f"{url}: {exc}"]
+        return result
+
+    result["addresses"] = sorted(set(addresses), key=str.lower)
+    if not addresses:
+        result["errors"] = [f"{url}: no addresses found"]
+    return result
+
+
+def scrape_all_facilitators(
+    limit: Optional[int] = None,
+    max_workers: int = 5,
+    timeout: float = 20.0,
+    delay: float = 0.0,
+    on_progress: Optional[Any] = None,
+) -> list[dict[str, Any]]:
+    items = fetch_facilitators(timeout=timeout)
+    if limit is not None:
+        items = items[:limit]
+
+    def worker(item: dict[str, Any]) -> dict[str, Any]:
+        if delay:
+            time.sleep(delay)
+        result = scrape_facilitator(item, timeout=timeout)
+        if on_progress:
+            on_progress()
+        return result
+
+    results: list[dict[str, Any]] = []
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        futures = [pool.submit(worker, item) for item in items]
         for future in as_completed(futures):
             results.append(future.result())
 

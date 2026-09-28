@@ -984,6 +984,36 @@ def cmd_scrape_servers(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_scrape_facilitators(args: argparse.Namespace) -> int:
+    def on_progress() -> None:
+        print(".", end="", flush=True)
+
+    try:
+        results = x402scan_scraper.scrape_all_facilitators(
+            limit=args.limit,
+            max_workers=args.workers,
+            timeout=args.probe_timeout,
+            delay=args.delay,
+            on_progress=on_progress,
+        )
+    except requests.exceptions.RequestException as exc:
+        print()
+        return print_error(f"could not fetch x402scan.com: {exc}")
+    print()  # end the line of "." progress dots
+
+    payload = json.dumps(results, indent=2, default=str)
+    if args.output:
+        try:
+            with open(args.output, "w", encoding="utf-8") as fh:
+                fh.write(payload)
+        except OSError as exc:
+            return print_error(f"could not write {args.output}: {exc}")
+        print(f"wrote {len(results)} facilitator(s) to {args.output}")
+    else:
+        print(payload)
+    return 0
+
+
 _URL_RE = re.compile(r"https?://[^\s\"'<>]+")
 
 
@@ -1598,6 +1628,29 @@ def build_parser() -> argparse.ArgumentParser:
         "--probe-timeout", type=float, default=20.0, help="per-request timeout in seconds (default: 20)"
     )
     p_scrape.set_defaults(func=cmd_scrape_servers)
+
+    p_scrape_fac = sub.add_parser(
+        "scrape-facilitators",
+        help="scrape x402scan.com's facilitator directory: name, docs URL, "
+        "chains, and addresses per facilitator",
+    )
+    p_scrape_fac.add_argument(
+        "output", nargs="?", help="path to write the JSON output to (default: print to stdout)"
+    )
+    p_scrape_fac.add_argument("--limit", type=int, help="only scrape this many facilitators (for testing)")
+    p_scrape_fac.add_argument(
+        "--workers", type=int, default=5, help="parallel facilitator-page fetches (default: 5)"
+    )
+    p_scrape_fac.add_argument(
+        "--delay",
+        type=float,
+        default=0.0,
+        help="seconds to wait before each facilitator's detail-page fetch (default: 0)",
+    )
+    p_scrape_fac.add_argument(
+        "--probe-timeout", type=float, default=20.0, help="per-request timeout in seconds (default: 20)"
+    )
+    p_scrape_fac.set_defaults(func=cmd_scrape_facilitators)
 
     p_settle = sub.add_parser(
         "settle",

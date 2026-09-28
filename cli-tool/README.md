@@ -352,6 +352,32 @@ A full run visits x402scan's homepage once plus one page per server
 how many of those run concurrently and `--delay` adds a pause before each
 one if you want to be gentler on their site.
 
+## Scraping x402scan.com's facilitator directory
+
+`scrape-facilitators` scrapes [x402scan.com](https://www.x402scan.com/)'s
+Facilitators page the same way `scrape-servers` scrapes the server
+directory: no documented public API, so it fetches the plain HTML of
+`/facilitators` (for the list of facilitators and their `/facilitator/<id>`
+detail-page URLs) and then each facilitator's own detail page, and parses
+the embedded React Server Component JSON rather than screen-scraping
+rendered markup.
+
+On a facilitator's detail page, its settlement addresses are shown in the
+UI as masked text under the facilitator's name, revealed in full only on
+hover (a tooltip). The full address list is embedded in the page's HTML
+regardless - `x402scan_scraper.py` reads it directly from there rather than
+needing to render the page or trigger the hover.
+
+For each facilitator it reports: name, id (the `/facilitator/<id>` slug),
+its detail-page URL, its docs URL, the chains it settles on, and its full
+address list.
+
+```bash
+x402tool scrape-facilitators                      # print JSON for every facilitator to stdout
+x402tool scrape-facilitators facilitators.json    # write it to a file instead
+x402tool scrape-facilitators --limit 3            # just the first 3, for a quick look
+```
+
 `extract-domains <file.json>` pulls every unique domain referenced by a URL
 in any JSON file - `scrape-servers` output or otherwise - and prints them
 one per line, alphabetically (e.g. `https://api.example.com/foo` and
@@ -381,7 +407,8 @@ x402tool/
   chainquery_client.py  ChainQuery Sanctions API client for check-sanctions
   etherscan_client.py   Etherscan V2 "fundedby" client for funded-by-etherscan
   blockscout_client.py  Blockscout Pro API client for assoc-txs-blockscout and assoc-erc20-blockscout
-  x402scan_scraper.py   x402scan.com server-directory scraper for scrape-servers
+  x402scan_scraper.py   x402scan.com server/facilitator-directory scraper for
+                        scrape-servers and scrape-facilitators
   formatting.py         table/JSON output helpers
   cli.py                argparse wiring
 ```
