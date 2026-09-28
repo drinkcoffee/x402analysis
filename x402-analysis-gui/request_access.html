@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request Access — x402 Analysis</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f9f9f9;
+      --ink: #000000;
+      --muted: #4a4a4a;
+      --accent: #d33839;
+      --accent-ink: #ffffff;
+      --panel: #ffffff;
+      --border: #e2e2e2;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --ink: #f9f9f9;
+        --muted: #b5b5b5;
+        --accent: #d33839;
+        --accent-ink: #ffffff;
+        --panel: #121212;
+        --border: #2a2a2a;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.25rem;
+    }
+    main {
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3rem 2rem;
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.6rem;
+      letter-spacing: -0.01em;
+    }
+    img.logo {
+      width: 96px;
+      height: 96px;
+      margin: 0 0 1.25rem;
+    }
+    p.subtitle {
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    p.subtitle strong {
+      color: var(--ink);
+    }
+    button.request-button {
+      display: inline-block;
+      padding: 0.7rem 1.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+    button.request-button:hover {
+      opacity: 0.9;
+    }
+    p.alt-link {
+      margin: 1.5rem 0 0;
+      font-size: 0.9rem;
+    }
+    p.alt-link a {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="/assets/icon-192.png" alt="x402 Analysis logo" />
+    <h1>Request Access</h1>
+    <p class="subtitle"><strong>{{EMAIL}}</strong> isn't yet authorized to use x402 Analysis. Request access below and a site administrator will review it.</p>
+    <form method="post" action="/auth/request-access">
+      <button class="request-button" type="submit">Request Access</button>
+    </form>
+    <p class="alt-link"><a href="/auth/logout">Not you? Log out</a></p>
+  </main>
+</body>
+</html>

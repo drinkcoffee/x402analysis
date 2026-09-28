@@ -36,12 +36,17 @@ rather than an env var.
 
 Signing up (`/auth/signup`) sends the user through Auth0's signup screen
 instead of its login screen (`screen_hint=signup`), but lands on the same
-`/auth/callback`. If the resulting email isn't already in `user_settings`,
-instead of the plain "access denied" a `/auth/login` attempt with an
-unapproved email gets, it emails `ADMIN_NOTIFY_EMAIL` via Resend
-(`gui/email_notify.py`) asking that the address be approved, and tells the
-user their request has been submitted. See `.env.example` for the
-`RESEND_API_KEY`/`ADMIN_NOTIFY_EMAIL`/`RESEND_FROM_EMAIL` env vars this needs.
+`/auth/callback`. If the resulting email isn't already in `user_settings`:
+- from `/auth/signup`, it's treated as an explicit request for access --
+  `gui/email_notify.py` emails `ADMIN_NOTIFY_EMAIL` via Resend right away,
+  and the user sees a "your request has been sent" message.
+- from a plain `/auth/login`, the user instead lands on `/request-access`
+  (their email held in the session as `pending_access_email`, not a URL
+  param) with a "Request Access" button -- clicking it sends the same
+  Resend email, so a login attempt alone doesn't silently notify the admin.
+
+See `.env.example` for the `RESEND_API_KEY`/`ADMIN_NOTIFY_EMAIL`/
+`RESEND_FROM_EMAIL` env vars this needs.
 
 ## How it's structured
 
@@ -59,9 +64,11 @@ x402-analysis-gui/
   user_admin.html       the Auth0-gated, Admin-only user administration page
   risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
   facilitator.html       the Auth0-gated facilitator detail page (demo data)
+  request_access.html    the public "Request Access" page for an unapproved login
   api/
     app.py             every route: /, /auth/login, /auth/signup,
-                       /auth/callback, /auth/logout, /dashboard, /settings,
+                       /auth/callback, /auth/logout, /request-access,
+                       /auth/request-access, /dashboard, /settings,
                        /settings/light-mode, /admin/users,
                        /risk-score-factors, /facilitator
   gui/

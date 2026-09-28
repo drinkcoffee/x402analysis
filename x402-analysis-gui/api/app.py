@@ -15,8 +15,19 @@ Routes:
                                Resend (gui/email_notify.py) requesting approval,
                                instead of the plain "access denied" a /auth/login
                                attempt with an unapproved email gets.
-    GET  /auth/callback        Auth0 redirects back here with the auth code
+    GET  /auth/callback        Auth0 redirects back here with the auth code.
+                               A successful /auth/login for an unapproved
+                               email lands on /request-access instead of a
+                               flat "access denied" message.
     GET  /auth/logout          clears the session + Auth0 logout
+    GET  /request-access       shown after a successful Auth0 login whose
+                               email isn't in user_settings yet -- a "Request
+                               Access" button for that email (kept in the
+                               session as pending_access_email, not a URL
+                               param, so it can't be edited client-side).
+    POST /auth/request-access  sends the same Resend approval-request email
+                               /auth/signup sends automatically, but only
+                               when the user explicitly clicks that button
     GET  /dashboard            the OAuth-gated page (dashboard.html) -- header
                                bar (logo, site name, the logged-in user's
                                email, their user type, a hamburger menu with
@@ -109,6 +120,12 @@ SETTINGS_HTML_PATH = PROJECT_ROOT / "settings.html"
 USER_ADMIN_HTML_PATH = PROJECT_ROOT / "user_admin.html"
 RISK_SCORE_HTML_PATH = PROJECT_ROOT / "risk_score_factors.html"
 FACILITATOR_HTML_PATH = PROJECT_ROOT / "facilitator.html"
+REQUEST_ACCESS_HTML_PATH = PROJECT_ROOT / "request_access.html"
+
+_ACCESS_REQUEST_SENT_HTML = (
+    "<p>Thanks! Your request for access has been sent to the site "
+    "administrator. You'll be able to log in once it's approved.</p>"
+)
 
 # Site icon/logo (favicon variants + the logo shown on the landing page).
 app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "assets")), name="assets")
@@ -245,12 +262,9 @@ def callback(request: Request):
         logger.warning("oauth callback: email=%s is not in user_settings", email)
         if intent == "signup":
             send_access_request(email)
-            return HTMLResponse(
-                "<p>Thanks for signing up! Your request for access has been sent "
-                "to the site administrator. You'll be able to log in once it's "
-                "approved.</p>"
-            )
-        return HTMLResponse("<p>Access denied: this account is not authorized to use this app.</p>", status_code=403)
+            return HTMLResponse(_ACCESS_REQUEST_SENT_HTML)
+        request.session["pending_access_email"] = email
+        return RedirectResponse(url="/request-access")
 
     request.session["user_email"] = email
     logger.info("oauth callback: login succeeded email=%s", email)
@@ -263,6 +277,26 @@ def logout(request: Request):
     request.session.clear()
     logger.info("logout: cleared local session for email=%s; redirecting to Auth0 logout", email)
     return RedirectResponse(url=build_logout_url())
+
+
+@app.get("/request-access")
+def request_access_page(request: Request):
+    email = request.session.get("pending_access_email")
+    if not email:
+        return RedirectResponse(url="/")
+    page = REQUEST_ACCESS_HTML_PATH.read_text()
+    page = page.replace("{{EMAIL}}", escape(email))
+    return HTMLResponse(page)
+
+
+@app.post("/auth/request-access")
+def submit_access_request(request: Request):
+    email = request.session.pop("pending_access_email", None)
+    if not email:
+        return RedirectResponse(url="/", status_code=303)
+    send_access_request(email)
+    logger.info("request-access: sent access-request email for %s", email)
+    return HTMLResponse(_ACCESS_REQUEST_SENT_HTML)
 
 
 # --- OAuth-gated pages ---------------------------------------------------------
