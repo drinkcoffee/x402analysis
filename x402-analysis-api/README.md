@@ -68,16 +68,67 @@ x402-analysis-api/
                             require_read_write_access route dependencies
       app_setup.py           wires request logging onto the app
   db/
-    schema.sql             the api_keys table definition (read only by
-                           scripts/init_db.py, not the deployed function)
+    schema.sql             every table definition (for a brand-new database)
+    migrations.sql          idempotent ALTER statements that patch an
+                           already-created database up to schema.sql's
+                           current shape -- both are read only by
+                           scripts/init_db.py, never the deployed function
   scripts/
-    init_db.py              creates the table in your Neon database
-    create_api_key.py        mint/list/revoke API keys
+    db_setup.py              shared: applies schema.sql then migrations.sql
+                             (used by both scripts below, so neither can run
+                             against a database that's a migration behind)
+    init_db.py                creates/updates the tables in your Neon database
+    create_api_key.py          mint/list/revoke API keys
+    load_facilitators.py        loads scripts/data/x402Fac.json into the
+                                facilitator/uris/addresses/linkaddresses tables
+    data/
+      x402Fac.json            facilitator data to load (name, API/doc/
+                              x402scan URLs, on-chain addresses) -- see
+                              cli-tool/tempdata/combine_facilitators.py for
+                              how this gets built
   vercel.json
   requirements.txt
   .env.example
   API.md
 ```
+
+## x402 ecosystem data
+
+Beyond `api_keys`, `db/schema.sql` also defines the actual x402 ecosystem
+data model: `uris` (a URL plus what's known about it -- IP, geolocation,
+TLS certificate subject), `facilitator`, `server`, `service`, `clients`,
+`addresses`, and `linkaddresses` (a polymorphic link between one address
+and one facilitator/server/client/funder/associate -- see the comments in
+`db/schema.sql` for the full field-by-field rationale).
+
+Right now the only loader is `scripts/load_facilitators.py`, which reads
+`scripts/data/x402Fac.json` and populates `facilitator`, `uris`,
+`addresses`, and `linkaddresses`. It brings the database's schema up to
+date itself before touching any data (same as `scripts/init_db.py` -- see
+`scripts/db_setup.py`), so there's no separate "remember to migrate first"
+step:
+
+```bash
+python scripts/load_facilitators.py
+```
+
+For every URL it encounters (a facilitator's API, doc, and x402scan.com
+page), it also passively fingerprints the host -- IP address, IP
+geolocation, and TLS certificate subject name -- reusing the sibling
+`cli-tool` project's `x402tool.net_analysis` module (DNS resolution, a TLS
+handshake, and a batched `ip-api.com` lookup), so `cli-tool/` needs to be
+checked out next to this project (as it is in this monorepo) for the
+import to resolve. This is a local-only maintenance script, never part of
+the deployed Vercel function.
+
+The loader is idempotent: re-running it (e.g. after refreshing
+`x402Fac.json`, or just to re-fingerprint URLs) upserts by each table's
+natural key (`uris.url`, `facilitator.name`, `addresses.address`,
+`linkaddresses(owner, ref, address)`) rather than duplicating rows, and
+deliberately leaves every `risk`/`active`/`notes` field alone on a
+re-import -- those are for manual curation (e.g. a future admin UI), not
+this script's concern; only the columns it actually owns (URLs, IP/geo/TLS
+fingerprints, address chains/source) get refreshed.
 
 ## Neon database setup
 
@@ -88,12 +139,16 @@ x402-analysis-api/
    a fresh connection per request — appropriate for Vercel's serverless
    functions — so the pooled string lets Neon's own PgBouncer absorb that
    connect/disconnect churn.
-3. Create the table:
+3. Create (or update) the tables:
    ```bash
    python scripts/init_db.py
    ```
-   This runs `db/schema.sql` (`CREATE TABLE IF NOT EXISTS`), so it's safe
-   to re-run.
+   Runs `db/schema.sql` (`CREATE TABLE IF NOT EXISTS`, for a brand-new
+   database) then `db/migrations.sql` (idempotent `ALTER TABLE` statements
+   that patch an already-created database up to schema.sql's current
+   shape -- `CREATE TABLE IF NOT EXISTS` alone can't add a column or
+   constraint to a table that already exists). Safe to re-run any time,
+   against a database in any of those states.
 4. Mint your first API key(s):
    ```bash
    python scripts/create_api_key.py --access read --label "example read-only consumer"

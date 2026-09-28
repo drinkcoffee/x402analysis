@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Creates the api_keys table in your Neon database, from db/schema.sql.
+"""Creates (or updates) every table in your Neon database, from
+db/schema.sql and db/migrations.sql.
+
+schema.sql's `CREATE TABLE IF NOT EXISTS` only handles tables that don't
+exist yet -- it can't add a column or constraint to a table that was
+created before that column/constraint was added to schema.sql. migrations.sql
+covers that: a set of idempotent ALTER statements safe to run any number of
+times (including against a database that's already fully up to date, where
+they're a no-op). Running both here means one command handles a brand-new
+database and patching up an existing one alike.
 
 Usage:
     python scripts/init_db.py
@@ -22,7 +31,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 import psycopg2  # noqa: E402
 
-SCHEMA_PATH = PROJECT_ROOT / "db" / "schema.sql"
+from db_setup import ensure_schema  # noqa: E402
 
 
 def main() -> None:
@@ -34,7 +43,7 @@ def main() -> None:
     conn = psycopg2.connect(url)
     try:
         with conn.cursor() as cur:
-            cur.execute(SCHEMA_PATH.read_text())
+            ensure_schema(cur)
         conn.commit()
     finally:
         conn.close()

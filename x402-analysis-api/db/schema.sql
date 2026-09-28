@@ -36,32 +36,39 @@ CREATE TABLE IF NOT EXISTS uris (
     updated   DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
--- facilitator: one x402 payment facilitator. `api` is required (every
--- facilitator has at least an API endpoint); `doc`/`website` are optional,
--- since not every facilitator publishes separate docs/marketing pages.
+-- facilitator: one x402 payment facilitator. `name` is unique so a loader
+-- (see scripts/load_facilitators.py) can upsert by name instead of
+-- duplicating a facilitator on every re-run. `api` is nullable -- not
+-- every known facilitator has a recorded API URL yet (some are only known
+-- via their x402scan.com page); `doc`/`website`/`x402scan` are likewise
+-- optional.
 CREATE TABLE IF NOT EXISTS facilitator (
-    id       SERIAL PRIMARY KEY,
-    name     TEXT NOT NULL,
-    api      INTEGER NOT NULL REFERENCES uris(id),
-    doc      INTEGER REFERENCES uris(id),
-    website  INTEGER REFERENCES uris(id),
-    risk     SMALLINT NOT NULL DEFAULT 0,
-    active   BOOLEAN NOT NULL DEFAULT TRUE,
-    notes    TEXT,
-    updated  DATE NOT NULL DEFAULT CURRENT_DATE
+    id        SERIAL PRIMARY KEY,
+    name      TEXT NOT NULL,
+    api       INTEGER REFERENCES uris(id),
+    doc       INTEGER REFERENCES uris(id),
+    website   INTEGER REFERENCES uris(id),
+    x402scan  INTEGER REFERENCES uris(id),  -- the facilitator's x402scan.com page, if known
+    risk      SMALLINT NOT NULL DEFAULT 0,
+    active    BOOLEAN NOT NULL DEFAULT TRUE,
+    notes     TEXT,
+    updated   DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT facilitator_name_key UNIQUE (name)
 );
 
 -- server: one x402-gated server (same shape as facilitator -- see above).
 CREATE TABLE IF NOT EXISTS server (
-    id       SERIAL PRIMARY KEY,
-    name     TEXT NOT NULL,
-    api      INTEGER NOT NULL REFERENCES uris(id),
-    doc      INTEGER REFERENCES uris(id),
-    website  INTEGER REFERENCES uris(id),
-    risk     SMALLINT NOT NULL DEFAULT 0,
-    active   BOOLEAN NOT NULL DEFAULT TRUE,
-    notes    TEXT,
-    updated  DATE NOT NULL DEFAULT CURRENT_DATE
+    id        SERIAL PRIMARY KEY,
+    name      TEXT NOT NULL,
+    api       INTEGER REFERENCES uris(id),
+    doc       INTEGER REFERENCES uris(id),
+    website   INTEGER REFERENCES uris(id),
+    x402scan  INTEGER REFERENCES uris(id),  -- kept symmetric with facilitator; unused until a server loader exists
+    risk      SMALLINT NOT NULL DEFAULT 0,
+    active    BOOLEAN NOT NULL DEFAULT TRUE,
+    notes     TEXT,
+    updated   DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT server_name_key UNIQUE (name)
 );
 
 -- service: one endpoint offered by a server.
@@ -92,7 +99,8 @@ CREATE TABLE IF NOT EXISTS clients (
 CREATE TABLE IF NOT EXISTS addresses (
     id       SERIAL PRIMARY KEY,
     address  TEXT NOT NULL UNIQUE,
-    chains   TEXT,
+    chains   TEXT,  -- comma-separated if the address is used on more than one chain
+    source   TEXT,  -- where this address was observed, e.g. "x402scan", "Docs", "/supported" -- comma-separated if more than one
     risk     SMALLINT NOT NULL DEFAULT 0,
     notes    TEXT,
     updated  DATE NOT NULL DEFAULT CURRENT_DATE
@@ -104,9 +112,12 @@ CREATE TABLE IF NOT EXISTS addresses (
 -- schema, it can't carry a real foreign-key constraint (Postgres FKs can
 -- only target one fixed table). owner=3 (funder) and owner=4 (associate)
 -- don't have a table yet; only facilitator/server/clients (0/1/2) do.
+-- (owner, ref, address) is unique so a loader can upsert (ON CONFLICT DO
+-- NOTHING) instead of duplicating a link on every re-run.
 CREATE TABLE IF NOT EXISTS linkaddresses (
     id       SERIAL PRIMARY KEY,
     owner    SMALLINT NOT NULL CHECK (owner IN (0, 1, 2, 3, 4)),  -- 0=facilitator, 1=server, 2=client, 3=funder, 4=associate
     ref      INTEGER NOT NULL,  -- id in the table named by `owner`; see note above
-    address  INTEGER NOT NULL REFERENCES addresses(id)
+    address  INTEGER NOT NULL REFERENCES addresses(id),
+    CONSTRAINT linkaddresses_owner_ref_address_key UNIQUE (owner, ref, address)
 );
