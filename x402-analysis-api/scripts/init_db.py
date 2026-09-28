@@ -38,7 +38,7 @@ def main() -> None:
         conn.commit()
     finally:
         conn.close()
-    print("api_keys table is ready.")
+    print("Tables are ready.")
 
 
 if __name__ == "__main__":
