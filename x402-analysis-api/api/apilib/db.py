@@ -1,8 +1,10 @@
 """Neon Postgres access for x402-analysis-api.
 
-Currently just the `api_keys` table -- who may call this server's
-API-key-protected endpoints (see apilib/auth.py) -- plus the connection check
-`GET /status` uses.
+The `api_keys` table -- who may call this server's API-key-protected
+endpoints (see apilib/auth.py) -- plus the connection check `GET /status`
+uses, plus read access to the x402 ecosystem data tables (facilitator,
+uris, addresses, linkaddresses -- see db/schema.sql) for GET /facilitators
+and GET /facilitators/{name}.
 
 Each function opens and closes its own connection rather than pooling
 in-process: Vercel serverless functions are short-lived and stateless, so
@@ -27,6 +29,9 @@ import psycopg2.extensions
 import psycopg2.extras
 
 VALID_ACCESS_LEVELS = {"read", "read_write"}
+
+# linkaddresses.owner: matches the mapping documented in db/schema.sql.
+OWNER_FACILITATOR = 0
 
 
 def _connection_string() -> str:
@@ -99,3 +104,61 @@ def list_api_keys() -> list[dict]:
             cur.execute("SELECT id, access_level, label, created_at FROM api_keys ORDER BY created_at")
             rows = cur.fetchall()
     return [dict(row) for row in rows]
+
+
+def list_facilitators() -> list[dict]:
+    """{"name", "risk", "active"} for every facilitator, ordered by name.
+    Used by GET /facilitators."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute("SELECT name, risk, active FROM facilitator ORDER BY name")
+            rows = cur.fetchall()
+    return [dict(row) for row in rows]
+
+
+def _uri_row(cur, uri_id: Optional[int]) -> Optional[dict]:
+    if uri_id is None:
+        return None
+    cur.execute("SELECT url, ip, location, subject, risk, notes, updated FROM uris WHERE id = %s", (uri_id,))
+    row = cur.fetchone()
+    return dict(row) if row else None
+
+
+def find_facilitator(name: str) -> Optional[dict]:
+    """Every column on one facilitator row, plus its api/doc/website/x402scan
+    URLs (the full uris row for each, not just the bare URL string -- IP,
+    geolocation, and TLS subject are "information available about" it too)
+    and every address linked to it (via linkaddresses, owner=0). `name` is
+    matched case-insensitively. Returns None if no facilitator matches.
+    Used by GET /facilitators/{name}."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT id, name, api, doc, website, x402scan, risk, active, notes, updated
+                FROM facilitator
+                WHERE lower(name) = lower(%s)
+                """,
+                (name,),
+            )
+            row = cur.fetchone()
+            if not row:
+                return None
+            facilitator = dict(row)
+
+            for field in ("api", "doc", "website", "x402scan"):
+                facilitator[field] = _uri_row(cur, facilitator[field])
+
+            cur.execute(
+                """
+                SELECT a.address, a.chains, a.source, a.risk, a.notes, a.updated
+                FROM linkaddresses la
+                JOIN addresses a ON a.id = la.address
+                WHERE la.owner = %s AND la.ref = %s
+                ORDER BY a.address
+                """,
+                (OWNER_FACILITATOR, facilitator["id"]),
+            )
+            facilitator["addresses"] = [dict(r) for r in cur.fetchall()]
+
+    return facilitator

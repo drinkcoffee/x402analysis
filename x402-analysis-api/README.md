@@ -13,8 +13,16 @@ request/response contract each endpoint exposes, see [API.md](API.md).
   whether the server and database are online.
 - `GET /favicon.ico` — unauthenticated. The browser-tab icon, generated
   from `api/assets/icon.png`.
+- `GET /facilitators` — requires a `read` (or `read_write`) API key.
+  Name/risk/active for every facilitator.
+- `GET /facilitators/{name}` — requires a `read` (or `read_write`) API key.
+  Everything known about one facilitator (matched case-insensitively),
+  including its full `uris` rows (IP/geolocation/TLS subject, not just the
+  bare URL) and every linked address; 404 if `{name}` matches none.
 - Everything else requires an API key (see below) sent as an `X-API-Key`
-  header. There are no other endpoints yet.
+  header.
+
+See [API.md](API.md) for the full request/response contract.
 
 ## API keys
 

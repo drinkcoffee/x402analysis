@@ -33,12 +33,16 @@ Routes:
     GET  /favicon.ico  unauthenticated -- the browser-tab icon
                        (api/assets/favicon.ico, generated from
                        api/assets/icon.png)
+    GET  /facilitators          requires a "read" (or "read_write") API key
+                                -- name/risk/active for every facilitator
+    GET  /facilitators/{name}   requires a "read" (or "read_write") API key
+                                -- everything known about one facilitator
+                                (matched case-insensitively), 404 if none
+                                match
 
-Everything else requires an API key sent as an `X-API-Key` header (see
-api/apilib/auth.py: require_read_access / require_read_write_access) -- but
-there are no other endpoints yet. `/` and `/status` are deliberately exempt
-from that requirement (so uptime checks and the landing message don't need
-a key).
+Everything except `/`, `/status`, and `/favicon.ico` requires an API key
+sent as an `X-API-Key` header (see api/apilib/auth.py: require_read_access /
+require_read_write_access).
 
 See API.md for the machine-readable request/response contract, and
 README.md for how to run and deploy this server.
@@ -63,13 +67,14 @@ logging.basicConfig(
 logger = logging.getLogger("x402_api")
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 load_dotenv()
 
 import apilib.db as db  # noqa: E402
 from apilib.app_setup import configure_app  # noqa: E402
+from apilib.auth import require_read_access  # noqa: E402
 
 app = FastAPI(title="x402 Analysis API")
 configure_app(app, logger)
@@ -112,3 +117,20 @@ def status_check() -> JSONResponse:
         logger.exception("status: database connection check failed")
         return JSONResponse({"server": "online", "database": "offline"}, status_code=503)
     return JSONResponse({"server": "online", "database": "online"})
+
+
+@app.get("/facilitators")
+def list_facilitators(_=Depends(require_read_access)) -> list[dict]:
+    # A plain dict/list return (rather than manually building a JSONResponse,
+    # as the routes above do) goes through FastAPI's own jsonable_encoder,
+    # which -- unlike a bare JSONResponse -- knows how to serialize the
+    # datetime.date values psycopg2 hands back for `updated` columns.
+    return db.list_facilitators()
+
+
+@app.get("/facilitators/{name}")
+def get_facilitator(name: str, _=Depends(require_read_access)) -> dict:
+    facilitator = db.find_facilitator(name)
+    if facilitator is None:
+        raise HTTPException(status_code=404, detail=f"No facilitator named {name!r}.")
+    return facilitator
