@@ -61,9 +61,20 @@ Routes:
                                facilitator.html, a detail page for one row
                                of the dashboard's Facilitators tab, reached
                                by clicking that row. Which facilitator to
-                               show is passed as ?name=... and resolved
-                               client-side against a small hardcoded demo
-                               dataset (no facilitators table in Neon yet).
+                               show is passed as ?name=... and fetched
+                               client-side from GET /api/facilitators/{name}.
+    GET  /api/facilitators          OAuth-gated JSON proxy to the sibling
+                                    x402-analysis-api server's own
+                                    GET /facilitators (see gui/facilitators_client.py)
+                                    -- name/risk/active for every facilitator.
+                                    Proxying server-side, rather than having
+                                    the browser call x402-analysis-api
+                                    directly, is what keeps X402_API_KEY out
+                                    of client-side JavaScript.
+    GET  /api/facilitators/{name}   OAuth-gated JSON proxy to the sibling
+                                    server's GET /facilitators/{name} --
+                                    everything known about one facilitator;
+                                    404 if none match.
     GET  /assets/*             static files (favicons, the site logo) from
                                assets/, mounted via StaticFiles
 
@@ -93,14 +104,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger("x402_gui.api")
 
+import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
 import gui.db as db  # noqa: E402
+import gui.facilitators_client as facilitators_client  # noqa: E402
 from gui.app_setup import configure_app  # noqa: E402
 from gui.email_notify import send_access_request  # noqa: E402
 from gui.oauth import (  # noqa: E402
@@ -449,6 +462,33 @@ def facilitator_page(request: Request):
     page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
     page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
     return HTMLResponse(page)
+
+
+@app.get("/api/facilitators")
+def api_list_facilitators(request: Request):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        return JSONResponse(facilitators_client.list_facilitators())
+    except requests.RequestException:
+        logger.exception("api/facilitators: upstream request to x402-analysis-api failed")
+        return JSONResponse({"detail": "Facilitators service is unavailable."}, status_code=502)
+
+
+@app.get("/api/facilitators/{name}")
+def api_get_facilitator(name: str, request: Request):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        facilitator = facilitators_client.get_facilitator(name)
+    except requests.RequestException:
+        logger.exception("api/facilitators/%s: upstream request to x402-analysis-api failed", name)
+        return JSONResponse({"detail": "Facilitators service is unavailable."}, status_code=502)
+    if facilitator is None:
+        return JSONResponse({"detail": f"No facilitator named {name!r}."}, status_code=404)
+    return JSONResponse(facilitator)
 
 
 @app.post("/settings/light-mode")

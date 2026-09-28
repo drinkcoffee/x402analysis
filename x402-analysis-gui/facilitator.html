@@ -201,6 +201,17 @@
       color: var(--muted);
       font-weight: 600;
     }
+    .table-scroll {
+      overflow-x: auto;
+    }
+    .active-yes {
+      color: #1a8a3d;
+      font-weight: 700;
+    }
+    .active-no {
+      color: var(--accent);
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -229,86 +240,86 @@
       <h1>Facilitator: <span id="fac-name"></span></h1>
       <dl class="summary-list">
         <dt>Risk Score</dt><dd id="fac-risk-score"></dd>
+        <dt>Active</dt><dd id="fac-active"></dd>
         <dt>Transaction Volume (week)</dt><dd id="fac-tx-volume"></dd>
         <dt>Servers Settling Transactions</dt><dd id="fac-servers-settling"></dd>
         <dt>Services Settling Transactions</dt><dd id="fac-services-settling"></dd>
+        <dt>Notes</dt><dd id="fac-notes"></dd>
+        <dt>Updated</dt><dd id="fac-updated"></dd>
       </dl>
 
       <section class="table-section">
         <h2>Web Domains</h2>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>URL</th>
-              <th>IP</th>
-              <th>Location</th>
-              <th>TLS Subject Name</th>
-            </tr>
-          </thead>
-          <tbody id="web-domains-tbody"></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>URL</th>
+                <th>IP</th>
+                <th>Location</th>
+                <th>TLS Subject Name</th>
+                <th>Risk</th>
+                <th>Notes</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody id="web-domains-tbody"></tbody>
+          </table>
+        </div>
       </section>
 
       <section class="table-section">
         <h2>Blockchain Addresses</h2>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Usage</th>
-              <th>Blockchain</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody id="blockchain-addresses-tbody"></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Chains</th>
+                <th>Source</th>
+                <th>Risk</th>
+                <th>Notes</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody id="blockchain-addresses-tbody"></tbody>
+          </table>
+        </div>
       </section>
     </div>
 
     <p id="facilitator-not-found" hidden>Facilitator not found.</p>
+    <p id="facilitator-error" hidden>Failed to load this facilitator. Please try reloading the page.</p>
   </main>
 
   <script>
-    // Demo data for the two hardcoded facilitators shown on the dashboard's
-    // Facilitators tab. There's no backing data store for this yet, so this
-    // detail page is populated client-side from the facilitator name in the
-    // URL's ?name= query parameter.
-    const FACILITATORS = {
-      TestFac: {
-        riskScore: 10,
-        txVolume: 1000,
-        serversSettling: 10000,
-        servicesSettling: 240,
-        webDomains: [
-          { type: 'API', url: 'https://api.testfac.io', ip: '203.0.113.10', location: 'US-East (N. Virginia)', tlsSubject: 'api.testfac.io' },
-          { type: 'Documentation', url: 'https://docs.testfac.io', ip: '203.0.113.11', location: 'US-East (N. Virginia)', tlsSubject: 'docs.testfac.io' },
-          { type: 'Website', url: 'https://testfac.io', ip: '203.0.113.12', location: 'US-East (N. Virginia)', tlsSubject: 'testfac.io' },
-        ],
-        blockchainAddresses: [
-          { usage: 'Signing', blockchain: 'Base', address: '0xfac1fac1fac1fac1fac1fac1fac1fac1fac1fac1' },
-          { usage: 'Payment', blockchain: 'Base', address: '0xfac2fac2fac2fac2fac2fac2fac2fac2fac2fac2' },
-          { usage: 'Payment', blockchain: 'Solana', address: '0xfac3fac3fac3fac3fac3fac3fac3fac3fac3fac3' },
-          { usage: 'Signing', blockchain: '*', address: '0xfac4fac4fac4fac4fac4fac4fac4fac4fac4fac4' },
-        ],
-      },
-      Dexter: {
-        riskScore: 0,
-        txVolume: 700,
-        serversSettling: 15000,
-        servicesSettling: 85,
-        webDomains: [
-          { type: 'API', url: 'https://api.dexter.io', ip: '198.51.100.20', location: 'EU-West (Dublin)', tlsSubject: 'api.dexter.io' },
-        ],
-        blockchainAddresses: [
-          { usage: 'Signing', blockchain: 'Base', address: '0xdec1dec1dec1dec1dec1dec1dec1dec1dec1dec1' },
-          { usage: 'Payment', blockchain: '*', address: '0xdec2dec2dec2dec2dec2dec2dec2dec2dec2dec2' },
-        ],
-      },
-    };
+    // Escapes &/</>/"/' so DB-sourced strings (name, notes, URLs, ...) are
+    // safe to interpolate into innerHTML template strings.
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // null/undefined fields (notes, chains, an unfingerprinted URL's ip/
+    // location/subject, ...) render as an empty cell rather than "null".
+    function displayValue(value) {
+      return value === null || value === undefined ? '' : escapeHtml(value);
+    }
+
+    const WEB_DOMAIN_TYPES = [
+      { field: 'api', label: 'API' },
+      { field: 'doc', label: 'Documentation' },
+      { field: 'website', label: 'Website' },
+      { field: 'x402scan', label: 'X402Scan' },
+    ];
 
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
-    const data = name && Object.prototype.hasOwnProperty.call(FACILITATORS, name) ? FACILITATORS[name] : null;
 
     // Carry the dashboard's tab/sort state (present in this page's own
     // query string, since the Facilitators row link forwards it) back with
@@ -319,34 +330,76 @@
     const backQuery = backParams.toString();
     document.getElementById('back-link').href = '/dashboard' + (backQuery ? '?' + backQuery : '');
 
-    if (!data) {
-      document.getElementById('facilitator-not-found').hidden = false;
-    } else {
+    async function loadFacilitator() {
+      if (!name) {
+        document.getElementById('facilitator-not-found').hidden = false;
+        return;
+      }
+
+      let response;
+      try {
+        response = await fetch('/api/facilitators/' + encodeURIComponent(name));
+      } catch (err) {
+        document.getElementById('facilitator-error').hidden = false;
+        return;
+      }
+
+      if (response.status === 404) {
+        document.getElementById('facilitator-not-found').hidden = false;
+        return;
+      }
+      if (!response.ok) {
+        document.getElementById('facilitator-error').hidden = false;
+        return;
+      }
+
+      const data = await response.json();
+
       document.getElementById('facilitator-panel').hidden = false;
-      document.getElementById('fac-name').textContent = name;
-      document.getElementById('fac-risk-score').textContent = data.riskScore;
-      document.getElementById('fac-tx-volume').textContent = data.txVolume;
-      document.getElementById('fac-servers-settling').textContent = data.serversSettling;
-      document.getElementById('fac-services-settling').textContent = data.servicesSettling;
+      document.getElementById('fac-name').textContent = data.name;
+      document.getElementById('fac-risk-score').textContent = data.risk;
+      document.getElementById('fac-active').innerHTML = data.active
+        ? '<span class="active-yes">YES</span>'
+        : '<span class="active-no">NO</span>';
+      // Not tracked anywhere yet.
+      document.getElementById('fac-tx-volume').textContent = -1;
+      document.getElementById('fac-servers-settling').textContent = -1;
+      document.getElementById('fac-services-settling').textContent = -1;
+      document.getElementById('fac-notes').textContent = data.notes || '';
+      document.getElementById('fac-updated').textContent = data.updated || '';
 
-      document.getElementById('web-domains-tbody').innerHTML = data.webDomains.map((d) => `
-        <tr>
-          <td>${d.type}</td>
-          <td>${d.url}</td>
-          <td>${d.ip}</td>
-          <td>${d.location}</td>
-          <td>${d.tlsSubject}</td>
-        </tr>
-      `).join('');
+      const webDomainRows = WEB_DOMAIN_TYPES
+        .filter(({ field }) => data[field])
+        .map(({ field, label }) => {
+          const d = data[field];
+          return `
+            <tr>
+              <td>${escapeHtml(label)}</td>
+              <td>${displayValue(d.url)}</td>
+              <td>${displayValue(d.ip)}</td>
+              <td>${displayValue(d.location)}</td>
+              <td>${displayValue(d.subject)}</td>
+              <td>${displayValue(d.risk)}</td>
+              <td>${displayValue(d.notes)}</td>
+              <td>${displayValue(d.updated)}</td>
+            </tr>
+          `;
+        });
+      document.getElementById('web-domains-tbody').innerHTML = webDomainRows.join('');
 
-      document.getElementById('blockchain-addresses-tbody').innerHTML = data.blockchainAddresses.map((a) => `
+      document.getElementById('blockchain-addresses-tbody').innerHTML = data.addresses.map((a) => `
         <tr>
-          <td>${a.usage}</td>
-          <td>${a.blockchain}</td>
-          <td>${a.address}</td>
+          <td>${displayValue(a.address)}</td>
+          <td>${displayValue(a.chains)}</td>
+          <td>${displayValue(a.source)}</td>
+          <td>${displayValue(a.risk)}</td>
+          <td>${displayValue(a.notes)}</td>
+          <td>${displayValue(a.updated)}</td>
         </tr>
       `).join('');
     }
+
+    loadFacilitator();
 
     const menuButton = document.getElementById('menu-button');
     const menuDropdown = document.getElementById('menu-dropdown');

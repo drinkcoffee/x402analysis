@@ -328,16 +328,17 @@
       history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
     }
 
-    const facilitatorsData = [
-      { name: 'TestFac', riskScore: 10, txVolume: 1000, numServers: 10000, active: 'YES' },
-      { name: 'Dexter', riskScore: 0, txVolume: 700, numServers: 15000, active: 'NO' },
-    ];
+    // Loaded from GET /api/facilitators (a same-origin proxy to the sibling
+    // x402-analysis-api server -- see gui/facilitators_client.py for why the
+    // browser never calls that server directly). Tx Volume and #Servers
+    // aren't tracked anywhere yet, so they're always shown as -1.
+    let facilitatorsData = [];
 
     function renderFacilitatorsRows(rows) {
       const tbody = document.getElementById('facilitators-tbody');
       tbody.innerHTML = rows.map((row) => `
-        <tr data-name="${row.name}">
-          <td>${row.name}</td>
+        <tr data-name="${escapeHtml(row.name)}">
+          <td>${escapeHtml(row.name)}</td>
           <td>${row.riskScore}</td>
           <td>${row.txVolume}</td>
           <td>${row.numServers}</td>
@@ -401,12 +402,40 @@
     const urlSortDir = initialParams.get('dir');
     const initialSortCol = validSortCols.includes(urlSortCol) ? urlSortCol : 'name';
     const initialSortDir = (urlSortDir === 'asc' || urlSortDir === 'desc') ? urlSortDir : 'asc';
-    setFacilitatorsSort(initialSortCol, initialSortDir, { updateUrl: false });
 
+    async function loadFacilitators() {
+      const tbody = document.getElementById('facilitators-tbody');
+      tbody.innerHTML = '<tr><td colspan="5">Loading facilitators&hellip;</td></tr>';
+      try {
+        const response = await fetch('/api/facilitators');
+        if (!response.ok) throw new Error('request failed: ' + response.status);
+        const facilitators = await response.json();
+        facilitatorsData = facilitators.map((f) => ({
+          name: f.name,
+          riskScore: f.risk,
+          txVolume: -1,
+          numServers: -1,
+          active: f.active ? 'YES' : 'NO',
+        }));
+        setFacilitatorsSort(initialSortCol, initialSortDir, { updateUrl: false });
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5">Failed to load facilitators. Please try reloading the page.</td></tr>';
+      }
+    }
+
+    loadFacilitators();
+
+    // Escapes &/</>/"/' so DB-sourced strings (facilitator names, notes, ...)
+    // are safe to interpolate into innerHTML template strings -- including
+    // inside an HTML attribute value like data-name="${...}", where a bare
+    // '"' would otherwise break out of the attribute.
     function escapeHtml(value) {
-      const div = document.createElement('div');
-      div.textContent = String(value);
-      return div.innerHTML;
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     // If a service's description is missing or just "Route", fall back to

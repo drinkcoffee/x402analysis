@@ -11,14 +11,26 @@ rather than an env var.
   user type, a hamburger menu) plus tabs (Servers/Services/Facilitators/
   Clients/Funders), each currently showing placeholder content except
   Facilitators, which has a sortable table (click a column heading to sort,
-  click again to reverse) of two hardcoded rows; clicking a row opens
-  `/facilitator`.
+  click again to reverse), loaded live from the sibling `x402-analysis-api`
+  server via `GET /api/facilitators`; clicking a row opens `/facilitator`.
+  Transaction Volume and #Servers are always shown as `-1` -- that data
+  doesn't exist yet anywhere.
 - `/facilitator?name=...` — Auth0-gated, any authenticated user. Detail page
-  for one facilitator: Name/Risk Score/Transaction Volume/Servers Settling
-  Transactions/Services Settling Transactions, then a Web Domains table and
-  a Blockchain Addresses table. Populated client-side from a hardcoded demo
-  dataset in `facilitator.html` (there's no facilitators table in Neon yet)
-  keyed by the `name` query parameter.
+  for one facilitator, loaded live via `GET /api/facilitators/{name}`: Name/
+  Risk Score/Active/Notes/Updated/Transaction Volume (always `-1`)/Servers
+  and Services Settling Transactions (always `-1`), then a Web Domains table
+  (API/Documentation/Website/X402Scan URLs, each with IP/Location/TLS Subject
+  Name/Risk/Notes/Updated) and a Blockchain Addresses table (Address/Chains/
+  Source/Risk/Notes/Updated).
+- `/api/facilitators` and `/api/facilitators/{name}` — Auth0-gated JSON
+  routes (any authenticated user) that proxy the identically-named endpoints
+  on the sibling `x402-analysis-api` server (`gui/facilitators_client.py`).
+  The browser calls these, never `x402-analysis-api` directly -- that keeps
+  `X402_API_KEY` out of client-side JavaScript entirely; it lives only in
+  this server's own env. See `.env.example` for the `X402_API_BASE_URL`
+  (that server's base URL) and `X402_API_KEY` (a `read` or `read_write` key
+  for it, minted with `x402-analysis-api/scripts/create_api_key.py`) env
+  vars this needs.
 - `/settings` — Auth0-gated. Currently just one control: your light/dark/
   auto theme preference, stored in the database and applied on every page
   load from then on.
@@ -63,18 +75,22 @@ x402-analysis-gui/
   settings.html        the Auth0-gated light-mode settings page
   user_admin.html       the Auth0-gated, Admin-only user administration page
   risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
-  facilitator.html       the Auth0-gated facilitator detail page (demo data)
+  facilitator.html       the Auth0-gated facilitator detail page
   request_access.html    the public "Request Access" page for an unapproved login
   api/
     app.py             every route: /, /auth/login, /auth/signup,
                        /auth/callback, /auth/logout, /request-access,
                        /auth/request-access, /dashboard, /settings,
                        /settings/light-mode, /admin/users,
-                       /risk-score-factors, /facilitator
+                       /risk-score-factors, /facilitator,
+                       /api/facilitators, /api/facilitators/{name}
   gui/
     oauth.py            Auth0 login/signup/callback/logout
     email_notify.py      Resend "please approve this signup" email to the admin
     db.py               Neon access: find/add/update/remove/list users
+    facilitators_client.py  server-side HTTP client for the sibling
+                            x402-analysis-api's /facilitators endpoints --
+                            holds X402_API_KEY so the browser never has to
     crypto.py            AES-256-GCM encryption + lookup-hash for the
                          email column
     session.py           signed-cookie session middleware config
@@ -183,7 +199,7 @@ pip install -r requirements.txt
 
 cp .env.example .env
 # fill in .env: PUBLIC_BASE_URL=http://localhost:8000, DATABASE_URL,
-# DB_ENCRYPTION_KEY, etc.
+# DB_ENCRYPTION_KEY, X402_API_BASE_URL, X402_API_KEY, etc.
 
 python scripts/init_db.py
 python scripts/add_user.py you@example.com --user-type admin
@@ -202,7 +218,8 @@ Then open `http://localhost:8000`.
    `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`,
    `PUBLIC_BASE_URL` (your Vercel deployment URL), `SESSION_SECRET_KEY`,
    `DATABASE_URL`, `DB_ENCRYPTION_KEY`, `RESEND_API_KEY`,
-   `ADMIN_NOTIFY_EMAIL`, and `RESEND_FROM_EMAIL`.
+   `ADMIN_NOTIFY_EMAIL`, `RESEND_FROM_EMAIL`, `X402_API_BASE_URL`, and
+   `X402_API_KEY`.
 3. Deploy. Vercel auto-detects the Python/FastAPI app from
    `requirements.txt` + `api/app.py` — no extra build config needed beyond
    `vercel.json`.
