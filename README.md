@@ -17,3 +17,10 @@ Tools and analysis for the [x402](https://www.x402.org/) payment protocol ecosys
   authenticated `/dashboard` page. See
   [x402-analysis-gui/README.md](x402-analysis-gui/README.md) for setup and
   deployment.
+
+- **[x402-analysis-api/](x402-analysis-api/)** — a minimal API server
+  (Python/FastAPI on Vercel, Neon-backed) providing programmatic access to
+  x402 ecosystem analysis data, gated by API keys stored in the database.
+  See [x402-analysis-api/README.md](x402-analysis-api/README.md) for setup
+  and deployment, and [x402-analysis-api/API.md](x402-analysis-api/API.md)
+  for the request/response contract.
