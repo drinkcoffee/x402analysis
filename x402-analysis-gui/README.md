@@ -25,7 +25,11 @@ rather than an env var.
 - `/admin/users` — Auth0-gated, Admin only ("User Administration" in the
   hamburger menu, shown only to Admins). Add a new authorised email address
   and set its user type; new users always start with light_mode = auto. Also
-  lists the currently authorised users.
+  lists the currently authorised users, each with a pencil-icon edit button
+  to change their user type or delete them — except the row for the admin
+  currently logged in, who has no edit button for their own account (and the
+  underlying `/admin/users/update` and `/admin/users/delete` routes refuse a
+  request targeting the caller's own email too, in case that's ever bypassed).
 - `/risk-score-factors` — Auth0-gated, Admin and Advanced users only ("Risk
   Score Factors" in the hamburger menu, hidden from Standard users).
   Currently a placeholder: "Risk Score Factors screen is coming soon."

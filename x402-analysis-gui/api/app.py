@@ -33,6 +33,14 @@ Routes:
     POST /admin/users          Admin-only: adds (or updates the user_type of)
                                an authorised user, with light_mode defaulting
                                to auto
+    POST /admin/users/update   Admin-only: changes an existing user's
+                               user_type (the pencil-button edit modal on
+                               /admin/users). An admin can't target their
+                               own account this way -- there's no edit
+                               button next to their own row, and the route
+                               itself ignores such a request too.
+    POST /admin/users/delete   Admin-only: removes an authorised user (same
+                               edit modal, same can't-target-yourself rule).
     GET  /risk-score-factors   Admin/Advanced only: a placeholder page
                                (risk_score_factors.html). Standard users
                                don't see the "Risk Score Factors" menu item
@@ -160,18 +168,29 @@ def _risk_score_menu_item(user: dict) -> str:
     return '<a href="/risk-score-factors">Risk Score Factors</a>'
 
 
-def _render_user_rows() -> str:
+def _render_user_rows(current_email: str) -> str:
     rows = db.list_users()
     if not rows:
-        return '<tr><td colspan="3">(no authorised users yet)</td></tr>'
-    return "\n".join(
-        "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(
-            escape(row["email"]),
-            escape(db.USER_TYPE_NAMES[row["user_type"]]),
-            escape(db.LIGHT_MODE_NAMES[row["light_mode"]]),
+        return '<tr><td colspan="4">(no authorised users yet)</td></tr>'
+    row_html = []
+    for row in rows:
+        is_self = row["email"].strip().lower() == current_email.strip().lower()
+        edit_button = (
+            ""
+            if is_self
+            else '<button type="button" class="edit-user-button" data-email="{}" data-user-type="{}" aria-label="Edit {}">&#9998;</button>'.format(
+                escape(row["email"], quote=True), row["user_type"], escape(row["email"], quote=True)
+            )
         )
-        for row in rows
-    )
+        row_html.append(
+            "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(
+                escape(row["email"]),
+                escape(db.USER_TYPE_NAMES[row["user_type"]]),
+                escape(db.LIGHT_MODE_NAMES[row["light_mode"]]),
+                edit_button,
+            )
+        )
+    return "\n".join(row_html)
 
 
 # --- Public landing page -----------------------------------------------------
@@ -297,7 +316,7 @@ def admin_users_page(request: Request):
     page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
     page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
     page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
-    page = page.replace("{{USER_ROWS}}", _render_user_rows())
+    page = page.replace("{{USER_ROWS}}", _render_user_rows(email))
     return HTMLResponse(page)
 
 
@@ -320,6 +339,50 @@ async def admin_add_user(request: Request):
     if new_email:
         db.add_user(new_email, user_type=new_user_type, light_mode=db.LIGHT_MODE_AUTO)
         logger.info("admin/users POST: admin=%s added/updated user=%s user_type=%s", email, new_email, new_user_type)
+
+    return RedirectResponse(url="/admin/users", status_code=303)
+
+
+@app.post("/admin/users/update")
+async def admin_update_user(request: Request):
+    email, user = _require_admin(request)
+    if not user:
+        logger.info("admin/users/update POST: no valid session or non-admin (email=%s)", email)
+        return RedirectResponse(url="/dashboard" if email else "/", status_code=303)
+
+    form = await request.form()
+    target_email = (form.get("email") or "").strip()
+    try:
+        new_user_type = int(form.get("user_type", ""))
+    except (TypeError, ValueError):
+        new_user_type = None
+
+    if not target_email or target_email.lower() == email.lower():
+        logger.warning("admin/users/update POST: admin=%s attempted to edit own account; ignored", email)
+    elif new_user_type not in db.VALID_USER_TYPES:
+        logger.warning("admin/users/update POST: admin=%s sent invalid user_type for %s; ignored", email, target_email)
+    else:
+        db.update_user_type(target_email, new_user_type)
+        logger.info("admin/users/update POST: admin=%s set user=%s user_type=%s", email, target_email, new_user_type)
+
+    return RedirectResponse(url="/admin/users", status_code=303)
+
+
+@app.post("/admin/users/delete")
+async def admin_delete_user(request: Request):
+    email, user = _require_admin(request)
+    if not user:
+        logger.info("admin/users/delete POST: no valid session or non-admin (email=%s)", email)
+        return RedirectResponse(url="/dashboard" if email else "/", status_code=303)
+
+    form = await request.form()
+    target_email = (form.get("email") or "").strip()
+
+    if not target_email or target_email.lower() == email.lower():
+        logger.warning("admin/users/delete POST: admin=%s attempted to delete own account; ignored", email)
+    else:
+        db.remove_user(target_email)
+        logger.info("admin/users/delete POST: admin=%s deleted user=%s", email, target_email)
 
     return RedirectResponse(url="/admin/users", status_code=303)
 

@@ -108,6 +108,22 @@ def update_light_mode(email: str, light_mode: int) -> bool:
     return updated
 
 
+def update_user_type(email: str, user_type: int) -> bool:
+    """Updates the user_type for an existing authorised user, leaving their
+    light_mode untouched. Returns False if the email isn't in user_settings
+    (nothing to update)."""
+    if user_type not in VALID_USER_TYPES:
+        raise ValueError(f"invalid user_type: {user_type!r}")
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE user_settings SET user_type_encrypted = %s, updated_at = now() WHERE email_hash = %s",
+                (encrypt(str(user_type)), lookup_hash(email)),
+            )
+            updated = cur.rowcount > 0
+    return updated
+
+
 def add_user(email: str, user_type: int = USER_TYPE_STANDARD, light_mode: int = LIGHT_MODE_AUTO) -> None:
     """Adds a new authorised user, or updates user_type/light_mode (and
     re-encrypts the email) if that email is already present. Used by
@@ -145,7 +161,7 @@ def remove_user(email: str) -> bool:
 def list_users() -> list[dict]:
     """{"email": str, "user_type": int, "light_mode": int} for every
     authorised user, decrypting each stored email. Used by
-    scripts/add_user.py --list, not by the running web app."""
+    scripts/add_user.py --list and the /admin/users page."""
     with _connect() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(

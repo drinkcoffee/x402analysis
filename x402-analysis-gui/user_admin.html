@@ -222,6 +222,113 @@
       color: var(--muted);
       font-weight: 600;
     }
+    .admin-panel .edit-user-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      font-size: 0.95rem;
+      line-height: 1;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+    }
+    .admin-panel .edit-user-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      z-index: 20;
+    }
+    .modal-overlay[hidden] { display: none; }
+    .modal {
+      width: 100%;
+      max-width: 360px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .modal h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.1rem;
+    }
+    .modal .modal-email {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+    .modal label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .modal select {
+      width: 100%;
+      padding: 0.55rem 0.7rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .modal .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+    .modal button {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .modal button.save-button {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .modal button.save-button:hover {
+      opacity: 0.9;
+    }
+    .modal button.cancel-button {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--ink);
+    }
+    .modal button.delete-button {
+      border: 1px solid var(--accent);
+      background: var(--panel);
+      color: var(--accent);
+      margin-right: auto;
+    }
+    .modal button.delete-button:hover {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .modal-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0.25rem 0 1.25rem;
+    }
   </style>
 </head>
 <body>
@@ -265,7 +372,7 @@
       <h2>Authorised users</h2>
       <table>
         <thead>
-          <tr><th>Email</th><th>User type</th><th>Light mode</th></tr>
+          <tr><th>Email</th><th>User type</th><th>Light mode</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {{USER_ROWS}}
@@ -274,7 +381,70 @@
     </div>
   </main>
 
+  <div class="modal-overlay" id="edit-modal-overlay" hidden>
+    <div class="modal">
+      <h2>Edit user</h2>
+      <p class="modal-email" id="edit-modal-email"></p>
+
+      <form method="post" action="/admin/users/update" id="edit-type-form">
+        <input type="hidden" name="email" id="edit-type-email" />
+        <label for="edit-user-type">User type</label>
+        <select id="edit-user-type" name="user_type">
+          <option value="0">Admin</option>
+          <option value="1">Advanced</option>
+          <option value="2">Standard</option>
+        </select>
+        <div class="modal-actions">
+          <button type="button" class="cancel-button" id="edit-modal-cancel">Cancel</button>
+          <button type="submit" class="save-button">Save changes</button>
+        </div>
+      </form>
+
+      <hr class="modal-divider" />
+
+      <form method="post" action="/admin/users/delete" id="edit-delete-form">
+        <input type="hidden" name="email" id="edit-delete-email" />
+        <div class="modal-actions">
+          <button type="submit" class="delete-button">Delete user</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
+    const editOverlay = document.getElementById('edit-modal-overlay');
+    const editEmailLabel = document.getElementById('edit-modal-email');
+    const editUserTypeSelect = document.getElementById('edit-user-type');
+    const editTypeEmailInput = document.getElementById('edit-type-email');
+    const editDeleteEmailInput = document.getElementById('edit-delete-email');
+
+    function openEditModal(email, userType) {
+      editEmailLabel.textContent = email;
+      editUserTypeSelect.value = userType;
+      editTypeEmailInput.value = email;
+      editDeleteEmailInput.value = email;
+      editOverlay.hidden = false;
+    }
+
+    function closeEditModal() {
+      editOverlay.hidden = true;
+    }
+
+    document.querySelectorAll('.edit-user-button').forEach((btn) => {
+      btn.addEventListener('click', () => openEditModal(btn.dataset.email, btn.dataset.userType));
+    });
+
+    document.getElementById('edit-modal-cancel').addEventListener('click', closeEditModal);
+    editOverlay.addEventListener('click', (event) => {
+      if (event.target === editOverlay) closeEditModal();
+    });
+
+    document.getElementById('edit-delete-form').addEventListener('submit', (event) => {
+      if (!confirm('Delete ' + editDeleteEmailInput.value + '? This cannot be undone.')) {
+        event.preventDefault();
+      }
+    });
+
     const menuButton = document.getElementById('menu-button');
     const menuDropdown = document.getElementById('menu-dropdown');
     menuButton.addEventListener('click', (event) => {
