@@ -27,10 +27,14 @@ That needs a CDP API key pair: CDP_API_KEY_ID / CDP_API_KEY_SECRET, free
 from https://portal.cdp.coinbase.com/ -- read from a .env file in *either*
 this project's root or cli-tool's (so an existing cli-tool/.env, if you
 already use the CLI against Coinbase, doesn't need to be duplicated here).
-Checked at startup, before anything else runs: if either is missing, the
-script prints setup instructions and exits immediately rather than only
-reporting Coinbase as one of possibly several failures partway through the
-run.
+Checked by preflight_checks(), which main() runs up front (alongside a
+DATABASE_URL/connectivity check) before anything else, so a missing CDP
+setup is reported clearly and the whole run stops immediately, rather than
+only turning up as Coinbase's entry in the failures list partway through.
+Required libraries (psycopg2, requests, pyjwt, cryptography) are checked
+even earlier than that, via a guarded import at the top of this file --
+missing any of them prints which one and exits immediately, since nothing
+here can run at all without them.
 
 A facilitator with no api URL on file is skipped -- there's nothing to call.
 
@@ -56,18 +60,30 @@ from urllib.parse import urlparse
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CLI_TOOL_ROOT = PROJECT_ROOT.parent / "cli-tool"
 
-from dotenv import load_dotenv
+import preflight  # noqa: E402
+
+try:
+    from dotenv import load_dotenv
+    import psycopg2
+    import psycopg2.extras
+    import requests
+    # cdp_client/cdp_auth pull in pyjwt and cryptography -- caught here too,
+    # under the same "pip install -r requirements.txt" message, rather than
+    # a separate one just for these two.
+    from cdp_client import CDP_BASE_URL, CDP_HOST, CdpClient, CdpClientError
+except ImportError as exc:
+    print(
+        f"missing required package: {exc.name}. Run `pip install -r "
+        "requirements.txt` from x402-analysis-api/, with your virtualenv "
+        "active.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 load_dotenv(PROJECT_ROOT / ".env")
 load_dotenv(CLI_TOOL_ROOT / ".env")  # e.g. CDP_API_KEY_ID/SECRET, if set up for the CLI already
 
 import os  # noqa: E402
-
-import psycopg2  # noqa: E402
-import psycopg2.extras  # noqa: E402
-import requests  # noqa: E402
-
-from cdp_client import CDP_BASE_URL, CDP_HOST, CdpClient, CdpClientError  # noqa: E402
 
 REQUEST_TIMEOUT = 10.0
 TEXT_PREVIEW_LIMIT = 500
@@ -141,36 +157,36 @@ def check_supported(api_url: str) -> tuple[str, bool, str]:
     return _check_generic_supported(api_url)
 
 
-def _require_cdp_env_vars() -> None:
-    """CDP_API_KEY_ID/CDP_API_KEY_SECRET are required to run this script at
-    all -- checked once, up front, so a missing CDP setup is reported
-    clearly and the whole run stops immediately, rather than only turning
-    up as Coinbase's entry in the failures list partway through."""
+def preflight_checks() -> list[str]:
+    """Problems that would stop check_supported() from being able to check
+    Coinbase specifically: CDP_API_KEY_ID/CDP_API_KEY_SECRET. Required
+    libraries (psycopg2/requests/pyjwt/cryptography) are already guaranteed
+    importable by this point -- this module's own top-level import already
+    exited with a clear message if any were missing -- so they're not
+    re-checked here. This is what update.py additionally aggregates when it
+    reuses check_supported() directly, without going through this script's
+    own main()."""
     missing = [name for name in ("CDP_API_KEY_ID", "CDP_API_KEY_SECRET") if not os.getenv(name)]
     if not missing:
-        return
-    print(
-        "Missing required env var(s): " + ", ".join(missing) + "\n"
-        "\n"
-        "This script authenticates to Coinbase's CDP Platform API with a "
-        "CDP API key pair. To set one up:\n"
-        "  1. Go to https://portal.cdp.coinbase.com/\n"
-        "  2. Go to Settings, API Keys, Secret API keys\n"
-        "  3. Set CDP_API_KEY_ID and CDP_API_KEY_SECRET -- either export "
-        "them, or add them to a .env file in this project's root (or "
-        "cli-tool's, if you already use the CLI against Coinbase).\n",
-        file=sys.stderr,
-    )
-    sys.exit(1)
+        return []
+    return [
+        "Missing required env var(s): "
+        + ", ".join(missing)
+        + ". This script authenticates to Coinbase's CDP Platform API with "
+        "a CDP API key pair. To set one up: (1) go to "
+        "https://portal.cdp.coinbase.com/, (2) go to Settings, API Keys, "
+        "Secret API keys, (3) set CDP_API_KEY_ID and CDP_API_KEY_SECRET -- "
+        "either export them, or add them to a .env file in this project's "
+        "root (or cli-tool's, if you already use the CLI against Coinbase)."
+    ]
 
 
 def main() -> None:
-    _require_cdp_env_vars()
-
     database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        print("DATABASE_URL is not set.", file=sys.stderr)
-        sys.exit(1)
+    preflight.check_or_exit(
+        preflight_checks,
+        preflight.require_database_url(database_url),
+    )
 
     conn = psycopg2.connect(database_url)
     try:

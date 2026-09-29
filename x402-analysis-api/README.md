@@ -82,6 +82,10 @@ x402-analysis-api/
                            current shape -- both are read only by
                            scripts/init_db.py, never the deployed function
   scripts/
+    preflight.py              stdlib-only shared checks (env vars, Neon
+                              connectivity) used by every script below to
+                              report everything missing/broken up front, in
+                              one message, before doing any real work
     db_setup.py              shared: applies schema.sql then migrations.sql
                              (used by both scripts below, so neither can run
                              against a database that's a migration behind)
@@ -262,6 +266,35 @@ checks the local mirror was downloaded from this *exact* `DATABASE_URL`
 (comparing a hash recorded at download time, not just "some download
 happened at some point") and forces a fresh download whenever that doesn't
 match, rather than silently diffing against whatever's already on disk.
+
+### Preflight checks
+
+`update.py` and the scripts it calls check everything they need up front --
+env vars, libraries, external tools, Neon connectivity -- and report every
+problem found together in one message, rather than failing with a
+traceback (or worse, a partially-applied change) partway through a run:
+
+- **Required packages** (`psycopg2`, `requests`, `python-dotenv`, `pyjwt`,
+  `cryptography`): each script guards its own imports of these in a
+  `try`/`except ImportError`, printing which package is missing and
+  `pip install -r requirements.txt` as the fix, then exiting immediately --
+  Python can't partially import a module anyway, so there's nothing to
+  usefully aggregate here.
+- **The sibling `cli-tool` project** checked out next to this one (needed
+  by `load_facilitators.fingerprint_urls`, and so transitively by
+  `update.py`): same treatment, checked at the point that import happens.
+- **`DATABASE_URL`** (Neon): checked for both presence and actual
+  connectivity (`preflight.require_database_url`).
+- **`CDP_API_KEY_ID`/`CDP_API_KEY_SECRET`**: `check_supported.py`'s
+  `preflight_checks()`.
+- **PostgreSQL binaries and local port availability**: `download_db.py`'s
+  `preflight_checks()`.
+
+`update.py`'s `main()` runs all of these together via `preflight.py` (the
+one piece that's genuinely worth aggregating, since these problems are
+independent of each other) before doing anything else; `download_db.py`
+and `check_supported.py` each run their own subset the same way when run
+standalone.
 
 ## Neon database setup
 

@@ -28,10 +28,13 @@ the local server (a well-known snag when restoring a managed Postgres dump
 into a vanilla local one).
 
 is_downloaded(neon_url) / ensure_server_running() / download() /
-local_db_url() are meant to be imported by other scripts (see update.py) as
-well as run directly here. is_downloaded() takes the Neon URL currently in
-play and returns False if the local mirror was actually downloaded from a
-*different* one -- see its docstring for why that check exists.
+local_db_url() / preflight_checks() are meant to be imported by other
+scripts (see update.py) as well as run directly here. is_downloaded() takes
+the Neon URL currently in play and returns False if the local mirror was
+actually downloaded from a *different* one -- see its docstring for why
+that check exists. preflight_checks() reports any missing PostgreSQL
+binary or port conflict up front, before ensure_server_running()/download()
+would otherwise fail partway through.
 
 Usage:
     python scripts/download_db.py
@@ -45,6 +48,7 @@ from __future__ import annotations
 import getpass
 import hashlib
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -53,13 +57,23 @@ from typing import Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-from dotenv import load_dotenv
+import preflight  # noqa: E402
+
+try:
+    from dotenv import load_dotenv
+    import psycopg2
+except ImportError as exc:
+    print(
+        f"missing required package: {exc.name}. Run `pip install -r "
+        "requirements.txt` from x402-analysis-api/, with your virtualenv "
+        "active.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 load_dotenv(PROJECT_ROOT / ".env")
 
 import os  # noqa: E402
-
-import psycopg2  # noqa: E402
 
 LOCAL_DB_ROOT = PROJECT_ROOT / "localdb"
 LOCAL_DATA_DIR = LOCAL_DB_ROOT / "pgdata"
@@ -106,6 +120,38 @@ def _pg_bin(name: str) -> str:
         "version();`; e.g. `brew install postgresql@18`) or add its bin/ "
         "directory to PATH."
     )
+
+
+def preflight_checks() -> list[str]:
+    """Problems that would stop ensure_server_running()/download() from
+    working: any of the PostgreSQL binaries they shell out to, and the
+    local port they need free. Doesn't check DATABASE_URL -- that's the
+    caller's Neon connection to check (preflight.require_database_url),
+    not something this module owns."""
+    problems: list[str] = []
+    missing_binary = False
+
+    for name in ("initdb", "pg_ctl", "pg_isready", "pg_dump", "psql"):
+        try:
+            _pg_bin(name)
+        except RuntimeError as exc:
+            problems.append(str(exc))
+            missing_binary = True
+
+    # _server_running() itself needs pg_ctl -- skip the port check rather
+    # than raise a second time if that's already one of the problems above.
+    if not missing_binary and not _server_running():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.5)
+            if s.connect_ex(("localhost", LOCAL_DB_PORT)) == 0:
+                problems.append(
+                    f"port {LOCAL_DB_PORT} is already in use by something "
+                    "else (not this project's local Postgres mirror, which "
+                    "isn't running yet). Set LOCAL_DB_PORT to a different "
+                    "port, or stop whatever's using it."
+                )
+
+    return problems
 
 
 def local_db_url() -> str:
@@ -249,9 +295,10 @@ def download(neon_url: Optional[str] = None) -> None:
 
 def main() -> None:
     neon_url = os.getenv("DATABASE_URL")
-    if not neon_url:
-        print("DATABASE_URL is not set.", file=sys.stderr)
-        sys.exit(1)
+    preflight.check_or_exit(
+        preflight_checks,
+        preflight.require_database_url(neon_url),
+    )
     download(neon_url)
 
 

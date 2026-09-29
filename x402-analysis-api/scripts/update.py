@@ -58,13 +58,29 @@ just "some download happened at some point"), and forces a fresh download
 whenever that doesn't match, rather than silently diffing against
 whatever's on disk.
 
+Before any of the above: every required env var, library, and external
+tool is checked up front and reported together (preflight.py), rather than
+failing with a traceback -- or worse, a partially-applied change -- partway
+through a run:
+  - required packages (psycopg2, requests, python-dotenv, pyjwt,
+    cryptography) via a guarded import at the top of this file and of each
+    module it imports (check_supported.py, download_db.py,
+    load_facilitators.py) -- missing one prints which one and exits
+    immediately, since nothing downstream can work without it anyway.
+  - the sibling cli-tool project checked out next to this one (needed by
+    load_facilitators.fingerprint_urls, transitively) -- same treatment,
+    checked where that import happens.
+  - DATABASE_URL (Neon): set, and actually reachable.
+  - CDP_API_KEY_ID/CDP_API_KEY_SECRET (check_supported.preflight_checks()):
+    needed for step 4 to check Coinbase specifically.
+  - the PostgreSQL binaries download_db.py shells out to, and its local
+    port being free (download_db.preflight_checks()).
+
 Usage:
     python scripts/update.py
 
-Requires DATABASE_URL (Neon) and CDP_API_KEY_ID/CDP_API_KEY_SECRET (checked
-up front, same as check_supported.py, since step 4 needs them to check
-Coinbase), read from a .env file in the project root (if present) or the
-real environment.
+Requires DATABASE_URL (Neon) and CDP_API_KEY_ID/CDP_API_KEY_SECRET, read
+from a .env file in the project root (if present) or the real environment.
 """
 
 from __future__ import annotations
@@ -74,15 +90,31 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-from dotenv import load_dotenv
+import preflight  # noqa: E402
+
+try:
+    from dotenv import load_dotenv
+    import psycopg2
+    import psycopg2.extras
+    import requests  # needed by x402scan_scraper, imported below
+except ImportError as exc:
+    print(
+        f"missing required package: {exc.name}. Run `pip install -r "
+        "requirements.txt` from x402-analysis-api/, with your virtualenv "
+        "active.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 load_dotenv(PROJECT_ROOT / ".env")
 
 import os  # noqa: E402
 
-import psycopg2  # noqa: E402
-import psycopg2.extras  # noqa: E402
-
+# Each of these has its own guarded import for its own extra dependencies
+# (requests, pyjwt/cryptography via cdp_client, cli-tool's x402tool via
+# load_facilitators) -- if any of those are missing, importing it here
+# prints a clear message and exits immediately, the same way a missing
+# package above does.
 import check_supported  # noqa: E402
 import download_db  # noqa: E402
 import x402scan_scraper  # noqa: E402
@@ -288,12 +320,12 @@ def _fingerprint_targets(ops: list[dict]) -> set[str]:
 
 
 def main() -> None:
-    check_supported._require_cdp_env_vars()
-
     neon_url = os.getenv("DATABASE_URL")
-    if not neon_url:
-        print("DATABASE_URL is not set.", file=sys.stderr)
-        sys.exit(1)
+    preflight.check_or_exit(
+        preflight.require_database_url(neon_url),
+        check_supported.preflight_checks,
+        download_db.preflight_checks,
+    )
 
     if not download_db.is_downloaded(neon_url):
         print("local database hasn't been downloaded yet (or was downloaded from a different DATABASE_URL) -- downloading now...")

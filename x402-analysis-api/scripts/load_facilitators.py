@@ -72,19 +72,39 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+CLI_TOOL_ROOT = PROJECT_ROOT.parent / "cli-tool"
 
-from dotenv import load_dotenv
+import preflight  # noqa: E402
+
+try:
+    from dotenv import load_dotenv
+    import psycopg2
+except ImportError as exc:
+    print(
+        f"missing required package: {exc.name}. Run `pip install -r "
+        "requirements.txt` from x402-analysis-api/, with your virtualenv "
+        "active.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 load_dotenv(PROJECT_ROOT / ".env")
 
 import os  # noqa: E402
 
-import psycopg2  # noqa: E402
-
 from db_setup import ensure_schema  # noqa: E402
 
-sys.path.insert(0, str(PROJECT_ROOT.parent / "cli-tool"))
-from x402tool import net_analysis  # noqa: E402
+sys.path.insert(0, str(CLI_TOOL_ROOT))
+try:
+    from x402tool import net_analysis  # noqa: E402
+except ImportError as exc:
+    print(
+        f"couldn't import the sibling cli-tool project's x402tool.net_analysis "
+        f"module ({exc}). Clone cli-tool next to this project (as it is in "
+        f"this monorepo) -- expected at {CLI_TOOL_ROOT}.",
+        file=sys.stderr,
+    )
+    sys.exit(1)
 
 DEFAULT_DATA_PATH = PROJECT_ROOT / "scripts" / "data" / "x402Fac.json"
 NET_TIMEOUT = 8.0
@@ -236,14 +256,11 @@ def load_facilitators(cur, facilitators: list[dict]) -> tuple[int, int]:
 
 def main() -> None:
     data_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_DATA_PATH
-    if not data_path.exists():
-        print(f"{data_path} does not exist.", file=sys.stderr)
-        sys.exit(1)
-
     database_url = os.getenv("DATABASE_URL")
-    if not database_url:
-        print("DATABASE_URL is not set.", file=sys.stderr)
-        sys.exit(1)
+    preflight.check_or_exit(
+        lambda: None if data_path.exists() else f"{data_path} does not exist.",
+        preflight.require_database_url(database_url),
+    )
 
     facilitators = json.loads(data_path.read_text())
 
