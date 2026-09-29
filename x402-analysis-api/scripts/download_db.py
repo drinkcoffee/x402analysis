@@ -79,20 +79,32 @@ _COMMON_PG_BIN_DIRS = [
 
 def _pg_bin(name: str) -> str:
     """Absolute path to a PostgreSQL client/server binary (initdb, pg_ctl,
-    pg_isready, pg_dump, psql). Checks PATH first, then a few common
-    Homebrew install locations, since `brew install postgresql@16` doesn't
-    always put its binaries on PATH."""
-    found = shutil.which(name)
-    if found:
-        return found
+    pg_isready, pg_dump, psql). Prefers the newest installed PostgreSQL
+    version it can find under the common Homebrew locations (checked newest
+    major version first) over whatever happens to be first on PATH, and
+    only falls back to plain PATH lookup if none of those exist.
+
+    This order matters specifically for pg_dump: it refuses to dump from a
+    server *newer* than itself ("aborting because of server version
+    mismatch"), and Neon stays current on major versions. If an older
+    postgresql@16 happens to be the one linked onto PATH while a newer
+    postgresql@18 is also installed but unlinked, checking PATH first would
+    silently pick the incompatible one instead of the perfectly good newer
+    one sitting right there -- so the versioned locations are checked
+    first, newest to oldest, and PATH is only the last resort."""
     for bin_dir in _COMMON_PG_BIN_DIRS:
         candidate = Path(bin_dir) / name
         if candidate.exists():
             return str(candidate)
+    found = shutil.which(name)
+    if found:
+        return found
     raise RuntimeError(
         f"couldn't find the '{name}' PostgreSQL binary on PATH or in any of "
-        f"{_COMMON_PG_BIN_DIRS}. Install PostgreSQL (e.g. `brew install "
-        "postgresql@16`) or add its bin/ directory to PATH."
+        f"{_COMMON_PG_BIN_DIRS}. Install a PostgreSQL version at least as "
+        "new as your Neon database's (check its version with `SELECT "
+        "version();`; e.g. `brew install postgresql@18`) or add its bin/ "
+        "directory to PATH."
     )
 
 
