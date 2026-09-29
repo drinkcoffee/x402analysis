@@ -11,7 +11,7 @@ https://docs.cdp.coinbase.com/api-reference/v2/rest-api/x402-facilitator/x402-fa
 from __future__ import annotations
 
 from typing import Any, Optional
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 import requests
 
@@ -50,7 +50,15 @@ class CdpClient:
                 "--api-key-id/--api-key-secret or set the CDP_API_KEY_ID / "
                 "CDP_API_KEY_SECRET environment variables."
             )
-        token = build_bearer_token(self.key_id, self.key_secret, method, CDP_HOST, path)
+        # CDP's JWT "uri" claim must match the actual request path CDP sees,
+        # which includes self.base_url's own path component (e.g.
+        # "/platform") -- not just the route-specific `path` passed in here.
+        # Signing "path" alone here produced a uri claim CDP could never
+        # match against the real request, so every authenticated call
+        # (verify/settle/supported) failed with "Unauthorized" regardless of
+        # how correct the credentials were.
+        full_path = urlparse(self.base_url).path + path
+        token = build_bearer_token(self.key_id, self.key_secret, method, CDP_HOST, full_path)
         return {"Authorization": f"Bearer {token}"}
 
     def _request(
