@@ -92,6 +92,13 @@ x402-analysis-api/
     check_supported.py           calls GET {api_url}/supported for every
                                  facilitator with an api URL on file, and
                                  reports any that didn't return valid JSON
+    cdp_client.py                 Coinbase CDP Platform API client, used by
+                                  check_supported.py -- vendored from the
+                                  sibling cli-tool project's
+                                  x402tool/cdp_client.py
+    cdp_auth.py                    CDP bearer JWT signing, used by
+                                   cdp_client.py -- vendored from
+                                   x402tool/cdp_auth.py
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see
@@ -153,6 +160,27 @@ response was received at all).
 ```bash
 python scripts/check_supported.py
 ```
+
+Coinbase's CDP Platform API is a special case, since it's authenticated and
+versioned (`/v2/x402/supported`, not a bare `/supported`) rather than the
+plain contract every other facilitator uses -- the script detects its host
+and calls it via `CdpClient` (`scripts/cdp_client.py`) instead, which signs
+a short-lived bearer JWT per request (`scripts/cdp_auth.py`). Both files are
+vendored, byte-for-byte, from the sibling `cli-tool` project's
+`x402tool/cdp_client.py` and `x402tool/cdp_auth.py`, so this script doesn't
+need `cli-tool` checked out next to this project just to authenticate to
+Coinbase -- their only extra dependencies, `pyjwt` and `cryptography`, are
+in this project's own `requirements.txt`.
+
+That needs a CDP API key pair (`CDP_API_KEY_ID` / `CDP_API_KEY_SECRET`, free
+from [portal.cdp.coinbase.com](https://portal.cdp.coinbase.com/) -- read
+from a `.env` in either this project's root or `cli-tool`'s, so an existing
+`cli-tool/.env`, if you already use the CLI against Coinbase, doesn't need
+to be duplicated here). Both are **required** to run the script at all:
+checked once at startup, before anything else -- if either is missing, the
+script prints setup instructions and exits immediately, rather than only
+surfacing Coinbase as one of possibly several failures partway through the
+run.
 
 ## Neon database setup
 
