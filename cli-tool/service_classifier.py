@@ -48,23 +48,101 @@ class CategoryRule:
 # Checked in order; a resource goes to the first category whose include terms
 # match and whose exclude terms don't. Anything left over is "uncategorised".
 CATEGORY_RULES: list[CategoryRule] = [
-    CategoryRule("giftcard", include=["gift"]),
+    CategoryRule("*giftcard", include=["gift"]),
+    CategoryRule(
+        "*password",
+        include=["password"],
+        exclude=[],
+    ),
+    CategoryRule(
+        "*secret",
+        include=["secret"],
+        exclude=["non-secret"],
+    ),
+    CategoryRule(
+        "*signature",
+        include=["signature", "signed"],
+        exclude=[],
+    ),
     CategoryRule(
         "network",
-        include=["-ip ", " ip ", "/ip-"],
+        include=["-ip ", " ip ", "/ip-", "domain", "tld", "ipv", "4byte"],
         # "ip " also turns up inside words like "...ship " and TLDs like
         # ".vip"/".rip" -- exclude those false positives.
         exclude=["hip", "rip", "vip", "rip", "tip", "lip"],
     ),
     CategoryRule(
-        "password",
-        include=["password"],
+        "blockchain",
+        include=["ethereum", "arbitrum", "optimism", "token", "abi", "bitcoin", "crypto", "btc", 
+                 "defi", "dex", "perpetual", "order-book", "gas", "solana", "ens", 
+                 "uniswap", "pancake", "sushi", "evm"],
         exclude=[],
     ),
     CategoryRule(
-        "blockchain-util",
-        include=["ethereum", "arbitrum", "optimism", "token"],
+        "news",
+        include=["news"],
         exclude=[],
+    ),
+    CategoryRule(
+        "buying",
+        include=["ebay", "amazon", "costco", "product", "shop"],
+        exclude=[],
+    ),
+    CategoryRule(
+        "job-search",
+        include=["job", "salary"],
+        exclude=[],
+    ),
+    CategoryRule(
+        "software-dev",
+        include=["git", "database migrations", "database schema", "json", "x402 ecosystem", 
+                 "x402 seller", "x402 network", "nlp/", "md/", "palette", "wiki", "stack", 
+                 "scrape", "screenshot", "cron", "base64", "web search", "geocode", "convert",
+                 "morse", "uuid", "regex", "rgb", "encoder", "avatar", "cldr"],
+        exclude=[".json"],
+    ),
+    CategoryRule(
+        "health",
+        include=["hospital", "Medicare", "healthcare", "nutrition", "herb", "dental", "cosmetic", 
+                 "sleep", "mind", "fengshui", "astrology"],
+    ),
+    CategoryRule(
+        "researcher",
+        include=["researcher", "citation", "paper", "patent"],
+    ),
+    CategoryRule(
+        "company-verification",
+        include=["ein", "duns", "cusip", "abn"],
+    ),
+    CategoryRule(
+        "weather",
+        include=["weather", "precipitation"],
+    ),
+    CategoryRule(
+        "pdf",
+        include=["pdf"],
+    ),
+    CategoryRule(
+        "finance",
+        include=["wealth", "vet/", "startup", "equit", "commodit", "esg", "rental", "debt", "roi", 
+                 "perp", "etf", "quote", "taker", "percentage", "interest", "exchange", "rate",
+                 "statistics", "company", "stock"],
+    ),
+    CategoryRule(
+        "image",
+        include=["image", "video", "mp4"],
+    ),
+    CategoryRule(
+        "social-media",
+        include=["linkedin", "instagram", "facebook", "rss", "podcast", "twitter", "twitr.sh", "tweet"],
+    ),
+    CategoryRule(
+        "util",
+        include=["time", "business day"],
+    ),
+    CategoryRule(
+        "llm",
+        include=["llm"],
     ),
 ]
 
@@ -85,7 +163,7 @@ def classify_resource(text: str) -> str:
         matches = any(term in text for term in rule.include)
         excluded = any(term in text for term in rule.exclude)
         if matches and not excluded:
-            print(f"{rule.name}: {text}")
+            # print(f"{rule.name}: {text}")
             return rule.name
     return UNCATEGORISED
 
