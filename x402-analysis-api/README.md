@@ -99,6 +99,17 @@ x402-analysis-api/
     cdp_auth.py                    CDP bearer JWT signing, used by
                                    cdp_client.py -- vendored from
                                    x402tool/cdp_auth.py
+    download_db.py                 downloads the entire Neon database into
+                                   a local Postgres mirror (localdb/,
+                                   gitignored) -- used by update.py, or run
+                                   directly to refresh a stale local copy
+    x402scan_scraper.py             scrapes x402scan.com's Facilitators
+                                    page, used by update.py -- vendored
+                                    from x402tool/x402scan_scraper.py
+    update.py                      refreshes facilitator data from
+                                   x402scan.com and re-checks which
+                                   facilitators are live, writing any
+                                   changes to both localdb/ and Neon
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see
@@ -181,6 +192,76 @@ checked once at startup, before anything else -- if either is missing, the
 script prints setup instructions and exits immediately, rather than only
 surfacing Coinbase as one of possibly several failures partway through the
 run.
+
+`scripts/download_db.py` downloads the *entire* Neon database into a local
+PostgreSQL server, so `update.py` (below) can read/write against a local
+mirror rather than hitting Neon on every query:
+
+```bash
+python scripts/download_db.py
+```
+
+The local server is a separate PostgreSQL install/data directory (`initdb`
+is run the first time this is needed), kept on its own port (5433 by
+default -- `LOCAL_DB_PORT` to override) so it doesn't collide with a system
+Postgres on 5432, with everything it creates under `localdb/` --
+gitignored, not something to commit. It looks for `psql`/`pg_dump`/
+`initdb`/`pg_ctl`/`pg_isready` on `PATH` or a few common Homebrew install
+locations; it doesn't install PostgreSQL itself (`brew install
+postgresql@16` if you don't have it). Every run is a full, clean mirror --
+the local database is dropped and recreated first, so re-running this to
+refresh a stale local copy never leaves stray objects behind.
+
+`scripts/update.py` refreshes facilitator data from x402scan.com and
+re-checks which facilitators are actually live, writing any changes to
+*both* the local mirror and Neon:
+
+```bash
+python scripts/update.py
+```
+
+1. Downloads the local database first if it hasn't been already (or if the
+   local mirror was downloaded from a *different* `DATABASE_URL` than the
+   one currently configured -- see below for why that specific check
+   exists).
+2. Scrapes x402scan.com's Facilitators page (`scripts/x402scan_scraper.py`,
+   vendored byte-for-byte from the sibling `cli-tool` project's
+   `x402tool/x402scan_scraper.py`, so this doesn't need `cli-tool` checked
+   out next to this project either).
+3. Compares the scrape against the local database: a facilitator x402scan
+   knows about that the database doesn't becomes a new row (its `api` URL
+   is left unset -- x402scan's own data doesn't include one, only a doc URL
+   and its x402scan.com page URL); a doc/x402scan URL that's changed is
+   updated; an address x402scan lists that isn't already linked to that
+   facilitator is added (never removed, on the same "additive only"
+   principle `load_facilitators.py` follows).
+4. Re-checks every facilitator's liveness via `check_supported.py`'s own
+   `check_supported()` function (imported directly, not shelled out to): no
+   `api` URL, or an `api` URL whose `/supported` isn't valid JSON, means
+   not active; anything else does. Wherever that disagrees with what's
+   stored, `active` is updated.
+5. Every change from steps 3-4 is applied to both databases -- computed
+   once against the local mirror, then replayed identically against each,
+   since each resolves its own foreign keys by natural key (url/address/
+   name) rather than a shared numeric id.
+
+**This local/Neon pairing is the one thing to be careful with.** The diff
+in step 3 is only safe to apply to Neon if the local mirror it was computed
+against actually reflects that Neon database -- if `DATABASE_URL` ever
+points somewhere else than whatever the local mirror was last downloaded
+from (a different Neon project/branch, or a stale mirror left over from
+testing against a throwaway database), every facilitator Neon already has
+but the wrong local mirror doesn't looks "new," and applying that diff
+overwrites those facilitators' real `api`/`doc`/`x402scan` with whatever
+the scrape/local-mirror side had (nothing, for `api`). That's not
+hypothetical -- it's exactly what happened once during this script's own
+development, wiping the `api` URL (and flipping `active` to false) for nine
+real facilitators in production before it was caught and fixed by hand.
+`download_db.is_downloaded(neon_url)` now guards against exactly this: it
+checks the local mirror was downloaded from this *exact* `DATABASE_URL`
+(comparing a hash recorded at download time, not just "some download
+happened at some point") and forces a fresh download whenever that doesn't
+match, rather than silently diffing against whatever's already on disk.
 
 ## Neon database setup
 
