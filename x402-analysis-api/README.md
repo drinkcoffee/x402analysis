@@ -89,6 +89,9 @@ x402-analysis-api/
     create_api_key.py          mint/list/revoke API keys
     load_facilitators.py        loads scripts/data/x402Fac.json into the
                                 facilitator/uris/addresses/linkaddresses tables
+    check_supported.py           calls GET {api_url}/supported for every
+                                 facilitator with an api URL on file, and
+                                 reports any that didn't return valid JSON
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see
@@ -137,6 +140,19 @@ deliberately leaves every `risk`/`active`/`notes` field alone on a
 re-import -- those are for manual curation (e.g. a future admin UI), not
 this script's concern; only the columns it actually owns (URLs, IP/geo/TLS
 fingerprints, address chains/source) get refreshed.
+
+`scripts/check_supported.py` spot-checks that every facilitator's API is
+actually alive and speaking x402: for each facilitator with an `api` URL on
+file, it calls `GET {api_url}/supported` (the same endpoint the sibling
+`cli-tool` project's `GenericFacilitatorClient.supported()` hits) and
+reports any facilitator whose response wasn't valid JSON -- printing the
+facilitator's name, the URL called, and the raw text that came back (or a
+description of the failure, e.g. a timeout or connection error, if no
+response was received at all).
+
+```bash
+python scripts/check_supported.py
+```
 
 ## Neon database setup
 
