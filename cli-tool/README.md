@@ -393,6 +393,15 @@ x402tool scrape-servers servers.json && x402tool extract-domains servers.json
 x402tool extract-domains some-other-file.json
 ```
 
+
+## Service classifier
+Example usage:
+
+```bash
+python3 service_classifier.py tempdata/x402scansServers.json -o tempdata/servers-categories.txt
+```
+
+
 ## Layout
 
 ```
