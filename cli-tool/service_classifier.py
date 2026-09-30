@@ -48,7 +48,21 @@ class CategoryRule:
 # Checked in order; a resource goes to the first category whose include terms
 # match and whose exclude terms don't. Anything left over is "uncategorised".
 CATEGORY_RULES: list[CategoryRule] = [
-    CategoryRule("*giftcard", include=["gift"]),
+    CategoryRule(
+        "service-inactive",
+        include=["api.zaroniacalculator.co.za/v1/verify/frn",
+                 "api.24klabs.ai/api",
+                 "x402pastebin.987659876.xyz",
+                 "api.xona-agent.com",
+                 "gift_recommender", "gift finder"],
+    ),
+    CategoryRule(
+        "*giftcard", 
+        include=["gift"],
+        exclude=["gift_certificate", 
+                 "dealpulse.theaslangroupllc.com/api/deals/giftcard",
+                 "dealpulse.theaslangroupllc.com/api/deals/subscription-letter"]
+    ),
     CategoryRule(
         "*password",
         include=["password"],
@@ -56,13 +70,33 @@ CATEGORY_RULES: list[CategoryRule] = [
     ),
     CategoryRule(
         "*secret",
-        include=["secret"],
-        exclude=["non-secret"],
+        include=["secret", "pii",
+                 "pastebin.0000402.xyz"],
+        exclude=["non-secret", "secretary"],
     ),
     CategoryRule(
-        "*signature",
-        include=["signature", "signed"],
-        exclude=[],
+        "*gambling",
+        include=["play.0000402.xyz"],
+    ),
+    CategoryRule(
+        "*image-to-be-sorted",
+        include=["image", "video", "mp4"],
+        exclude=["search", "ocr", "exif", "written", "format", "colors", "qr", "background", "audio",
+                 "markdown", "performance", "hailuo", "youtube", "banana", "description", "alt-",
+                 "downloader", "convert", "resize", "ad-",
+                 "face-swap"]
+    ),
+    CategoryRule(
+        "*malicious-image",
+        include=["image", "video", "mp4"],
+        exclude=["search", "ocr", "exif", "written", "format", "colors", "qr", "background", "audio",
+                 "markdown", "performance", "hailuo", "youtube", "banana","description", "alt-", 
+                 "downloader", "convert", "resize", "ad-",
+                 ]
+    ),
+    CategoryRule(
+        "image",
+        include=["image", "video", "mp4"],
     ),
     CategoryRule(
         "network",
@@ -75,7 +109,8 @@ CATEGORY_RULES: list[CategoryRule] = [
         "blockchain",
         include=["ethereum", "arbitrum", "optimism", "token", "abi", "bitcoin", "crypto", "btc", 
                  "defi", "dex", "perpetual", "order-book", "gas", "solana", "ens", 
-                 "uniswap", "pancake", "sushi", "evm"],
+                 "uniswap", "pancake", "sushi", "evm", "yield", "wallet", "tx-subscription", 
+                 "0x.org", "asset", "signature", "signed", "liquidity"],
         exclude=[],
     ),
     CategoryRule(
@@ -84,8 +119,10 @@ CATEGORY_RULES: list[CategoryRule] = [
         exclude=[],
     ),
     CategoryRule(
-        "buying",
-        include=["ebay", "amazon", "costco", "product", "shop"],
+        "shopping",
+        include=["ebay", "amazon", "costco", "product", "shop", "gift finder",
+                 "dealpulse.theaslangroupllc.com/api/deals/giftcard",
+                 "punksinapunk.0000402.xyz", "canvas.0000402.xyz"],
         exclude=[],
     ),
     CategoryRule(
@@ -98,7 +135,9 @@ CATEGORY_RULES: list[CategoryRule] = [
         include=["git", "database migrations", "database schema", "json", "x402 ecosystem", 
                  "x402 seller", "x402 network", "nlp/", "md/", "palette", "wiki", "stack", 
                  "scrape", "screenshot", "cron", "base64", "web search", "geocode", "convert",
-                 "morse", "uuid", "regex", "rgb", "encoder", "avatar", "cldr"],
+                 "morse", "uuid", "regex", "rgb", "encoder", "avatar", "cldr", "pdf", "ipfs",
+                 "dns", "webhook", "keyword-frequency", "markdown", "jwt", "tls", "rot13",
+                 "robots-check", "seo"],
         exclude=[".json"],
     ),
     CategoryRule(
@@ -108,29 +147,22 @@ CATEGORY_RULES: list[CategoryRule] = [
     ),
     CategoryRule(
         "researcher",
-        include=["researcher", "citation", "paper", "patent"],
-    ),
-    CategoryRule(
-        "company-verification",
-        include=["ein", "duns", "cusip", "abn"],
+        include=["researcher", "citation", "paper", "patent",
+                 "https://jurat.dev/v1/snapshot/batch"],
     ),
     CategoryRule(
         "weather",
-        include=["weather", "precipitation"],
-    ),
-    CategoryRule(
-        "pdf",
-        include=["pdf"],
+        include=["weather", "precipitation", "forecast"],
     ),
     CategoryRule(
         "finance",
         include=["wealth", "vet/", "startup", "equit", "commodit", "esg", "rental", "debt", "roi", 
                  "perp", "etf", "quote", "taker", "percentage", "interest", "exchange", "rate",
-                 "statistics", "company", "stock"],
-    ),
-    CategoryRule(
-        "image",
-        include=["image", "video", "mp4"],
+                 "statistics", "company", "stock", "market", "filing", "gdp", "macro", "payroll",
+                 "cpi", "inflation", "contract award", "companies", "ein", "duns", "cusip", "abn",
+                 "economic", "iban", "vat", "tender", "amortization", "fx", "ipo", "loan", "recession",
+                 "earnings", "gift_certificate", "secretary", 
+                 "dealpulse.theaslangroupllc.com/api/deals/subscription-letter"],
     ),
     CategoryRule(
         "social-media",
@@ -138,12 +170,32 @@ CATEGORY_RULES: list[CategoryRule] = [
     ),
     CategoryRule(
         "util",
-        include=["time", "business day"],
+        include=["time", "business day", "formataddress.com", "public holiday", "holidays", "roman numerals"],
     ),
     CategoryRule(
         "llm",
-        include=["llm"],
+        include=["llm", "embedding", "code-run", "x402audit.dev/api/audit", "unpaid x402 probe", 
+                 "/ai/", "chunk", "text-analyze", "anthropic", "openai"],
     ),
+    CategoryRule(
+        "sport",
+        include=["sport", "soccer"],
+    ),
+    CategoryRule(
+        "travel",
+        include=["hotel", "flight", "trip", "track", "rail"],
+    ),
+    CategoryRule(
+        "search",
+        include=["search"],
+    ),
+    CategoryRule(
+        "notorization",
+        include=["usaref.dev/v1/all", "jurat.dev/v1/conformance"],
+    ),
+
+
+    
 ]
 
 UNCATEGORISED = "uncategorised"
