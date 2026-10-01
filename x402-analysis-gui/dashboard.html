@@ -242,6 +242,39 @@
     #facilitators-tbody tr:hover {
       background: var(--bg);
     }
+    #servers-tbody tr,
+    #services-tbody tr {
+      cursor: pointer;
+    }
+    #servers-tbody tr:hover,
+    #services-tbody tr:hover {
+      background: var(--bg);
+    }
+    .paging-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .paging-controls button {
+      appearance: none;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--ink);
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .paging-controls button:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+    .paging-controls button:not(:disabled):hover {
+      border-color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -272,24 +305,44 @@
   </nav>
 
   <main>
-    <div class="tab-panel" id="tab-servers" role="tabpanel">This is the Servers tab</div>
+    <div class="tab-panel" id="tab-servers" role="tabpanel">
+      <div class="table-scroll">
+        <table class="data-table" id="servers-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Risk Score</th>
+              <th>Active</th>
+            </tr>
+          </thead>
+          <tbody id="servers-tbody"></tbody>
+        </table>
+      </div>
+      <div class="paging-controls">
+        <button type="button" id="servers-prev">&larr; Previous</button>
+        <span id="servers-paging-info"></span>
+        <button type="button" id="servers-next">Next &rarr;</button>
+      </div>
+    </div>
     <div class="tab-panel" id="tab-services" role="tabpanel" hidden>
       <div class="table-scroll">
         <table class="data-table" id="services-table">
           <thead>
             <tr>
               <th>Server</th>
-              <th>Risk Score</th>
+              <th>Path</th>
               <th>Category</th>
-              <th>Description</th>
               <th>Price</th>
-              <th>Tags</th>
               <th>Active</th>
-              <th>URL</th>
             </tr>
           </thead>
           <tbody id="services-tbody"></tbody>
         </table>
+      </div>
+      <div class="paging-controls">
+        <button type="button" id="services-prev">&larr; Previous</button>
+        <span id="services-paging-info"></span>
+        <button type="button" id="services-next">Next &rarr;</button>
       </div>
     </div>
     <div class="tab-panel" id="tab-facilitators" role="tabpanel" hidden>
@@ -438,76 +491,122 @@
         .replace(/'/g, '&#39;');
     }
 
-    // If a service's description is missing or just "Route", fall back to
-    // the last segment of its URL path instead.
-    function descriptionFor(service) {
-      if (service.description && service.description !== 'Route') {
-        return service.description;
+    // Servers and Services tabs: loaded live from GET /api/servers and
+    // GET /api/services (same same-origin-proxy reasoning as facilitators
+    // -- see gui/servers_client.py / gui/services_client.py). Both can run
+    // into the thousands of rows, so neither is sorted client-side the way
+    // Facilitators is -- they're paged instead, one page fetched at a time.
+    const PAGE_SIZE = 50;
+
+    function pagingInfoText({ offset, limit, total }) {
+      if (total === 0) return '0 of 0';
+      const shownStart = offset + 1;
+      const shownEnd = Math.min(offset + limit, total);
+      return `${shownStart}–${shownEnd} of ${total}`;
+    }
+
+    function wirePaging(prefix, loadPage) {
+      const prevButton = document.getElementById(prefix + '-prev');
+      const nextButton = document.getElementById(prefix + '-next');
+      const infoSpan = document.getElementById(prefix + '-paging-info');
+      let state = { offset: 0, limit: PAGE_SIZE, total: 0 };
+
+      prevButton.addEventListener('click', () => loadPage(Math.max(0, state.offset - state.limit)));
+      nextButton.addEventListener('click', () => loadPage(state.offset + state.limit));
+
+      return {
+        update(page) {
+          state = page;
+          infoSpan.textContent = pagingInfoText(state);
+          prevButton.disabled = state.offset <= 0;
+          nextButton.disabled = state.offset + state.limit >= state.total;
+        },
+      };
+    }
+
+    function renderServersRows(rows) {
+      const tbody = document.getElementById('servers-tbody');
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="3">No servers found.</td></tr>';
+        return;
       }
-      const segments = new URL(service.url).pathname.split('/').filter(Boolean);
-      return segments.length ? segments[segments.length - 1] : service.url;
+      tbody.innerHTML = rows.map((row) => `
+        <tr data-name="${escapeHtml(row.name)}">
+          <td>${escapeHtml(row.name)}</td>
+          <td>${row.risk}</td>
+          <td class="${row.active ? 'active-yes' : 'active-no'}">${row.active ? 'YES' : 'NO'}</td>
+        </tr>
+      `).join('');
     }
 
-    // The URL's first path segment after "/api/" (e.g. "ai", "aviation")
-    // doubles as a technical grouping distinct from the service's
-    // functional tags (Search/AI/Utility/...).
-    function categoryFromUrl(url) {
-      const segments = new URL(url).pathname.split('/').filter(Boolean);
-      const apiIndex = segments.indexOf('api');
-      const category = apiIndex >= 0 ? segments[apiIndex + 1] : segments[0];
-      if (!category) return '';
-      return category.toLowerCase() === 'ai' ? 'AI' : category.charAt(0).toUpperCase() + category.slice(1);
+    const serversPaging = wirePaging('servers', loadServers);
+
+    async function loadServers(offset = 0) {
+      const tbody = document.getElementById('servers-tbody');
+      tbody.innerHTML = '<tr><td colspan="3">Loading servers&hellip;</td></tr>';
+      try {
+        const response = await fetch(`/api/servers?limit=${PAGE_SIZE}&offset=${offset}`);
+        if (!response.ok) throw new Error('request failed: ' + response.status);
+        const data = await response.json();
+        renderServersRows(data.items);
+        serversPaging.update(data);
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="3">Failed to load servers. Please try reloading the page.</td></tr>';
+      }
     }
 
-    // Demo data for the one hardcoded server so far, drawn from a sample of
-    // its real published endpoints -- there's no servers/services table in
-    // Neon yet.
-    const twoSServer = '2s — the (most) everything API';
-    const servicesData = [
-      { url: 'https://2s.io/api/agent/knowledge-delta', description: "What's happened in a given topic since a given date?", price: '0.150000 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/agriculture/drought', description: 'US Drought Monitor severity for a county (5-digit FIPS) or...', price: '0.002500 USD', tags: ['Utility'] },
-      { url: 'https://2s.io/api/agriculture/stats', description: 'USDA NASS QuickStats - authoritative US agricultural...', price: '0.002500 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/ai/chat', description: 'OpenAI-compatible chat completions across every frontier...', price: '0.002500-50.000000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/classify', description: 'Zero-shot text classification.', price: '0.045000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/council', description: 'Ask several frontier models the same question and get one...', price: '0.030000-50.000000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/describe-image', description: 'Describe an image. POST { imageUrl, instruction? }. Returns...', price: '0.045000 USD', tags: ['AI'], riskScore: 50 },
-      { url: 'https://2s.io/api/ai/entities', description: 'Named-entity recognition.', price: '0.090000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/extract', description: 'Extract structured data from a webpage.', price: '0.187500 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/image', description: "Generate images from a text prompt across the gateway's...", price: '0.090000-50.000000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/moderate', description: 'Content moderation. POST { text }. Flags content across...', price: '0.045000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/ocr', description: 'OCR + layout extraction.', price: '0.090000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/pii', description: 'PII detection. POST { text }. Finds personally identifiable...', price: '0.075000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/research', description: 'Grounded research brief.', price: '0.105000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/screenshot', description: 'Render a URL as a screenshot.', price: '0.018750 USD', tags: ['Utility'] },
-      { url: 'https://2s.io/api/ai/sentiment', description: 'Sentiment analysis. POST { text }. Returns overall...', price: '0.045000 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/summarize', description: 'Summarize a webpage. POST { url, instruction? }. Returns {...', price: '0.157500 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/translate', description: 'Translate text. POST { text, targetLanguage...', price: '0.070500 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/ai/web-answer', description: 'Answer a question from the live web.', price: '0.082500 USD', tags: ['AI'] },
-      { url: 'https://2s.io/api/aircraft/lookup', description: 'Look up a US-registered aircraft by tail number (N-number, e.g.', price: '0.003600 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/aircraft/profile', description: 'Identify a US-registered aircraft by tail (N-number) or...', price: '0.010800 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/airport/lookup', description: 'Look up an airport by 3-letter IATA (e.g.', price: '0.002500 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/airport/near', description: 'Airports within a radius of a coordinate, sorted by distance.', price: '0.002500 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/aviation/accidents', description: 'Search the NTSB civil aviation accident & incident database...', price: '0.003000 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/aviation/metar', description: 'Current aviation weather observation (METAR) for one or...', price: '0.003000 USD', tags: ['Utility'] },
-      { url: 'https://2s.io/api/aviation/sigmet', description: 'Active in-flight weather hazard advisories (SIGMETs and...', price: '0.002700 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/aviation/taf', description: 'Terminal Aerodrome Forecast (TAF) for one or more airports...', price: '0.003000 USD', tags: ['Utility'] },
-      { url: 'https://2s.io/api/bank/lookup', description: 'FDIC-insured US bank directory lookup.', price: '0.003000 USD', tags: ['Search'] },
-      { url: 'https://2s.io/api/barcode/generate', description: 'Generate QR / Aztec / Data Matrix / PDF417 codes from...', price: '0.002500 USD', tags: ['Utility'] },
-      { url: 'https://2s.io/api/batch/run', description: 'Run up to 50 endpoint calls behind ONE x402 payment.', price: '0.003000-50.000000 USD', tags: ['Utility'] },
-    ].map((service) => ({ riskScore: 0, ...service, server: twoSServer, active: true }));
+    document.getElementById('servers-tbody').addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-name]');
+      if (!row) return;
+      const params = new URLSearchParams(window.location.search);
+      params.set('name', row.dataset.name);
+      window.location.href = '/server?' + params.toString();
+    });
 
-    document.getElementById('services-tbody').innerHTML = servicesData.map((service) => `
-      <tr>
-        <td>${escapeHtml(service.server)}</td>
-        <td class="${service.riskScore > 10 ? 'risk-score-high' : ''}">${service.riskScore}</td>
-        <td>${escapeHtml(categoryFromUrl(service.url))}</td>
-        <td>${escapeHtml(descriptionFor(service))}</td>
-        <td>${escapeHtml(service.price)}</td>
-        <td>${escapeHtml(service.tags.join(', '))}</td>
-        <td class="${service.active ? 'active-yes' : 'active-no'}">${service.active ? 'YES' : 'NO'}</td>
-        <td class="services-url">${escapeHtml(service.url)}</td>
-      </tr>
-    `).join('');
+    loadServers();
+
+    function renderServicesRows(rows) {
+      const tbody = document.getElementById('services-tbody');
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5">No services found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map((row) => `
+        <tr data-id="${row.id}">
+          <td>${escapeHtml(row.server_name)}</td>
+          <td>${escapeHtml(row.path)}</td>
+          <td>${escapeHtml(row.category || '')}</td>
+          <td>${escapeHtml(row.price || '')}</td>
+          <td class="${row.active ? 'active-yes' : 'active-no'}">${row.active ? 'YES' : 'NO'}</td>
+        </tr>
+      `).join('');
+    }
+
+    const servicesPaging = wirePaging('services', loadServices);
+
+    async function loadServices(offset = 0) {
+      const tbody = document.getElementById('services-tbody');
+      tbody.innerHTML = '<tr><td colspan="5">Loading services&hellip;</td></tr>';
+      try {
+        const response = await fetch(`/api/services?limit=${PAGE_SIZE}&offset=${offset}`);
+        if (!response.ok) throw new Error('request failed: ' + response.status);
+        const data = await response.json();
+        renderServicesRows(data.items);
+        servicesPaging.update(data);
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="5">Failed to load services. Please try reloading the page.</td></tr>';
+      }
+    }
+
+    document.getElementById('services-tbody').addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-id]');
+      if (!row) return;
+      const params = new URLSearchParams(window.location.search);
+      params.set('id', row.dataset.id);
+      window.location.href = '/service?' + params.toString();
+    });
+
+    loadServices();
 
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');

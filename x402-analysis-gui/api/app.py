@@ -63,6 +63,15 @@ Routes:
                                by clicking that row. Which facilitator to
                                show is passed as ?name=... and fetched
                                client-side from GET /api/facilitators/{name}.
+    GET  /server                OAuth-gated: server.html, a detail page for
+                                one row of the dashboard's Servers tab,
+                                reached by clicking that row (?name=...,
+                                fetched from GET /api/servers/{name}) --
+                                including the services that server offers.
+    GET  /service                OAuth-gated: service.html, a detail page
+                                 for one row of the dashboard's Services tab
+                                 or of a server's own services table
+                                 (?id=..., fetched from GET /api/services/{id}).
     GET  /api/facilitators          OAuth-gated JSON proxy to the sibling
                                     x402-analysis-api server's own
                                     GET /facilitators (see gui/facilitators_client.py)
@@ -75,6 +84,24 @@ Routes:
                                     server's GET /facilitators/{name} --
                                     everything known about one facilitator;
                                     404 if none match.
+    GET  /api/servers               OAuth-gated JSON proxy to the sibling
+                                    server's GET /servers (see
+                                    gui/servers_client.py) -- name/risk/
+                                    active for a page of servers (?limit=&
+                                    offset=; there can be thousands).
+    GET  /api/servers/{name}        OAuth-gated JSON proxy to GET
+                                    /servers/{name} -- everything known
+                                    about one server, including its
+                                    services; 404 if none match.
+    GET  /api/services               OAuth-gated JSON proxy to the sibling
+                                     server's GET /services (see
+                                     gui/services_client.py) -- a summary of
+                                     a page of services across every server
+                                     (?limit=&offset=; there can be
+                                     thousands).
+    GET  /api/services/{id}          OAuth-gated JSON proxy to GET
+                                     /services/{id} -- everything known
+                                     about one service; 404 if none match.
     GET  /assets/*             static files (favicons, the site logo) from
                                assets/, mounted via StaticFiles
 
@@ -106,7 +133,7 @@ logger = logging.getLogger("x402_gui.api")
 
 import requests
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -114,6 +141,8 @@ load_dotenv()
 
 import gui.db as db  # noqa: E402
 import gui.facilitators_client as facilitators_client  # noqa: E402
+import gui.servers_client as servers_client  # noqa: E402
+import gui.services_client as services_client  # noqa: E402
 from gui.app_setup import configure_app  # noqa: E402
 from gui.email_notify import send_access_request  # noqa: E402
 from gui.oauth import (  # noqa: E402
@@ -133,7 +162,15 @@ SETTINGS_HTML_PATH = PROJECT_ROOT / "settings.html"
 USER_ADMIN_HTML_PATH = PROJECT_ROOT / "user_admin.html"
 RISK_SCORE_HTML_PATH = PROJECT_ROOT / "risk_score_factors.html"
 FACILITATOR_HTML_PATH = PROJECT_ROOT / "facilitator.html"
+SERVER_HTML_PATH = PROJECT_ROOT / "server.html"
+SERVICE_HTML_PATH = PROJECT_ROOT / "service.html"
 REQUEST_ACCESS_HTML_PATH = PROJECT_ROOT / "request_access.html"
+
+# GET /api/servers and GET /api/services can each have thousands of rows,
+# so both are paged (?limit=&offset=) rather than returned whole the way
+# GET /api/facilitators is -- there are only ever a few dozen facilitators.
+DEFAULT_PAGE_LIMIT = 50
+MAX_PAGE_LIMIT = 500
 
 _ACCESS_REQUEST_SENT_HTML = (
     "<p>Thanks! Your request for access has been sent to the site "
@@ -464,6 +501,36 @@ def facilitator_page(request: Request):
     return HTMLResponse(page)
 
 
+@app.get("/server")
+def server_page(request: Request):
+    email, user = _require_user(request)
+    if not user:
+        logger.info("server: no valid session (email=%s); redirecting to the public landing page", email)
+        return RedirectResponse(url="/")
+    page = SERVER_HTML_PATH.read_text()
+    page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
+    page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
+    page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
+    return HTMLResponse(page)
+
+
+@app.get("/service")
+def service_page(request: Request):
+    email, user = _require_user(request)
+    if not user:
+        logger.info("service: no valid session (email=%s); redirecting to the public landing page", email)
+        return RedirectResponse(url="/")
+    page = SERVICE_HTML_PATH.read_text()
+    page = page.replace("{{THEME_ATTR}}", _theme_attr(user["light_mode"]))
+    page = page.replace("{{USER_EMAIL}}", escape(email))
+    page = page.replace("{{USER_TYPE}}", escape(db.USER_TYPE_NAMES[user["user_type"]]))
+    page = page.replace("{{RISK_SCORE_MENU_ITEM}}", _risk_score_menu_item(user))
+    page = page.replace("{{ADMIN_MENU_ITEM}}", _admin_menu_item(user))
+    return HTMLResponse(page)
+
+
 @app.get("/api/facilitators")
 def api_list_facilitators(request: Request):
     email, user = _require_user(request)
@@ -489,6 +556,68 @@ def api_get_facilitator(name: str, request: Request):
     if facilitator is None:
         return JSONResponse({"detail": f"No facilitator named {name!r}."}, status_code=404)
     return JSONResponse(facilitator)
+
+
+@app.get("/api/servers")
+def api_list_servers(
+    request: Request,
+    limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
+    offset: int = Query(0, ge=0),
+):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        return JSONResponse(servers_client.list_servers(limit, offset))
+    except requests.RequestException:
+        logger.exception("api/servers: upstream request to x402-analysis-api failed")
+        return JSONResponse({"detail": "Servers service is unavailable."}, status_code=502)
+
+
+@app.get("/api/servers/{name}")
+def api_get_server(name: str, request: Request):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        server = servers_client.get_server(name)
+    except requests.RequestException:
+        logger.exception("api/servers/%s: upstream request to x402-analysis-api failed", name)
+        return JSONResponse({"detail": "Servers service is unavailable."}, status_code=502)
+    if server is None:
+        return JSONResponse({"detail": f"No server named {name!r}."}, status_code=404)
+    return JSONResponse(server)
+
+
+@app.get("/api/services")
+def api_list_services(
+    request: Request,
+    limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
+    offset: int = Query(0, ge=0),
+):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        return JSONResponse(services_client.list_services(limit, offset))
+    except requests.RequestException:
+        logger.exception("api/services: upstream request to x402-analysis-api failed")
+        return JSONResponse({"detail": "Services service is unavailable."}, status_code=502)
+
+
+@app.get("/api/services/{service_id}")
+def api_get_service(service_id: int, request: Request):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        service = services_client.get_service(service_id)
+    except requests.RequestException:
+        logger.exception("api/services/%s: upstream request to x402-analysis-api failed", service_id)
+        return JSONResponse({"detail": "Services service is unavailable."}, status_code=502)
+    if service is None:
+        return JSONResponse({"detail": f"No service with id {service_id}."}, status_code=404)
+    return JSONResponse(service)
 
 
 @app.post("/settings/light-mode")

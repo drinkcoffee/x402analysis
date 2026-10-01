@@ -9,12 +9,15 @@ rather than an env var.
   "Sign up" button (`/auth/login` and `/auth/signup`).
 - `/dashboard` — Auth0-gated. A header bar (logo, site name, your email, your
   user type, a hamburger menu) plus tabs (Servers/Services/Facilitators/
-  Clients/Funders), each currently showing placeholder content except
-  Facilitators, which has a sortable table (click a column heading to sort,
-  click again to reverse), loaded live from the sibling `x402-analysis-api`
-  server via `GET /api/facilitators`; clicking a row opens `/facilitator`.
-  Transaction Volume and #Servers are always shown as `-1` -- that data
-  doesn't exist yet anywhere.
+  Clients/Funders); Clients and Funders still show placeholder content.
+  Facilitators has a sortable table (click a column heading to sort, click
+  again to reverse), loaded live via `GET /api/facilitators`; clicking a row
+  opens `/facilitator`. Transaction Volume and #Servers are always shown as
+  `-1` -- that data doesn't exist yet anywhere. Servers and Services are
+  each a *paged* table instead (`GET /api/servers` / `GET /api/services`,
+  Previous/Next, 50 rows at a time) rather than sorted client-side, since
+  either can run into the thousands of rows; clicking a row opens `/server`
+  or `/service`.
 - `/facilitator?name=...` — Auth0-gated, any authenticated user. Detail page
   for one facilitator, loaded live via `GET /api/facilitators/{name}`: Name/
   Risk Score/Active/Notes/Updated/Transaction Volume (always `-1`)/Servers
@@ -22,15 +25,27 @@ rather than an env var.
   (API/Documentation/Website/X402Scan URLs, each with IP/Location/TLS Subject
   Name/Risk/Notes/Updated) and a Blockchain Addresses table (Address/Chains/
   Source/Risk/Notes/Updated).
-- `/api/facilitators` and `/api/facilitators/{name}` — Auth0-gated JSON
-  routes (any authenticated user) that proxy the identically-named endpoints
-  on the sibling `x402-analysis-api` server (`gui/facilitators_client.py`).
-  The browser calls these, never `x402-analysis-api` directly -- that keeps
-  `X402_API_KEY` out of client-side JavaScript entirely; it lives only in
-  this server's own env. See `.env.example` for the `X402_API_BASE_URL`
-  (that server's base URL) and `X402_API_KEY` (a `read` or `read_write` key
-  for it, minted with `x402-analysis-api/scripts/create_api_key.py`) env
-  vars this needs.
+- `/server?name=...` — Auth0-gated, any authenticated user. Detail page for
+  one server, loaded live via `GET /api/servers/{name}`: Name/Risk
+  Score/Active/Notes/Updated, a Web Domains table and a Blockchain Addresses
+  table (same shape as the facilitator detail page), and a Services table
+  (Path/Description/Price/Tags/Category/Active/Risk/Notes/Updated) for every
+  service that server offers; clicking a service row opens `/service`.
+- `/service?id=...` — Auth0-gated, any authenticated user. Detail page for
+  one service, loaded live via `GET /api/services/{id}`: Server (a link back
+  to that server's `/server` page)/Description/Price/Tags/Category/Active/
+  Risk Score/Notes/Updated.
+- `/api/facilitators`, `/api/servers`, `/api/services` and their `/{name}`
+  or `/{id}` detail routes — Auth0-gated JSON routes (any authenticated
+  user) that proxy the identically-named endpoints on the sibling
+  `x402-analysis-api` server (`gui/facilitators_client.py`,
+  `gui/servers_client.py`, `gui/services_client.py`). The list routes accept
+  `?limit=&offset=` and pass them straight through. The browser calls these,
+  never `x402-analysis-api` directly -- that keeps `X402_API_KEY` out of
+  client-side JavaScript entirely; it lives only in this server's own env.
+  See `.env.example` for the `X402_API_BASE_URL` (that server's base URL)
+  and `X402_API_KEY` (a `read` or `read_write` key for it, minted with
+  `x402-analysis-api/scripts/create_api_key.py`) env vars this needs.
 - `/settings` — Auth0-gated. Currently just one control: your light/dark/
   auto theme preference, stored in the database and applied on every page
   load from then on.
@@ -76,14 +91,18 @@ x402-analysis-gui/
   user_admin.html       the Auth0-gated, Admin-only user administration page
   risk_score_factors.html  the Auth0-gated, Admin/Advanced-only placeholder page
   facilitator.html       the Auth0-gated facilitator detail page
+  server.html             the Auth0-gated server detail page (includes its services)
+  service.html             the Auth0-gated service detail page
   request_access.html    the public "Request Access" page for an unapproved login
   api/
     app.py             every route: /, /auth/login, /auth/signup,
                        /auth/callback, /auth/logout, /request-access,
                        /auth/request-access, /dashboard, /settings,
                        /settings/light-mode, /admin/users,
-                       /risk-score-factors, /facilitator,
-                       /api/facilitators, /api/facilitators/{name}
+                       /risk-score-factors, /facilitator, /server, /service,
+                       /api/facilitators, /api/facilitators/{name},
+                       /api/servers, /api/servers/{name},
+                       /api/services, /api/services/{id}
   gui/
     oauth.py            Auth0 login/signup/callback/logout
     email_notify.py      Resend "please approve this signup" email to the admin
@@ -91,6 +110,8 @@ x402-analysis-gui/
     facilitators_client.py  server-side HTTP client for the sibling
                             x402-analysis-api's /facilitators endpoints --
                             holds X402_API_KEY so the browser never has to
+    servers_client.py        same, for its /servers endpoints
+    services_client.py        same, for its /services endpoints
     crypto.py            AES-256-GCM encryption + lookup-hash for the
                          email column
     session.py           signed-cookie session middleware config
