@@ -50,7 +50,12 @@ Routes:
     GET  /services               requires a "read" (or "read_write") API key
                                  -- a summary of every service across every
                                  server, paged (?limit=&offset=; there can
-                                 be thousands)
+                                 be thousands), optionally filtered to one
+                                 or more categories (repeat ?category=...)
+    GET  /services/categories     requires a "read" (or "read_write") API
+                                  key -- every distinct category currently
+                                  assigned to at least one service, sorted
+                                  -- the option list for the filter above
     GET  /services/{id}          requires a "read" (or "read_write") API key
                                  -- everything known about one service, 404
                                  if no service has that id
@@ -179,10 +184,16 @@ def get_server(name: str, _=Depends(require_read_access)) -> dict:
 def list_services(
     limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
     offset: int = Query(0, ge=0),
+    category: list[str] = Query([]),
     _=Depends(require_read_access),
 ) -> dict:
-    items, total = db.list_services(limit, offset)
+    items, total = db.list_services(limit, offset, categories=category or None)
     return {"items": items, "total": total, "limit": limit, "offset": offset}
+
+
+@app.get("/services/categories")
+def list_service_categories(_=Depends(require_read_access)) -> list[str]:
+    return db.list_service_categories()
 
 
 @app.get("/services/{service_id}")

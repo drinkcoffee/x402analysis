@@ -185,8 +185,14 @@ To fetch every server, keep requesting with `offset` advanced by `limit`
 ## GET /services
 
 - auth: `X-API-Key`, `read` or `read_write`
-- query params: `limit` (default `50`, max `500`), `offset` (default `0`) --
-  same paging contract as `GET /servers`, across every server's services
+- query params:
+  - `limit` (default `50`, max `500`), `offset` (default `0`) -- same
+    paging contract as `GET /servers`, across every server's services
+  - `category` -- optional, repeatable (e.g. `?category=weather&category=llm`)
+    -- when given, only services whose `category` is one of the listed
+    values are returned; `total` reflects the filtered count too, so paging
+    through a filtered result set stays consistent. Omit entirely for no
+    filtering (all categories).
 - response: `application/json` -- a page of results, ordered by server name
   then path
 
@@ -206,6 +212,19 @@ To fetch every server, keep requesting with `offset` advanced by `limit`
   "limit": 50,
   "offset": 0
 }
+```
+
+## GET /services/categories
+
+- auth: `X-API-Key`, `read` or `read_write`
+- response: `application/json` -- every distinct, non-null `category`
+  value currently assigned to at least one service, sorted. This is the
+  option list for `GET /services`' `category` filter above -- not the full
+  set of categories `scripts/service_classifier.py` knows how to assign,
+  which can include ones no service has actually been classified into yet.
+
+```json
+["finance", "llm", "search", "weather"]
 ```
 
 ## GET /services/{id}

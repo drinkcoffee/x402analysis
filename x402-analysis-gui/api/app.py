@@ -98,7 +98,14 @@ Routes:
                                      gui/services_client.py) -- a summary of
                                      a page of services across every server
                                      (?limit=&offset=; there can be
-                                     thousands).
+                                     thousands), optionally filtered to one
+                                     or more categories (repeat
+                                     ?category=...).
+    GET  /api/services/categories     OAuth-gated JSON proxy to GET
+                                      /services/categories -- every
+                                      distinct category currently assigned
+                                      to at least one service; the option
+                                      list for the filter above.
     GET  /api/services/{id}          OAuth-gated JSON proxy to GET
                                      /services/{id} -- everything known
                                      about one service; 404 if none match.
@@ -594,14 +601,27 @@ def api_list_services(
     request: Request,
     limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
     offset: int = Query(0, ge=0),
+    category: list[str] = Query([]),
 ):
     email, user = _require_user(request)
     if not user:
         return JSONResponse({"detail": "Not authenticated."}, status_code=401)
     try:
-        return JSONResponse(services_client.list_services(limit, offset))
+        return JSONResponse(services_client.list_services(limit, offset, categories=category or None))
     except requests.RequestException:
         logger.exception("api/services: upstream request to x402-analysis-api failed")
+        return JSONResponse({"detail": "Services service is unavailable."}, status_code=502)
+
+
+@app.get("/api/services/categories")
+def api_list_service_categories(request: Request):
+    email, user = _require_user(request)
+    if not user:
+        return JSONResponse({"detail": "Not authenticated."}, status_code=401)
+    try:
+        return JSONResponse(services_client.list_service_categories())
+    except requests.RequestException:
+        logger.exception("api/services/categories: upstream request to x402-analysis-api failed")
         return JSONResponse({"detail": "Services service is unavailable."}, status_code=502)
 
 

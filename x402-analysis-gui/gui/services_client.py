@@ -16,7 +16,7 @@ Env vars:
 from __future__ import annotations
 
 import os
-from typing import Optional
+from typing import Optional, Sequence
 
 import requests
 
@@ -37,12 +37,33 @@ def _headers() -> dict:
     return {"X-API-Key": key}
 
 
-def list_services(limit: int, offset: int, timeout: float = DEFAULT_TIMEOUT) -> dict:
+def list_services(
+    limit: int,
+    offset: int,
+    categories: Optional[Sequence[str]] = None,
+    timeout: float = DEFAULT_TIMEOUT,
+) -> dict:
     """{"items", "total", "limit", "offset"} -- GET /services on
-    x402-analysis-api, paged (there can be thousands of services)."""
+    x402-analysis-api, paged (there can be thousands of services) and
+    optionally filtered to one or more categories."""
+    params = {"limit": limit, "offset": offset}
+    if categories:
+        params["category"] = list(categories)
     resp = requests.get(
         f"{_base_url()}/services",
-        params={"limit": limit, "offset": offset},
+        params=params,
+        headers=_headers(),
+        timeout=timeout,
+    )
+    resp.raise_for_status()
+    return resp.json()
+
+
+def list_service_categories(timeout: float = DEFAULT_TIMEOUT) -> list[str]:
+    """Every distinct category currently assigned to at least one service,
+    sorted -- GET /services/categories on x402-analysis-api."""
+    resp = requests.get(
+        f"{_base_url()}/services/categories",
         headers=_headers(),
         timeout=timeout,
     )

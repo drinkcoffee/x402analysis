@@ -232,27 +232,45 @@ def find_server(name: str) -> Optional[dict]:
     return server
 
 
-def list_services(limit: int, offset: int) -> tuple[list[dict], int]:
+def list_services(limit: int, offset: int, categories: Optional[list[str]] = None) -> tuple[list[dict], int]:
     """({"id", "path", "category", "price", "active", "server_name"} for up
     to `limit` services starting at `offset`, ordered by server name then
-    path, total count of all services regardless of paging). Used by
+    path, total count of all *matching* services regardless of paging). If
+    `categories` is given (non-empty), only services whose category is one
+    of them are included -- both the page and the total reflect the filter,
+    so paging through a filtered result set stays consistent. Used by
     GET /services."""
+    where_clause = "WHERE sv.category = ANY(%s)" if categories else ""
+    params: tuple = (categories,) if categories else ()
     with _connect() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            cur.execute("SELECT COUNT(*) AS n FROM service")
+            cur.execute(f"SELECT COUNT(*) AS n FROM service sv {where_clause}", params)
             total = cur.fetchone()["n"]
             cur.execute(
-                """
+                f"""
                 SELECT sv.id, sv.path, sv.category, sv.price, sv.active, s.name AS server_name
                 FROM service sv
                 JOIN server s ON s.id = sv.server
+                {where_clause}
                 ORDER BY s.name, sv.path
                 LIMIT %s OFFSET %s
                 """,
-                (limit, offset),
+                params + (limit, offset),
             )
             rows = [dict(row) for row in cur.fetchall()]
     return rows, total
+
+
+def list_service_categories() -> list[str]:
+    """Every distinct, non-null `category` value currently in use across
+    all services, sorted -- the set of options a category filter UI should
+    offer (not scripts/service_classifier.py's full rule list, which can
+    include categories no service has actually been assigned yet). Used by
+    GET /services/categories."""
+    with _connect() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT DISTINCT category FROM service WHERE category IS NOT NULL ORDER BY category")
+            return [row[0] for row in cur.fetchall()]
 
 
 def find_service(service_id: int) -> Optional[dict]:
