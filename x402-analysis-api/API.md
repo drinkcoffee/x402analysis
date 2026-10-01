@@ -90,14 +90,172 @@ HTTP status: `200` if `database` is `"online"`, `503` if `"offline"`.
   { "detail": "No facilitator named 'nonexistent'." }
   ```
 
+## GET /servers
+
+- auth: `X-API-Key`, `read` or `read_write`
+- query params: `limit` (default `50`, max `500`), `offset` (default `0`) --
+  there can be thousands of servers, so this is paged rather than returned
+  whole the way `GET /facilitators` is
+- response: `application/json` -- a page of results, ordered by name
+
+```json
+{
+  "items": [
+    { "name": "2s — the (most) everything API", "risk": 0, "active": true },
+    { "name": "api.example.com", "risk": 0, "active": false }
+  ],
+  "total": 1842,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+| field | meaning |
+| --- | --- |
+| `items` | this page's rows, ordered by name |
+| `total` | total number of servers, regardless of paging |
+| `limit` | the page size actually used (echoes the request, or the default) |
+| `offset` | the offset actually used (echoes the request, or the default) |
+
+To fetch every server, keep requesting with `offset` advanced by `limit`
+(or by the number of `items` returned, if fewer) until `offset + len(items)
+>= total`.
+
+## GET /servers/{name}
+
+- auth: `X-API-Key`, `read` or `read_write`
+- `{name}` is matched against `server.name` case-insensitively
+- response: `application/json` -- every column on the server row, its
+  `api`/`doc`/`website`/`x402scan` URLs each expanded to the full `uris` row
+  (same shape as `GET /facilitators/{name}`), every address linked to it,
+  and every service it offers
+
+```json
+{
+  "id": 12,
+  "name": "api.example.com",
+  "risk": 0,
+  "active": true,
+  "notes": null,
+  "updated": "2026-09-30",
+  "api": {
+    "url": "https://api.example.com",
+    "ip": "203.0.113.10",
+    "location": "US-East (N. Virginia)",
+    "subject": "api.example.com",
+    "risk": 0,
+    "notes": null,
+    "updated": "2026-09-30"
+  },
+  "doc": null,
+  "website": null,
+  "x402scan": null,
+  "addresses": [
+    {
+      "address": "0xabc1230000000000000000000000000000abc1",
+      "chains": null,
+      "source": "x402scan",
+      "risk": 0,
+      "notes": null,
+      "updated": "2026-09-30"
+    }
+  ],
+  "services": [
+    {
+      "id": 501,
+      "path": "/weather/forecast",
+      "description": "7-day weather forecast",
+      "price": "0.02 USD",
+      "tags": "weather",
+      "category": "weather",
+      "active": true,
+      "risk": 0,
+      "notes": null,
+      "updated": "2026-09-30"
+    }
+  ]
+}
+```
+
+- 404 if no server matches `{name}`:
+  ```json
+  { "detail": "No server named 'nonexistent'." }
+  ```
+
+## GET /services
+
+- auth: `X-API-Key`, `read` or `read_write`
+- query params: `limit` (default `50`, max `500`), `offset` (default `0`) --
+  same paging contract as `GET /servers`, across every server's services
+- response: `application/json` -- a page of results, ordered by server name
+  then path
+
+```json
+{
+  "items": [
+    {
+      "id": 501,
+      "server_name": "api.example.com",
+      "path": "/weather/forecast",
+      "category": "weather",
+      "price": "0.02 USD",
+      "active": true
+    }
+  ],
+  "total": 9603,
+  "limit": 50,
+  "offset": 0
+}
+```
+
+## GET /services/{id}
+
+- auth: `X-API-Key`, `read` or `read_write`
+- `{id}` is the service's numeric id (not unique on its own across
+  servers -- a service's `path` is only unique *within* its own server, see
+  `db/schema.sql`'s `service_server_path_key` constraint)
+- response: `application/json` -- every column on the service row, with
+  `server` expanded to `{"id", "name"}` rather than a bare foreign key
+
+```json
+{
+  "id": 501,
+  "path": "/weather/forecast",
+  "description": "7-day weather forecast",
+  "price": "0.02 USD",
+  "tags": "weather",
+  "category": "weather",
+  "active": true,
+  "risk": 0,
+  "notes": null,
+  "updated": "2026-09-30",
+  "server": { "id": 12, "name": "api.example.com" }
+}
+```
+
+- 404 if no service has that id:
+  ```json
+  { "detail": "No service with id 999999." }
+  ```
+
 ## Errors (API-key-protected endpoints)
 
 | status | meaning |
 | --- | --- |
 | 401 | `X-API-Key` header missing, or the key isn't recognised |
 | 403 | key is valid but its access level is insufficient for this endpoint |
-| 404 | (GET /facilitators/{name} only) no facilitator matches `{name}` |
+| 404 | (a `/{name}` or `/{id}` route only) nothing matches |
+| 422 | `limit`/`offset` out of range, or `/services/{id}`'s `{id}` isn't an integer -- FastAPI's own request validation, before this API's own code runs |
+
+401/403/404 all respond with the same shape:
 
 ```json
 { "detail": "<message>" }
+```
+
+422 is FastAPI's own validation error shape instead -- `detail` is a list,
+not a string:
+
+```json
+{ "detail": [{ "type": "int_parsing", "loc": ["path", "id"], "msg": "...", "input": "..." }] }
 ```

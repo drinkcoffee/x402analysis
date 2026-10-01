@@ -3,8 +3,9 @@
 The `api_keys` table -- who may call this server's API-key-protected
 endpoints (see apilib/auth.py) -- plus the connection check `GET /status`
 uses, plus read access to the x402 ecosystem data tables (facilitator,
-uris, addresses, linkaddresses -- see db/schema.sql) for GET /facilitators
-and GET /facilitators/{name}.
+server, service, uris, addresses, linkaddresses -- see db/schema.sql) for
+GET /facilitators, GET /facilitators/{name}, GET /servers,
+GET /servers/{name}, GET /services, and GET /services/{id}.
 
 Each function opens and closes its own connection rather than pooling
 in-process: Vercel serverless functions are short-lived and stateless, so
@@ -32,6 +33,7 @@ VALID_ACCESS_LEVELS = {"read", "read_write"}
 
 # linkaddresses.owner: matches the mapping documented in db/schema.sql.
 OWNER_FACILITATOR = 0
+OWNER_SERVER = 1
 
 
 def _connection_string() -> str:
@@ -162,3 +164,117 @@ def find_facilitator(name: str) -> Optional[dict]:
             facilitator["addresses"] = [dict(r) for r in cur.fetchall()]
 
     return facilitator
+
+
+def list_servers(limit: int, offset: int) -> tuple[list[dict], int]:
+    """({"name", "risk", "active"} for up to `limit` servers starting at
+    `offset`, ordered by name, total count of all servers regardless of
+    paging). Used by GET /servers."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute("SELECT COUNT(*) AS n FROM server")
+            total = cur.fetchone()["n"]
+            cur.execute(
+                "SELECT name, risk, active FROM server ORDER BY name LIMIT %s OFFSET %s",
+                (limit, offset),
+            )
+            rows = [dict(row) for row in cur.fetchall()]
+    return rows, total
+
+
+def find_server(name: str) -> Optional[dict]:
+    """Every column on one server row, its api/doc/website/x402scan URLs
+    expanded the same way find_facilitator does, every address linked to it
+    (via linkaddresses, owner=1), and every service it offers. `name` is
+    matched case-insensitively. Returns None if no server matches. Used by
+    GET /servers/{name}."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT id, name, api, doc, website, x402scan, risk, active, notes, updated
+                FROM server
+                WHERE lower(name) = lower(%s)
+                """,
+                (name,),
+            )
+            row = cur.fetchone()
+            if not row:
+                return None
+            server = dict(row)
+
+            for field in ("api", "doc", "website", "x402scan"):
+                server[field] = _uri_row(cur, server[field])
+
+            cur.execute(
+                """
+                SELECT a.address, a.chains, a.source, a.risk, a.notes, a.updated
+                FROM linkaddresses la
+                JOIN addresses a ON a.id = la.address
+                WHERE la.owner = %s AND la.ref = %s
+                ORDER BY a.address
+                """,
+                (OWNER_SERVER, server["id"]),
+            )
+            server["addresses"] = [dict(r) for r in cur.fetchall()]
+
+            cur.execute(
+                """
+                SELECT id, path, description, price, tags, category, active, risk, notes, updated
+                FROM service
+                WHERE server = %s
+                ORDER BY path
+                """,
+                (server["id"],),
+            )
+            server["services"] = [dict(r) for r in cur.fetchall()]
+
+    return server
+
+
+def list_services(limit: int, offset: int) -> tuple[list[dict], int]:
+    """({"id", "path", "category", "price", "active", "server_name"} for up
+    to `limit` services starting at `offset`, ordered by server name then
+    path, total count of all services regardless of paging). Used by
+    GET /services."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute("SELECT COUNT(*) AS n FROM service")
+            total = cur.fetchone()["n"]
+            cur.execute(
+                """
+                SELECT sv.id, sv.path, sv.category, sv.price, sv.active, s.name AS server_name
+                FROM service sv
+                JOIN server s ON s.id = sv.server
+                ORDER BY s.name, sv.path
+                LIMIT %s OFFSET %s
+                """,
+                (limit, offset),
+            )
+            rows = [dict(row) for row in cur.fetchall()]
+    return rows, total
+
+
+def find_service(service_id: int) -> Optional[dict]:
+    """Every column on one service row, with its `server` foreign key
+    expanded to {"id", "name"} rather than a bare id. Returns None if no
+    service has that id. Used by GET /services/{id}."""
+    with _connect() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT sv.id, sv.server, sv.path, sv.description, sv.price, sv.tags,
+                       sv.category, sv.active, sv.risk, sv.notes, sv.updated,
+                       s.name AS server_name
+                FROM service sv
+                JOIN server s ON s.id = sv.server
+                WHERE sv.id = %s
+                """,
+                (service_id,),
+            )
+            row = cur.fetchone()
+            if not row:
+                return None
+            service = dict(row)
+            service["server"] = {"id": service.pop("server"), "name": service.pop("server_name")}
+    return service

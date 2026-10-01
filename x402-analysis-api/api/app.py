@@ -39,6 +39,21 @@ Routes:
                                 -- everything known about one facilitator
                                 (matched case-insensitively), 404 if none
                                 match
+    GET  /servers                requires a "read" (or "read_write") API key
+                                 -- name/risk/active for every server,
+                                 paged (?limit=&offset=; there can be
+                                 thousands)
+    GET  /servers/{name}         requires a "read" (or "read_write") API key
+                                 -- everything known about one server
+                                 (matched case-insensitively), including its
+                                 services, 404 if none match
+    GET  /services               requires a "read" (or "read_write") API key
+                                 -- a summary of every service across every
+                                 server, paged (?limit=&offset=; there can
+                                 be thousands)
+    GET  /services/{id}          requires a "read" (or "read_write") API key
+                                 -- everything known about one service, 404
+                                 if no service has that id
 
 Everything except `/`, `/status`, and `/favicon.ico` requires an API key
 sent as an `X-API-Key` header (see api/apilib/auth.py: require_read_access /
@@ -67,7 +82,7 @@ logging.basicConfig(
 logger = logging.getLogger("x402_api")
 
 from dotenv import load_dotenv
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 
 load_dotenv()
@@ -78,6 +93,12 @@ from apilib.auth import require_read_access  # noqa: E402
 
 app = FastAPI(title="x402 Analysis API")
 configure_app(app, logger)
+
+# GET /servers and GET /services can each have thousands of rows, so both
+# are paged (?limit=&offset=) rather than returned whole the way
+# GET /facilitators is -- there are only ever a few dozen facilitators.
+DEFAULT_PAGE_LIMIT = 50
+MAX_PAGE_LIMIT = 500
 
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
@@ -134,3 +155,39 @@ def get_facilitator(name: str, _=Depends(require_read_access)) -> dict:
     if facilitator is None:
         raise HTTPException(status_code=404, detail=f"No facilitator named {name!r}.")
     return facilitator
+
+
+@app.get("/servers")
+def list_servers(
+    limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
+    offset: int = Query(0, ge=0),
+    _=Depends(require_read_access),
+) -> dict:
+    items, total = db.list_servers(limit, offset)
+    return {"items": items, "total": total, "limit": limit, "offset": offset}
+
+
+@app.get("/servers/{name}")
+def get_server(name: str, _=Depends(require_read_access)) -> dict:
+    server = db.find_server(name)
+    if server is None:
+        raise HTTPException(status_code=404, detail=f"No server named {name!r}.")
+    return server
+
+
+@app.get("/services")
+def list_services(
+    limit: int = Query(DEFAULT_PAGE_LIMIT, ge=1, le=MAX_PAGE_LIMIT),
+    offset: int = Query(0, ge=0),
+    _=Depends(require_read_access),
+) -> dict:
+    items, total = db.list_services(limit, offset)
+    return {"items": items, "total": total, "limit": limit, "offset": offset}
+
+
+@app.get("/services/{service_id}")
+def get_service(service_id: int, _=Depends(require_read_access)) -> dict:
+    service = db.find_service(service_id)
+    if service is None:
+        raise HTTPException(status_code=404, detail=f"No service with id {service_id}.")
+    return service

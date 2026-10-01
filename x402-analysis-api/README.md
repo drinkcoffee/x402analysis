@@ -19,6 +19,14 @@ request/response contract each endpoint exposes, see [API.md](API.md).
   Everything known about one facilitator (matched case-insensitively),
   including its full `uris` rows (IP/geolocation/TLS subject, not just the
   bare URL) and every linked address; 404 if `{name}` matches none.
+- `GET /servers` / `GET /services` — requires a `read` (or `read_write`)
+  API key. Name/risk/active for every server, or a summary of every
+  service across every server -- both paged (`?limit=&offset=`, default
+  page size 50, max 500), since either can run into the thousands.
+- `GET /servers/{name}` / `GET /services/{id}` — requires a `read` (or
+  `read_write`) API key. Everything known about one server (matched
+  case-insensitively, including its services) or one service (by numeric
+  id, with its server expanded to `{id, name}`); 404 if nothing matches.
 - Everything else requires an API key (see below) sent as an `X-API-Key`
   header.
 
