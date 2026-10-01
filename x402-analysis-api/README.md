@@ -108,12 +108,16 @@ x402-analysis-api/
                                    gitignored) -- used by update.py, or run
                                    directly to refresh a stale local copy
     x402scan_scraper.py             scrapes x402scan.com's Facilitators
-                                    page, used by update.py -- vendored
-                                    from x402tool/x402scan_scraper.py
-    update.py                      refreshes facilitator data from
-                                   x402scan.com and re-checks which
-                                   facilitators are live, writing any
-                                   changes to both localdb/ and Neon
+                                    and Servers pages, used by update.py --
+                                    vendored from x402tool/x402scan_scraper.py
+    service_classifier.py            keyword-based service categoriser,
+                                     used by update.py -- vendored from
+                                     cli-tool's service_classifier.py
+    update.py                      refreshes facilitator/server/service
+                                   data from x402scan.com and Coinbase's
+                                   CDP Bazaar, and re-checks which
+                                   facilitators/services are live, writing
+                                   any changes to both localdb/ and Neon
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see
@@ -244,7 +248,23 @@ python scripts/update.py
    `api` URL, or an `api` URL whose `/supported` isn't valid JSON, means
    not active; anything else does. Wherever that disagrees with what's
    stored, `active` is updated.
-5. Every change from steps 3-4 is applied to both databases -- computed
+5. Scans for servers and the services (resources) they offer, from two
+   sources merged by hostname (the same real server can turn up in both,
+   but only x402scan gives it a proper name): x402scan.com's homepage
+   listing (`x402scan_scraper.scrape_all()` -- vendored already, just not
+   previously used for anything but facilitators) and Coinbase's CDP Bazaar
+   (`GET /v2/x402/discovery/resources`, unauthenticated -- no CDP
+   credentials needed for this part). A server neither database knows about
+   becomes a new row; a service (path) not already recorded under its
+   server is added, categorised with `scripts/service_classifier.py`'s
+   keyword rules (vendored from `cli-tool`, same treatment as
+   `cdp_client.py`/`x402scan_scraper.py`), with an `active` flag based on
+   whether a plain, unpaid request to it got back HTTP 402 (the correct
+   response from a live x402-gated endpoint -- confirming one actually
+   works would require a real payment). Existing services aren't touched;
+   an existing server is only ever upgraded to active by a newly found live
+   service, never downgraded.
+6. Every change from steps 3-5 is applied to both databases -- computed
    once against the local mirror, then replayed identically against each,
    since each resolves its own foreign keys by natural key (url/address/
    name) rather than a shared numeric id.

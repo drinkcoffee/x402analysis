@@ -47,3 +47,21 @@ DO $$ BEGIN
 EXCEPTION
     WHEN duplicate_table OR duplicate_object THEN NULL;
 END $$;
+
+-- service.category: added after some databases already had `service`
+-- (scripts/update.py's server/service scan needs it, even though
+-- schema.sql already includes it for a brand-new install).
+ALTER TABLE service ADD COLUMN IF NOT EXISTS category TEXT;
+
+-- service.active: added for scripts/update.py's liveness probe of newly
+-- discovered services (see schema.sql's comment on the service table).
+ALTER TABLE service ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT TRUE;
+
+-- service: (server, path) made UNIQUE, so scripts/update.py can tell a
+-- service it already knows about from a new one instead of duplicating a
+-- row on every re-run.
+DO $$ BEGIN
+    ALTER TABLE service ADD CONSTRAINT service_server_path_key UNIQUE (server, path);
+EXCEPTION
+    WHEN duplicate_table OR duplicate_object THEN NULL;
+END $$;

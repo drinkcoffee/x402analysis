@@ -71,7 +71,17 @@ CREATE TABLE IF NOT EXISTS server (
     CONSTRAINT server_name_key UNIQUE (name)
 );
 
--- service: one endpoint offered by a server.
+-- service: one endpoint offered by a server. `category` is a free-text
+-- label from scripts/service_classifier.py's keyword rules (e.g. "search",
+-- "llm", "finance") -- scripts/update.py's own concern, not curated here.
+-- (server, path) is unique so update.py can tell "a service already
+-- recorded for this server" from "a new one," the same way
+-- scripts/load_facilitators.py upserts facilitator/uris/addresses by their
+-- own natural keys. `active` reflects a liveness probe (an unpaid request
+-- getting HTTP 402 back, the correct response from a live x402-gated
+-- endpoint) taken when the service was first recorded -- not re-checked on
+-- every run the way facilitator.active is, since probing a live service
+-- meaningfully (getting past the 402) would require an actual payment.
 CREATE TABLE IF NOT EXISTS service (
     id           SERIAL PRIMARY KEY,
     server       INTEGER NOT NULL REFERENCES server(id),
@@ -80,9 +90,11 @@ CREATE TABLE IF NOT EXISTS service (
     price        TEXT,
     tags         TEXT,
     category     TEXT,
+    active       BOOLEAN NOT NULL DEFAULT TRUE,
     risk         SMALLINT NOT NULL DEFAULT 0,
     notes        TEXT,
-    updated      DATE NOT NULL DEFAULT CURRENT_DATE
+    updated      DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT service_server_path_key UNIQUE (server, path)
 );
 
 -- clients: has no identifying field of its own -- a client is identified

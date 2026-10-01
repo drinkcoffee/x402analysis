@@ -20,6 +20,13 @@ one string, which is what a category's exclude terms are for.
 Add more categories, or more include/exclude terms to an existing one, by
 editing CATEGORY_RULES below.
 
+Vendored, byte-for-byte, from the sibling cli-tool project's
+service_classifier.py, so update.py doesn't need cli-tool checked out next
+to this project to categorise services -- it imports classify_resource()
+and resource_text() directly; the CLI below (for classifying a standalone
+servers JSON file) is carried along unused for the same reason cdp_client.py
+and x402scan_scraper.py keep theirs: to stay an exact copy of the source.
+
 Usage:
     python3 server_classifier.py <servers.json> [-o output.txt]
 
