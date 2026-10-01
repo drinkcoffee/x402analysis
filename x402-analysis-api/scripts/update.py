@@ -52,11 +52,28 @@ Steps:
 
 This isn't a distributed transaction: the local commit and the Neon commit
 are two separate commits, in that order. If the Neon commit fails after the
-local one succeeds, the two databases are left temporarily out of sync
-until the next run (which would just re-derive and re-apply the same
-still-pending changes to Neon) -- acceptable for a periodically-run
-maintenance script, not something to build real two-phase-commit machinery
-around.
+local one succeeds -- a dropped connection partway through applying a big
+batch of ops is the usual way that happens -- the two databases are left
+temporarily out of sync: local has everything from this run, Neon has
+whatever it managed to commit before failing, which can include *none* of
+it (one failed statement rolls back that whole cursor's work, since nothing
+was committed yet). The intent is that the next run just re-derives and
+re-applies the same still-pending changes to Neon -- but a facilitator or
+server that exists in local and not (yet) in Neon breaks that unless the
+ops touching it can tolerate the row being missing: a "new_address"/
+"new_service"/"new_server_address" op only ever carries the parent
+facilitator/server's *name*, on the assumption (true when build_ops/
+build_server_ops computed it, against local) that a plain `SELECT ... WHERE
+name = %s` will find it on whatever connection applies the op later. If
+Neon doesn't have that row yet, that SELECT returns nothing and a bare
+`cur.fetchone()[0]` crashes with `TypeError: 'NoneType' object is not
+subscriptable` -- which is exactly what happened in practice once local/
+Neon had diverged this way. _get_or_create_facilitator/_get_or_create_server
+close that gap: each op now carries enough of its parent's fields (doc/
+x402scan URL, or api URL + active) to recreate a reasonable version of it
+if it's missing on this connection, so the next run genuinely self-heals
+instead of crashing. Not something to build real two-phase-commit machinery
+around either way -- this is a maintenance script, not a payments system.
 
 Step 3's diff is only ever safe to apply to Neon if the local mirror it was
 computed against actually reflects *that* Neon database. If DATABASE_URL
@@ -82,6 +99,18 @@ server only touches `updated` on an (name) conflict, never api/doc/active,
 so mistaking an already-existing server for a new one wastes some work
 (and a redundant liveness probe) rather than corrupting anything -- unlike
 facilitator.api, which is exactly the field the incident above wiped.
+
+Database connections are opened right before they're needed and closed
+right after, never held open across the slow parts in between (URL
+fingerprinting, service-liveness probing, step 4's per-facilitator
+/supported checks -- all third-party network calls that can take minutes
+for a large scrape). An idle connection sitting open that whole time is
+exactly what caused `psycopg2.OperationalError: SSL connection has been
+closed unexpectedly` once in practice: Neon (and Postgres connections
+generally) can drop one that's been idle too long. compute_active_ops is
+split from fetch_facilitators_for_active_check for the same reason -- the
+fetch is a fast DB read, the compute is a slow run of network calls and
+touches no database itself, so main() closes the connection between them.
 
 Before any of the above: every required env var, library, and external
 tool is checked up front and reported together (preflight.py), rather than
@@ -157,6 +186,24 @@ OWNER_SERVER = 1
 BAZAAR_PAGE_LIMIT = 200
 SERVICE_PROBE_TIMEOUT = 8.0
 SERVICE_PROBE_MAX_WORKERS = 10
+
+
+def _sanitize(value):
+    """Strips embedded NUL (0x00) bytes from strings, recursively through
+    lists/dicts. Postgres text columns can't store a NUL byte, and
+    psycopg2 raises `ValueError: A string literal cannot contain NUL (0x00)
+    characters.` the moment one turns up as a query parameter -- which
+    x402scan/Bazaar data occasionally has (e.g. a description scraped from
+    unsanitized upstream HTML/JSON). Applied once, right after scraping, so
+    every downstream consumer (build_ops, build_discovered_servers,
+    build_server_ops, ...) only ever sees already-clean strings."""
+    if isinstance(value, str):
+        return value.replace("\x00", "")
+    if isinstance(value, list):
+        return [_sanitize(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _sanitize(v) for k, v in value.items()}
+    return value
 
 
 def _normalize_address(address: str) -> str:
@@ -449,10 +496,23 @@ def build_server_ops(
             )
             continue
 
+        # server_name/server_api_url/server_active ride along on both op
+        # types below so apply_server_ops can recreate the server if this
+        # connection doesn't have it -- see its docstring for why that can
+        # happen even though build_server_ops only ever emits these for a
+        # server already found in `local_servers`.
         known_paths = local_services.get(existing["id"], set())
         new_services = [s for s in services if s["path"] not in known_paths]
         for service in new_services:
-            ops.append({"type": "new_service", "server_name": existing["name"], **service})
+            ops.append(
+                {
+                    "type": "new_service",
+                    "server_name": existing["name"],
+                    "server_api_url": existing["api_url"],
+                    "server_active": existing["active"],
+                    **service,
+                }
+            )
 
         if not existing["active"] and any(s["active"] for s in new_services):
             ops.append({"type": "update_server_active", "name": existing["name"], "active": True})
@@ -460,9 +520,44 @@ def build_server_ops(
         known_addresses = local_server_addresses.get(existing["id"], set())
         for address in entry["addresses"]:
             if address not in known_addresses:
-                ops.append({"type": "new_server_address", "server_name": existing["name"], "address": address})
+                ops.append(
+                    {
+                        "type": "new_server_address",
+                        "server_name": existing["name"],
+                        "server_api_url": existing["api_url"],
+                        "server_active": existing["active"],
+                        "address": address,
+                    }
+                )
 
     return ops
+
+
+def _get_or_create_server(cur, name: str, api_url, active: bool, fingerprints: dict) -> int:
+    """Returns the id of the server named `name` on *this* connection,
+    creating it (with whatever api URL is passed in, doc left unset) if it
+    doesn't have one yet. Same reasoning as _get_or_create_facilitator: a
+    "new_service"/"new_server_address" op's server is only guaranteed to
+    exist in the local mirror build_server_ops computed ops against, not
+    necessarily on the connection apply_server_ops happens to be replaying
+    them against right now (if an earlier run's Neon write failed partway
+    through after local's had already committed) -- so fall back to
+    creating it here instead of crashing on a bare `cur.fetchone()[0]`."""
+    cur.execute("SELECT id FROM server WHERE name = %s", (name,))
+    row = cur.fetchone()
+    if row:
+        return row[0]
+    api_id = _upsert_uri(cur, api_url, fingerprints) if api_url else None
+    cur.execute(
+        """
+        INSERT INTO server (name, api, active)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (name) DO UPDATE SET updated = CURRENT_DATE
+        RETURNING id
+        """,
+        (name, api_id, active),
+    )
+    return cur.fetchone()[0]
 
 
 def apply_server_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> None:
@@ -491,13 +586,11 @@ def apply_server_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> Non
                 _insert_service(cur, server_id, service)
 
         elif op["type"] == "new_service":
-            cur.execute("SELECT id FROM server WHERE name = %s", (op["server_name"],))
-            server_id = cur.fetchone()[0]
+            server_id = _get_or_create_server(cur, op["server_name"], op["server_api_url"], op["server_active"], fingerprints)
             _insert_service(cur, server_id, op)
 
         elif op["type"] == "new_server_address":
-            cur.execute("SELECT id FROM server WHERE name = %s", (op["server_name"],))
-            server_id = cur.fetchone()[0]
+            server_id = _get_or_create_server(cur, op["server_name"], op["server_api_url"], op["server_active"], fingerprints)
             address_id = _get_or_create_address(cur, op["address"])
             _link_address(cur, OWNER_SERVER, server_id, address_id)
 
@@ -572,7 +665,18 @@ def build_ops(
         known = {_normalize_address(a) for a in local_addresses.get(existing["id"], set())}
         for address in addresses:
             if _normalize_address(address) not in known:
-                ops.append({"type": "new_address", "name": existing["name"], "address": address})
+                ops.append(
+                    {
+                        "type": "new_address",
+                        "name": existing["name"],
+                        "address": address,
+                        # Carried along so apply_ops can recreate the
+                        # facilitator if this connection doesn't have it --
+                        # see apply_ops's docstring for why that can happen.
+                        "facilitator_doc_url": existing["doc_url"],
+                        "facilitator_x402scan_url": existing["x402scan_url"],
+                    }
+                )
 
     return ops
 
@@ -598,6 +702,32 @@ def _get_or_create_address(cur, address: str) -> int:
 
 
 _URL_FIELD_COLUMNS = {"doc": "doc", "x402scan": "x402scan"}
+
+
+def _get_or_create_facilitator(cur, name: str, doc_url, x402scan_url, fingerprints: dict) -> int:
+    """Returns the id of the facilitator named `name` on *this* connection,
+    creating it (with whatever doc/x402scan URLs are passed in, api left
+    unset) if it doesn't have one yet.
+
+    Normally a "new_address" op's facilitator is guaranteed to already
+    exist (build_ops only emits that op for a facilitator already found in
+    `local_facilitators`) and a plain SELECT would do. But apply_ops runs
+    once per connection, committing local before Neon (see main()'s
+    docstring on why this isn't a distributed transaction) -- if an earlier
+    run's Neon write failed partway through *after* local's had already
+    committed, local can have a facilitator Neon doesn't, and a later run's
+    ops would still only ever say "add an address to facilitator X",
+    assuming X already exists everywhere. Falling back to creating it here
+    lets that situation self-heal on the next run instead of crashing with
+    `TypeError: 'NoneType' object is not subscriptable` on a bare
+    `cur.fetchone()[0]`."""
+    cur.execute("SELECT id FROM facilitator WHERE name = %s", (name,))
+    row = cur.fetchone()
+    if row:
+        return row[0]
+    doc_id = _upsert_uri(cur, doc_url, fingerprints) if doc_url else None
+    x402scan_id = _upsert_uri(cur, x402scan_url, fingerprints) if x402scan_url else None
+    return _upsert_facilitator(cur, name, None, doc_id, x402scan_id)
 
 
 def apply_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> None:
@@ -629,8 +759,9 @@ def apply_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> None:
 
         elif op["type"] == "new_address":
             address_id = _get_or_create_address(cur, op["address"])
-            cur.execute("SELECT id FROM facilitator WHERE name = %s", (op["name"],))
-            facilitator_id = cur.fetchone()[0]
+            facilitator_id = _get_or_create_facilitator(
+                cur, op["name"], op["facilitator_doc_url"], op["facilitator_x402scan_url"], fingerprints
+            )
             _link_address(cur, OWNER_FACILITATOR, facilitator_id, address_id)
 
         elif op["type"] == "update_active":
@@ -643,12 +774,16 @@ def apply_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> None:
             raise ValueError(f"unknown op type: {op['type']!r}")
 
 
-def compute_active_ops(cur) -> list[dict]:
-    """Re-derives every facilitator's active state (no api URL, or an api
-    URL whose /supported doesn't return valid JSON -> inactive; otherwise
-    active) via check_supported.check_supported() -- the same function
-    check_supported.py itself calls -- and returns an "update_active" op
-    for each one that disagrees with what's currently stored."""
+def fetch_facilitators_for_active_check(cur) -> list[dict]:
+    """{"name", "active", "api_url"} for every facilitator -- the fast,
+    DB-only read half of what compute_active_ops needs. Split out from it
+    on purpose: compute_active_ops itself makes a live HTTP request per
+    facilitator and can take a while, and running that with a database
+    connection open and idle the whole time is exactly what caused
+    `psycopg2.OperationalError: SSL connection has been closed
+    unexpectedly` (Neon -- and any Postgres server, really -- can drop a
+    connection that's been idle too long). Callers should fetch these rows,
+    close the connection, *then* call compute_active_ops with the result."""
     cur.execute(
         """
         SELECT f.name, f.active, api_uri.url AS api_url
@@ -656,8 +791,18 @@ def compute_active_ops(cur) -> list[dict]:
         LEFT JOIN uris api_uri ON api_uri.id = f.api
         """
     )
-    rows = cur.fetchall()
+    return [dict(row) for row in cur.fetchall()]
 
+
+def compute_active_ops(rows: list[dict]) -> list[dict]:
+    """Re-derives every facilitator's active state (no api URL, or an api
+    URL whose /supported doesn't return valid JSON -> inactive; otherwise
+    active) via check_supported.check_supported() -- the same function
+    check_supported.py itself calls -- and returns an "update_active" op
+    for each one that disagrees with what's currently stored. `rows` comes
+    from fetch_facilitators_for_active_check(); this function itself never
+    touches the database, only the network -- see that function's
+    docstring for why that split matters."""
     ops: list[dict] = []
     for row in rows:
         name, current_active, api_url = row["name"], row["active"], row["api_url"]
@@ -704,26 +849,33 @@ def main() -> None:
         download_db.ensure_server_running()
 
     print("scraping x402scan.com/facilitators ...")
-    scraped = x402scan_scraper.scrape_all_facilitators()
+    scraped = _sanitize(x402scan_scraper.scrape_all_facilitators())
     print(f"scraped {len(scraped)} facilitator(s) from x402scan")
 
     print("scraping x402scan.com/servers ...")
-    x402scan_servers = x402scan_scraper.scrape_all()
+    x402scan_servers = _sanitize(x402scan_scraper.scrape_all())
     print(f"scraped {len(x402scan_servers)} server(s) from x402scan")
 
     print("fetching Coinbase CDP Bazaar's discovered resources ...")
-    bazaar_items = fetch_bazaar_resources()
+    bazaar_items = _sanitize(fetch_bazaar_resources())
     print(f"fetched {len(bazaar_items)} resource(s) from Bazaar")
 
     discovered_servers = build_discovered_servers(x402scan_servers, bazaar_items)
 
+    # Every connection below is opened right before it's needed and closed
+    # right after -- never held open across the slow (fingerprinting,
+    # liveness-probing, per-facilitator /supported checks) phases in
+    # between. Those can take minutes for a large scrape, and an idle
+    # connection sitting open that whole time is exactly what caused
+    # `psycopg2.OperationalError: SSL connection has been closed
+    # unexpectedly` -- Neon (and Postgres connections generally) can drop
+    # one that's been idle too long.
+
     local_conn = psycopg2.connect(download_db.local_db_url())
-    neon_conn = psycopg2.connect(neon_url)
     try:
-        for conn in (local_conn, neon_conn):
-            with conn.cursor() as cur:
-                ensure_schema(cur)
-            conn.commit()
+        with local_conn.cursor() as cur:
+            ensure_schema(cur)
+        local_conn.commit()
 
         with local_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             local_facilitators = fetch_local_facilitators(cur)
@@ -731,38 +883,60 @@ def main() -> None:
             local_servers = fetch_local_servers(cur)
             local_services = fetch_local_services(cur)
             local_server_addresses = fetch_local_server_addresses(cur)
+    finally:
+        local_conn.close()
 
-        ops = build_ops(scraped, local_facilitators, local_addresses)
-        fingerprints = fingerprint_urls(_fingerprint_targets(ops))
+    # --- Slow computation + third-party network calls only below -- no DB
+    # connection open across any of it. ---
 
-        # Probes every discovered resource's URL, not just ones already
-        # known to be new -- telling "new" from "already known" cheaply
-        # needs the diff build_server_ops does anyway, so it's simpler (and
-        # no less correct, just a bit more network traffic for a handful of
-        # already-known services) to probe first and let build_server_ops
-        # only use the result for the ones that turn out to actually be new.
-        print("probing discovered services for liveness ...")
-        probe_candidates = [
-            (info["full_url"], info["method"])
-            for entry in discovered_servers.values()
-            for info in entry["resources"].values()
-        ]
-        probe_results = probe_services(probe_candidates)
+    ops = build_ops(scraped, local_facilitators, local_addresses)
+    fingerprints = fingerprint_urls(_fingerprint_targets(ops))
 
-        server_ops = build_server_ops(
-            discovered_servers, local_servers, local_services, local_server_addresses, probe_results
-        )
-        server_fingerprints = fingerprint_urls(_server_fingerprint_targets(server_ops))
+    # Probes every discovered resource's URL, not just ones already known
+    # to be new -- telling "new" from "already known" cheaply needs the
+    # diff build_server_ops does anyway, so it's simpler (and no less
+    # correct, just a bit more network traffic for a handful of
+    # already-known services) to probe first and let build_server_ops only
+    # use the result for the ones that turn out to actually be new.
+    print("probing discovered services for liveness ...")
+    probe_candidates = [
+        (info["full_url"], info["method"])
+        for entry in discovered_servers.values()
+        for info in entry["resources"].values()
+    ]
+    probe_results = probe_services(probe_candidates)
 
+    server_ops = build_server_ops(
+        discovered_servers, local_servers, local_services, local_server_addresses, probe_results
+    )
+    server_fingerprints = fingerprint_urls(_server_fingerprint_targets(server_ops))
+
+    # --- Back to short-lived connections: apply everything computed so
+    # far, then read the now-current facilitator list for the liveness
+    # recheck below (fast), and close again before that recheck's slow
+    # per-facilitator network calls start. ---
+
+    local_conn = psycopg2.connect(download_db.local_db_url())
+    neon_conn = psycopg2.connect(neon_url)
+    try:
         for conn in (local_conn, neon_conn):
             with conn.cursor() as cur:
+                ensure_schema(cur)
                 apply_ops(cur, ops, fingerprints)
                 apply_server_ops(cur, server_ops, server_fingerprints)
             conn.commit()
 
         with local_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            active_ops = compute_active_ops(cur)
+            facilitator_rows = fetch_facilitators_for_active_check(cur)
+    finally:
+        local_conn.close()
+        neon_conn.close()
 
+    active_ops = compute_active_ops(facilitator_rows)
+
+    local_conn = psycopg2.connect(download_db.local_db_url())
+    neon_conn = psycopg2.connect(neon_url)
+    try:
         for conn in (local_conn, neon_conn):
             with conn.cursor() as cur:
                 apply_ops(cur, active_ops, fingerprints={})
