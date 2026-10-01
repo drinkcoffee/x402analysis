@@ -182,6 +182,7 @@
     }
     #tab-services {
       max-width: none;
+      position: relative;
     }
     .table-scroll {
       overflow-x: auto;
@@ -307,12 +308,15 @@
       margin-left: 0.3rem;
     }
     .filter-dropdown {
-      max-width: 420px;
-      margin-top: 0.75rem;
+      position: absolute;
+      z-index: 10;
+      width: 420px;
+      max-width: calc(100vw - 2.5rem);
       padding: 0.85rem;
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
     .filter-dropdown-options {
       display: flex;
@@ -741,9 +745,27 @@
       }
       pendingCategories = new Set(selectedCategories);
       renderCategoryFilterOptions();
+      positionCategoryFilterDropdown();
       categoryFilterDropdown.hidden = false;
       categoryFilterButton.setAttribute('aria-expanded', 'true');
     });
+
+    // The dropdown is positioned via JS, not a static CSS rule, because it's
+    // anchored to #tab-services (so it floats above the table instead of
+    // being pushed hundreds/thousands of pixels down the page by however
+    // many rows are on the current page -- a real bug seen with a full page
+    // of 50 services) but needs to track the filter button's actual
+    // position, which shifts with table/column layout.
+    function positionCategoryFilterDropdown() {
+      const panelRect = document.getElementById('tab-services').getBoundingClientRect();
+      const btnRect = categoryFilterButton.getBoundingClientRect();
+      const left = Math.max(0, Math.min(
+        btnRect.left - panelRect.left,
+        panelRect.width - 420 - 16
+      ));
+      categoryFilterDropdown.style.top = (btnRect.bottom - panelRect.top + 6) + 'px';
+      categoryFilterDropdown.style.left = left + 'px';
+    }
 
     categoryFilterDropdown.addEventListener('click', (event) => event.stopPropagation());
 
