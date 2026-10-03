@@ -133,6 +133,12 @@ x402-analysis-api/
     check_servers.py                re-checks which servers/services are
                                     live, writing any changes to both
                                     localdb/ and Neon
+    compare_db.py                   read-only: reports every difference
+                                    between localdb/ and Neon
+    push_to_neon.py                 makes Neon match localdb/ (inserts
+                                    and updates, never deletes) -- for
+                                    recovering from a failed Neon write
+                                    (--dry-run to preview)
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see

@@ -132,6 +132,8 @@ def probe_services(urls: set[str]) -> dict[str, bool]:
         futures = {pool.submit(probe_service_alive, url): url for url in urls}
         for future in as_completed(futures):
             results[futures[future]] = future.result()
+            print(".", end="", flush=True)
+    print()
     return results
 
 
