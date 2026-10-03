@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS server (
 -- scripts/load_facilitators.py upserts facilitator/uris/addresses by their
 -- own natural keys. `active` reflects a liveness probe (an unpaid request
 -- getting HTTP 402 back, the correct response from a live x402-gated
--- endpoint) taken when the service was first recorded -- not re-checked on
--- every run the way facilitator.active is, since probing a live service
+-- endpoint), set by scripts/check_servers.py -- update.py records new
+-- services as not active until that runs. Probing a live service any more
 -- meaningfully (getting past the 402) would require an actual payment.
 CREATE TABLE IF NOT EXISTS service (
     id           SERIAL PRIMARY KEY,

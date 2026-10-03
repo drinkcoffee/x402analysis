@@ -128,8 +128,11 @@ x402-analysis-api/
     update.py                      refreshes facilitator/server/service
                                    data from x402scan.com and Coinbase's
                                    CDP Bazaar, and re-checks which
-                                   facilitators/services are live, writing
-                                   any changes to both localdb/ and Neon
+                                   facilitators are live, writing any
+                                   changes to both localdb/ and Neon
+    check_servers.py                re-checks which servers/services are
+                                    live, writing any changes to both
+                                    localdb/ and Neon
     data/
       x402Fac.json            facilitator data to load (name, API/doc/
                               x402scan URLs, on-chain addresses) -- see
@@ -270,12 +273,10 @@ python scripts/update.py
    becomes a new row; a service (path) not already recorded under its
    server is added, categorised with `scripts/service_classifier.py`'s
    keyword rules (vendored from `cli-tool`, same treatment as
-   `cdp_client.py`/`x402scan_scraper.py`), with an `active` flag based on
-   whether a plain, unpaid request to it got back HTTP 402 (the correct
-   response from a live x402-gated endpoint -- confirming one actually
-   works would require a real payment). Existing services aren't touched;
-   an existing server is only ever upgraded to active by a newly found live
-   service, never downgraded.
+   `cdp_client.py`/`x402scan_scraper.py`). Existing services aren't
+   touched. Servers/services aren't probed for liveness here -- new ones
+   are recorded as not active until `scripts/check_servers.py` (below)
+   confirms otherwise.
 6. Every change from steps 3-5 is applied to both databases -- computed
    once against the local mirror, then replayed identically against each,
    since each resolves its own foreign keys by natural key (url/address/
@@ -298,6 +299,22 @@ checks the local mirror was downloaded from this *exact* `DATABASE_URL`
 (comparing a hash recorded at download time, not just "some download
 happened at some point") and forces a fresh download whenever that doesn't
 match, rather than silently diffing against whatever's already on disk.
+
+`scripts/check_servers.py` re-checks the active state of every server and
+service, writing any changes to both the local mirror and Neon:
+
+```bash
+python scripts/check_servers.py
+```
+
+It downloads the local database first if needed (same check as
+`update.py`), then probes every service: since confirming a paid resource
+actually works would require a real payment, a service is active if a
+plain, unpaid request to it gets back HTTP 402 (the correct response from a
+live x402-gated endpoint). The HTTP method isn't recorded, so GET is tried
+first, then POST. A server is active if any of its services are; a server
+with no services recorded is left as it is. Run it after `update.py` so
+newly discovered servers/services get their real state.
 
 ### Preflight checks
 

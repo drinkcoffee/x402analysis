@@ -34,14 +34,10 @@ Steps:
      no name from x402scan just gets its hostname as a placeholder name); a
      service (path) not already recorded under its server is added, with a
      category from scripts/service_classifier.py's keyword rules
-     (vendored from cli-tool, same as cdp_client.py/x402scan_scraper.py)
-     and, since actually confirming a paid resource works would require a
-     real payment, an `active` flag based on whether an unpaid request to
-     it got back HTTP 402 (the correct response from a live x402-gated
-     endpoint) rather than a connection failure or something else. Existing
-     services aren't touched, and an existing server is only ever upgraded
-     to active by a newly found live service, never downgraded (see
-     build_server_ops's docstring for why).
+     (vendored from cli-tool, same as cdp_client.py/x402scan_scraper.py).
+     Existing services aren't touched. Servers/services aren't probed for
+     liveness here: new ones are recorded as not active until
+     scripts/check_servers.py (run separately) confirms otherwise.
   6. Every change from steps 3-5 is applied to *both* the local database
      and Neon -- computed once (against the local mirror, which is assumed
      to already match Neon, since this script is the only thing that's
@@ -97,12 +93,12 @@ Step 5's server/service ops don't carry that same risk even if the local
 mirror were somehow still wrong: apply_server_ops's INSERT for a "new"
 server only touches `updated` on an (name) conflict, never api/doc/active,
 so mistaking an already-existing server for a new one wastes some work
-(and a redundant liveness probe) rather than corrupting anything -- unlike
+rather than corrupting anything -- unlike
 facilitator.api, which is exactly the field the incident above wiped.
 
 Database connections are opened right before they're needed and closed
 right after, never held open across the slow parts in between (URL
-fingerprinting, service-liveness probing, step 4's per-facilitator
+fingerprinting, step 4's per-facilitator
 /supported checks -- all third-party network calls that can take minutes
 for a large scrape). An idle connection sitting open that whole time is
 exactly what caused `psycopg2.OperationalError: SSL connection has been
@@ -141,7 +137,6 @@ from a .env file in the project root (if present) or the real environment.
 from __future__ import annotations
 
 import sys
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -184,8 +179,6 @@ OWNER_FACILITATOR = 0
 OWNER_SERVER = 1
 
 BAZAAR_PAGE_LIMIT = 200
-SERVICE_PROBE_TIMEOUT = 8.0
-SERVICE_PROBE_MAX_WORKERS = 10
 
 
 def _sanitize(value):
@@ -265,11 +258,8 @@ def fetch_local_addresses(cur) -> dict[int, set[str]]:
 #
 # Each resource is categorised with scripts/service_classifier.py's
 # keyword rules (vendored from cli-tool, same as cdp_client.py/
-# x402scan_scraper.py), and, since actually confirming a paid x402
-# resource is alive would require making a real payment, "alive" here
-# means it responded HTTP 402 Payment Required to a plain, unpaid request
-# -- the correct response from a live x402-gated endpoint -- rather than
-# skipping a liveness signal entirely.
+# x402scan_scraper.py). Liveness is scripts/check_servers.py's job, not
+# this script's.
 
 
 def _hostname(url: str | None) -> str | None:
@@ -420,32 +410,6 @@ def fetch_local_server_addresses(cur) -> dict[int, set[str]]:
     return result
 
 
-def probe_service_alive(url: str, method: str | None) -> bool:
-    """A resource is considered alive if it responds HTTP 402 Payment
-    Required to a plain, unpaid request -- the correct response from a
-    live x402-gated endpoint. Anything else, including a connection
-    failure or timeout, means "not confirmed alive" -- there's no way to
-    get further than the 402 without an actual payment."""
-    try:
-        response = requests.request(method or "GET", url, timeout=SERVICE_PROBE_TIMEOUT)
-    except requests.RequestException:
-        return False
-    return response.status_code == 402
-
-
-def probe_services(candidates: list[tuple[str, str | None]]) -> dict[str, bool]:
-    """full_url -> is_alive, probed concurrently for every (url, method)
-    pair in `candidates`."""
-    results: dict[str, bool] = {}
-    if not candidates:
-        return results
-    with ThreadPoolExecutor(max_workers=SERVICE_PROBE_MAX_WORKERS) as pool:
-        futures = {pool.submit(probe_service_alive, url, method): url for url, method in candidates}
-        for future in as_completed(futures):
-            results[futures[future]] = future.result()
-    return results
-
-
 def _classify(full_url: str | None, description: str | None, tags: list[str]) -> str:
     text = service_classifier.resource_text({"url": full_url, "description": description, "tags": tags})
     return service_classifier.classify_resource(text)
@@ -456,17 +420,12 @@ def build_server_ops(
     local_servers: dict[str, dict],
     local_services: dict[int, set[str]],
     local_server_addresses: dict[int, set[str]],
-    probe_results: dict[str, bool],
 ) -> list[dict]:
     """Diffs the discovered servers/services against the local database --
     same shape and purpose as build_ops, just for server/service/
-    server-address ops instead of facilitator ones. A brand new server
-    that turns up with at least one live service upgrades an otherwise
-    default-inactive row to active; an *existing* server only ever gets
-    upgraded the same way (never downgraded) by a newly found live
-    service -- its other, already-known services aren't re-probed here,
-    so there's never enough information from this diff alone to justify
-    marking a previously-active server inactive."""
+    server-address ops instead of facilitator ones. New servers/services
+    are recorded as not active; scripts/check_servers.py is what actually
+    probes them and sets `active`."""
     ops: list[dict] = []
 
     for hostname, entry in discovered.items():
@@ -477,7 +436,7 @@ def build_server_ops(
                 "price": info["price"],
                 "tags": info["tags"],
                 "category": _classify(info["full_url"], info["description"], info["tags"]),
-                "active": probe_results.get(info["full_url"], False),
+                "active": False,
             }
             for path, info in entry["resources"].items()
         ]
@@ -513,9 +472,6 @@ def build_server_ops(
                     **service,
                 }
             )
-
-        if not existing["active"] and any(s["active"] for s in new_services):
-            ops.append({"type": "update_server_active", "name": existing["name"], "active": True})
 
         known_addresses = local_server_addresses.get(existing["id"], set())
         for address in entry["addresses"]:
@@ -566,7 +522,6 @@ def apply_server_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> Non
     upsert-by-natural-key approach applies here."""
     for op in ops:
         if op["type"] == "new_server":
-            server_active = any(s["active"] for s in op["services"])
             api_id = _upsert_uri(cur, op["api_url"], fingerprints) if op["api_url"] else None
             doc_id = _upsert_uri(cur, op["doc_url"], fingerprints) if op["doc_url"] else None
             cur.execute(
@@ -576,7 +531,7 @@ def apply_server_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> Non
                 ON CONFLICT (name) DO UPDATE SET updated = CURRENT_DATE
                 RETURNING id
                 """,
-                (op["name"], api_id, doc_id, server_active),
+                (op["name"], api_id, doc_id, False),
             )
             server_id = cur.fetchone()[0]
             for address in op["addresses"]:
@@ -593,12 +548,6 @@ def apply_server_ops(cur, ops: list[dict], fingerprints: dict[str, dict]) -> Non
             server_id = _get_or_create_server(cur, op["server_name"], op["server_api_url"], op["server_active"], fingerprints)
             address_id = _get_or_create_address(cur, op["address"])
             _link_address(cur, OWNER_SERVER, server_id, address_id)
-
-        elif op["type"] == "update_server_active":
-            cur.execute(
-                "UPDATE server SET active = %s, updated = CURRENT_DATE WHERE name = %s",
-                (op["active"], op["name"]),
-            )
 
         else:
             raise ValueError(f"unknown op type: {op['type']!r}")
@@ -864,7 +813,7 @@ def main() -> None:
 
     # Every connection below is opened right before it's needed and closed
     # right after -- never held open across the slow (fingerprinting,
-    # liveness-probing, per-facilitator /supported checks) phases in
+    # per-facilitator /supported checks) phases in
     # between. Those can take minutes for a large scrape, and an idle
     # connection sitting open that whole time is exactly what caused
     # `psycopg2.OperationalError: SSL connection has been closed
@@ -892,23 +841,7 @@ def main() -> None:
     ops = build_ops(scraped, local_facilitators, local_addresses)
     fingerprints = fingerprint_urls(_fingerprint_targets(ops))
 
-    # Probes every discovered resource's URL, not just ones already known
-    # to be new -- telling "new" from "already known" cheaply needs the
-    # diff build_server_ops does anyway, so it's simpler (and no less
-    # correct, just a bit more network traffic for a handful of
-    # already-known services) to probe first and let build_server_ops only
-    # use the result for the ones that turn out to actually be new.
-    print("probing discovered services for liveness ...")
-    probe_candidates = [
-        (info["full_url"], info["method"])
-        for entry in discovered_servers.values()
-        for info in entry["resources"].values()
-    ]
-    probe_results = probe_services(probe_candidates)
-
-    server_ops = build_server_ops(
-        discovered_servers, local_servers, local_services, local_server_addresses, probe_results
-    )
+    server_ops = build_server_ops(discovered_servers, local_servers, local_services, local_server_addresses)
     server_fingerprints = fingerprint_urls(_server_fingerprint_targets(server_ops))
 
     # --- Back to short-lived connections: apply everything computed so
@@ -958,7 +891,6 @@ def main() -> None:
     new_server_addresses = sum(len(op["addresses"]) for op in server_ops if op["type"] == "new_server") + sum(
         1 for op in server_ops if op["type"] == "new_server_address"
     )
-    server_active_changes = sum(1 for op in server_ops if op["type"] == "update_server_active")
 
     print(
         f"{new_facilitators} new facilitator(s), {new_addresses} new address(es), "
@@ -966,7 +898,7 @@ def main() -> None:
     )
     print(
         f"{new_servers} new server(s), {new_services} new service(s), "
-        f"{new_server_addresses} new server address(es), {server_active_changes} server active-state change(s)"
+        f"{new_server_addresses} new server address(es)"
     )
 
 
