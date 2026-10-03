@@ -159,8 +159,25 @@ def fingerprint_urls(urls: set[str]) -> dict[str, dict]:
 
 
 def _upsert_uri(cur, url: str, fingerprints: dict[str, dict]) -> int:
-    """Inserts `url` into uris if it's new, and returns its id either way."""
-    fp = fingerprints.get(url, {})
+    """Inserts `url` into uris if it's new, and returns its id either way.
+
+    An existing row's ip/location/subject are only overwritten if `url` was
+    actually fingerprinted this run (is a key in `fingerprints`). Some
+    callers -- update.py's _get_or_create_server/_get_or_create_facilitator
+    -- pass along a URL that was never fingerprinted, and that mustn't
+    wipe the fingerprint already stored for it."""
+    if url not in fingerprints:
+        cur.execute(
+            """
+            INSERT INTO uris (url) VALUES (%s)
+            ON CONFLICT (url) DO UPDATE SET url = EXCLUDED.url
+            RETURNING id
+            """,
+            (url,),
+        )
+        return cur.fetchone()[0]
+
+    fp = fingerprints[url]
     cur.execute(
         """
         INSERT INTO uris (url, ip, location, subject)
