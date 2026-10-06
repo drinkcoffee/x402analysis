@@ -1,0 +1,4 @@
+# Extra dependencies for scripts that pay for API calls with x402
+# (l_bc_address.py). Kept out of the main requirements.txt, which the
+# deployed API also installs -- the SDK pulls in web3.
+x402[evm,requests]>=2.25
