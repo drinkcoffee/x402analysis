@@ -1,0 +1,810 @@
+{
+  "gathered_at": "2026-10-08T07:02:06+00:00",
+  "facilitators": [
+    {
+      "name": "402104",
+      "x402scan_id": null,
+      "api_url": "https://x402.load.network",
+      "doc_url": "https://x402.load.network",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://x402.load.network": {
+          "ip": "173.255.230.49",
+          "location": "Cedar Knolls, New Jersey, United States",
+          "subject": "x402.load.network"
+        }
+      }
+    },
+    {
+      "name": "Canton",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.ftptech.xyz",
+      "doc_url": "https://www.ftptech.xyz/x402",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.ftptech.xyz": {
+          "ip": "167.233.64.123",
+          "location": "Falkenstein, Saxony, Germany",
+          "subject": "facilitator.ftptech.xyz"
+        },
+        "https://www.ftptech.xyz/x402": {
+          "ip": "66.33.60.129",
+          "location": "Walnut, California, United States",
+          "subject": "www.ftptech.xyz"
+        }
+      }
+    },
+    {
+      "name": "Celo Facilitator",
+      "x402scan_id": null,
+      "api_url": "https://api.x402.celo.org",
+      "doc_url": "https://x402.celo.org",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.x402.celo.org": {
+          "ip": "104.248.234.109",
+          "location": "North Bergen, New Jersey, United States",
+          "subject": "api.x402.celo.org"
+        },
+        "https://x402.celo.org": {
+          "ip": "104.248.234.109",
+          "location": "North Bergen, New Jersey, United States",
+          "subject": "x402.celo.org"
+        }
+      }
+    },
+    {
+      "name": "CodeNut",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.codenut.ai",
+      "doc_url": "https://docs.codenut.ai/guides/x402-facilitator",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.codenut.ai": {
+          "ip": "35.243.90.78",
+          "location": "Tokyo, Tokyo, Japan",
+          "subject": null
+        },
+        "https://docs.codenut.ai/guides/x402-facilitator": {
+          "ip": "216.150.16.65",
+          "location": "Walnut, California, United States",
+          "subject": "docs.codenut.ai"
+        }
+      }
+    },
+    {
+      "name": "Coinbase",
+      "x402scan_id": "coinbase",
+      "api_url": "https://api.cdp.coinbase.com/platform",
+      "doc_url": "https://docs.cdp.coinbase.com/api-reference/v2/rest-api/x402-facilitator/x402-facilitator",
+      "x402scan_url": "https://www.x402scan.com/facilitator/coinbase",
+      "chains": [
+        "base",
+        "solana"
+      ],
+      "addresses": [
+        "0x001ddabba5782ee48842318bd9ff4008647c8d9c",
+        "0x14fda13953fc30428938e6bf950d036e77214e52",
+        "0x2a89407a98a0732b7fd578c4e156b7166540eb5a",
+        "0x3a70788150c7645a21b95b7062ab1784d3cc2104",
+        "0x42dd53906b49c202e8e934b059dc019e04634b00",
+        "0x47d8b3c9717e976f31025089384f23900750a5f4",
+        "0x4c934c63c786157fefd990945b25ea60a0fb0205",
+        "0x4ffeffa616a1460570d1eb0390e264d45a199e91",
+        "0x552300992857834c0ad41c8e1a6934a5e4a2e4ca",
+        "0x59b7ebc67a3d627fabaf06768c818638452ae704",
+        "0x625d8a65134079f8faaac39a7947c73d93c6ac39",
+        "0x64cc42b1ce598e3abcfbb64df4688521ddbf1f0a",
+        "0x67b9ce703d9ce658d7c4ac3c289cea112fe662af",
+        "0x6831508455a716f987782a1ab41e204856055cc2",
+        "0x68a96f41ff1e9f2e7b591a931a4ad224e7c07863",
+        "0x68efafe862d89ce66dd3d7b07d5a3747a0871164",
+        "0x708e57b6650a9a741ab39cae1969ea1d2d10eca1",
+        "0x772003a2e9c2ccc8af956870a37a66f64f8cec38",
+        "0x7f6d822467df2a85f792d4508c5722ade96be056",
+        "0x88800e08e20b45c9b1f0480cf759b5bf2f05180c",
+        "0x8cda367232d78c067116e3260da881d2da8ffa39",
+        "0x8f5cb67b49555e614892b7233cfddebfb746e531",
+        "0x91d313853ad458addda56b35a7686e2f38ff3952",
+        "0x93f6601151ccb08f333ab4b1cccfb1e188c0be44",
+        "0x94701e1df9ae06642bf6027589b8e05dc7004813",
+        "0x97acce27d5069544480bde0f04d9f47d7422a016",
+        "0x9aae2b0d1b9dc55ac9bab9556f9a26cb64995fb9",
+        "0x9c09faa49c4235a09677159ff14f17498ac48738",
+        "0x9fb2714af0a84816f5c6322884f2907e33946b88",
+        "0xa32ccda98ba7529705a059bd2d213da8de10d101",
+        "0xadd5585c776b9b0ea77e9309c1299a40442d820f",
+        "0xb87e1a2cc2b4643f2892768e80e41167f17c5860",
+        "0xca5e87f82b3fa093800e6ad67d621a427d79c70d",
+        "0xcbb10c30a9a72fae9232f41cbbd566a097b4e03a",
+        "0xce82eeec8e98e443ec34fda3c3e999cbe4cb6ac2",
+        "0xd7469bf02d221968ab9f0c8b9351f55f8668ac4f",
+        "0xdbdf3d8ed80f84c35d01c6c9f9271761bad90ba6",
+        "0xdc8fbad54bf5151405de488f45acd555517e0958",
+        "0xe72f0af4cf41356d433723547f1412ca27fbb1b8",
+        "0xe74817f4cdc15844314812b2271276e64e890fae",
+        "92QcYJZpkwYyacR3G69QNR2JfjadQxd16cp5d7x5GEzU",
+        "BENrLoUbndxoNMUS5JXApGMtNykLjFXXixMtpDwDR9SP",
+        "BFK9TLC3edb13K6v4YyH3DwPb5DSUpkWvb7XnqCL9b4F",
+        "D6ZhtNQ5nT9ZnTHUbqXZsTx5MH2rPFiBBggX4hY1WePM",
+        "GVJJ7rdGiXr5xaYbRwRbjfaJL7fmwRygFi1H6aGqDveb",
+        "Hc3sdEAsCGQcpgfivywog9uwtk8gUBUZgsxdME1EJy88",
+        "L54zkaPQFeTn1UsEqieEXBqWrPShiaZEPD7mS5WXfQg"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.cdp.coinbase.com/platform": {
+          "ip": "104.18.35.15",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "coinbase.com"
+        },
+        "https://docs.cdp.coinbase.com/api-reference/v2/rest-api/x402-facilitator/x402-facilitator": {
+          "ip": "66.33.60.194",
+          "location": "Walnut, California, United States",
+          "subject": "docs.cdp.coinbase.com"
+        },
+        "https://www.x402scan.com/facilitator/coinbase": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Daydreams",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.daydreams.systems",
+      "doc_url": "https://facilitator.daydreams.systems",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.daydreams.systems": {
+          "ip": "69.46.46.111",
+          "location": "Seattle, Washington, United States",
+          "subject": "facilitator.daydreams.systems"
+        }
+      }
+    },
+    {
+      "name": "Dexter",
+      "x402scan_id": "dexter",
+      "api_url": "https://facilitator.dexter.cash",
+      "doc_url": "https://facilitator.dexter.cash",
+      "x402scan_url": "https://www.x402scan.com/facilitator/dexter",
+      "chains": [
+        "solana"
+      ],
+      "addresses": [
+        "0x40272e2eac848ea70db07fd657d799bd309329c4",
+        "0x402feee072d655b85e08f1751af9ddbcd249521f",
+        "DEXVS3su4dZQWTvvPnLDJLRK1CeeKG6K3QqdzthgAkNV",
+        "DeXterR2kQm8AvRHnNPatWkE46TfAcMeBDjb6FySoAb8"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.dexter.cash": {
+          "ip": "104.21.22.14",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "dexter.cash"
+        },
+        "https://www.x402scan.com/facilitator/dexter": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "FareSide",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.x402.rs",
+      "doc_url": "https://x402.rs",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.x402.rs": {
+          "ip": "72.56.81.187",
+          "location": "Amsterdam, North Holland, The Netherlands",
+          "subject": "facilitator.x402.rs"
+        },
+        "https://x402.rs": {
+          "ip": "66.241.125.16",
+          "location": "Gunnison, Colorado, United States",
+          "subject": "x402.rs"
+        }
+      }
+    },
+    {
+      "name": "Figment",
+      "x402scan_id": "figment-facilitator",
+      "api_url": "https://api.figment.io/x402",
+      "doc_url": "https://docs.figment.io/reference/x402",
+      "x402scan_url": "https://www.x402scan.com/facilitator/figment-facilitator",
+      "chains": [
+        "solana"
+      ],
+      "addresses": [
+        "93syNmtT1tTd5ZtPwHqzGf6CM7fKhMmArpv4AM4FtyNX"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.figment.io/x402": {
+          "ip": "16.52.93.151",
+          "location": "Montreal, Quebec, Canada",
+          "subject": "*.api.figment.io"
+        },
+        "https://docs.figment.io/reference/x402": {
+          "ip": "104.16.242.118",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "docs.figment.io"
+        },
+        "https://www.x402scan.com/facilitator/figment-facilitator": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "FluxA",
+      "x402scan_id": "fluxa",
+      "api_url": "https://facilitator.fluxapay.xyz",
+      "doc_url": "https://facilitator.fluxapay.xyz",
+      "x402scan_url": "https://www.x402scan.com/facilitator/fluxa",
+      "chains": [
+        "base"
+      ],
+      "addresses": [
+        "0x24d4f332d8e886fc005bb4a103bad21d9ebc2b7f",
+        "0x7f72a02c682e908d46a5677fe937cdb612d94a3b",
+        "0xaa0df01e4d11decf2ad2c459c81d3a495e4f1925",
+        "0xb5d25e1fa0718bf3e1bf698f96791d4e93632ec8",
+        "0xc67b555b4a9d340ed7c5d87743163c31a75f2254",
+        "0xd2f74a14522d40e4a1d7fbb62aa97ce99fa1a7e5"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.fluxapay.xyz": {
+          "ip": "104.21.80.114",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "fluxapay.xyz"
+        },
+        "https://www.x402scan.com/facilitator/fluxa": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Heurist",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.heurist.xyz",
+      "doc_url": "https://docs.heurist.ai/x402-products/facilitator",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.heurist.xyz": {
+          "ip": "104.26.9.13",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "heurist.xyz"
+        },
+        "https://docs.heurist.ai/x402-products/facilitator": {
+          "ip": "76.76.21.241",
+          "location": "Walnut, California, United States",
+          "subject": "docs.heurist.ai"
+        }
+      }
+    },
+    {
+      "name": "HPP",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.hpp.io",
+      "doc_url": "https://docs.hpp.io/x402/facilitator",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.hpp.io": {
+          "ip": "104.26.0.229",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "hpp.io"
+        },
+        "https://docs.hpp.io/x402/facilitator": {
+          "ip": "185.199.111.153",
+          "location": "San Francisco, California, United States",
+          "subject": "docs.hpp.io"
+        }
+      }
+    },
+    {
+      "name": "KAMIYO",
+      "x402scan_id": null,
+      "api_url": "https://kamiyo.ai/api/v1/x402",
+      "doc_url": "https://kamiyo.ai/docs",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://kamiyo.ai/api/v1/x402": {
+          "ip": "216.24.57.1",
+          "location": "San Francisco, California, United States",
+          "subject": "kamiyo.ai"
+        },
+        "https://kamiyo.ai/docs": {
+          "ip": "216.24.57.1",
+          "location": "San Francisco, California, United States",
+          "subject": "kamiyo.ai"
+        }
+      }
+    },
+    {
+      "name": "Meridian",
+      "x402scan_id": "mrdn",
+      "api_url": "https://api.mrdn.finance/v1",
+      "doc_url": "https://mrdn.finance",
+      "x402scan_url": "https://www.x402scan.com/facilitator/mrdn",
+      "chains": [
+        "base"
+      ],
+      "addresses": [
+        "0x3210d7b21bfe1083c9dddbe17e8f947c9029a584",
+        "0x8e7769d440b3460b92159dd9c6d17302b036e2d6"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.mrdn.finance/v1": {
+          "ip": "172.67.140.81",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "mrdn.finance"
+        },
+        "https://mrdn.finance": {
+          "ip": "172.67.140.81",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "mrdn.finance"
+        },
+        "https://www.x402scan.com/facilitator/mrdn": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Mogami",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.mogami.tech",
+      "doc_url": "https://mogami.tech/",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.mogami.tech": {
+          "ip": "172.66.0.96",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "facilitator.mogami.tech"
+        },
+        "https://mogami.tech/": {
+          "ip": "162.159.140.98",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "mogami.tech"
+        }
+      }
+    },
+    {
+      "name": "PayAI",
+      "x402scan_id": "payAI",
+      "api_url": "https://facilitator.payai.network",
+      "doc_url": "https://payai.network",
+      "x402scan_url": "https://www.x402scan.com/facilitator/payAI",
+      "chains": [
+        "base",
+        "solana"
+      ],
+      "addresses": [
+        "0x03a3f7ce8e21e6f8d9fa14c67d8876b2470dc2f1",
+        "0x25659315106580ce2a787ceec5efb2d347b539c9",
+        "0x2daaef6f941de214bf7d6daf322bc6bc7406accb",
+        "0x2fae4026a31f19183947f0a6045ef975ebfa9ca8",
+        "0x489c40fc3c2a19ad8cb275b7dd6aa194e9219c4f",
+        "0x675707bc7d03089f820c1b7d49f7480083e8f4df",
+        "0x6ccf245c883f9f3c6caee0687aa61daf7bc96e32",
+        "0x9df61a719ddae27c20a63a417271cc2c704654bd",
+        "0xaf990eef9846b63d896056050fdc0b28bca9c24b",
+        "0xb2bd29925cbbcea7628279c91945ca5b98bf371b",
+        "0xb8f41cb13b1f213da1e94e1b742ec1323235c48f",
+        "0xc6699d2aada6c36dfea5c248dd70f9cb0235cb63",
+        "0xe299c486066739c4a31609e1268d93229632dd47",
+        "0xe575fa51af90957d66fab6d63355f1ed021b887b",
+        "0xf46833d4ac4f0f1405cc05c30edfd86770f721c9",
+        "2wKupLR9q6wXYppw8Gr2NvWxKBUqm4PPJKkQfoxHDBg4",
+        "8B5UKhwfAyFW67h58cBkQj1Ur6QXRgwWJJcQp8ZBsDPa",
+        "CjNFTjvBhbJJd2B5ePPMHRLx1ELZpa8dwQgGL727eKww"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.payai.network": {
+          "ip": "44.206.130.203",
+          "location": "Ashburn, Virginia, United States",
+          "subject": "facilitator.payai.network"
+        },
+        "https://payai.network": {
+          "ip": "216.150.1.1",
+          "location": "Walnut, California, United States",
+          "subject": "payai.network"
+        },
+        "https://www.x402scan.com/facilitator/payAI": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Polygon Facilitator",
+      "x402scan_id": null,
+      "api_url": "https://x402.polygon.technology",
+      "doc_url": "https://agentic-docs.polygon.technology/general/x402/intro/",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://x402.polygon.technology": {
+          "ip": "172.64.146.146",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "polygon.technology"
+        },
+        "https://agentic-docs.polygon.technology/general/x402/intro/": {
+          "ip": "104.18.41.110",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "polygon.technology"
+        }
+      }
+    },
+    {
+      "name": "Polymer",
+      "x402scan_id": "polymer",
+      "api_url": "https://api.polymer.zone/v1",
+      "doc_url": "https://docs.polymerlabs.org/docs/build/start",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.polymer.zone/v1": {
+          "ip": "172.66.158.19",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "api.polymer.zone"
+        },
+        "https://docs.polymerlabs.org/docs/build/start": {
+          "ip": "172.66.150.249",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "docs.polymerlabs.org"
+        }
+      }
+    },
+    {
+      "name": "Primer",
+      "x402scan_id": "primer",
+      "api_url": "https://x402.primer.systems",
+      "doc_url": "https://docs.primer.systems/facilitator.html",
+      "x402scan_url": "https://www.x402scan.com/facilitator/primer",
+      "chains": [
+        "base"
+      ],
+      "addresses": [
+        "0x37dfb4033d5dd98fd335f24d0d42e8fe68d587d6"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://x402.primer.systems": {
+          "ip": "69.46.46.51",
+          "location": "Seattle, Washington, United States",
+          "subject": "x402.primer.systems"
+        },
+        "https://docs.primer.systems/facilitator.html": {
+          "ip": "216.198.79.65",
+          "location": "Cleveland, Ohio, United States",
+          "subject": "docs.primer.systems"
+        },
+        "https://www.x402scan.com/facilitator/primer": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Questflow",
+      "x402scan_id": null,
+      "api_url": "https://facilitator.questflow.ai",
+      "doc_url": "https://facilitator.questflow.ai",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.questflow.ai": {
+          "ip": "172.66.40.113",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "questflow.ai"
+        }
+      }
+    },
+    {
+      "name": "Solvador",
+      "x402scan_id": null,
+      "api_url": "https://api.solvador.com",
+      "doc_url": "https://solvador.com",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.solvador.com": {
+          "ip": "172.67.151.77",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "solvador.com"
+        },
+        "https://solvador.com": {
+          "ip": "172.67.151.77",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "solvador.com"
+        }
+      }
+    },
+    {
+      "name": "Stellar",
+      "x402scan_id": null,
+      "api_url": "https://channels.openzeppelin.com/x402",
+      "doc_url": "https://channels.openzeppelin.com/x402",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://channels.openzeppelin.com/x402": {
+          "ip": "172.66.153.168",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "channels.openzeppelin.com"
+        }
+      }
+    },
+    {
+      "name": "T54",
+      "x402scan_id": null,
+      "api_url": "https://xrpl-facilitator-mainnet.t54.ai",
+      "doc_url": "https://docs.x402.org/dev-tools/facilitators",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://xrpl-facilitator-mainnet.t54.ai": {
+          "ip": "35.244.194.93",
+          "location": "Kansas City, Missouri, United States",
+          "subject": "xrpl-facilitator-mainnet.t54.ai"
+        },
+        "https://docs.x402.org/dev-tools/facilitators": {
+          "ip": "104.18.10.192",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "x402.org"
+        }
+      }
+    },
+    {
+      "name": "Thirdweb",
+      "x402scan_id": null,
+      "api_url": "https://api.thirdweb.com/v1/payments/x402",
+      "doc_url": "https://portal.thirdweb.com/payments/x402/facilitator",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://api.thirdweb.com/v1/payments/x402": {
+          "ip": "104.20.29.204",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "api.thirdweb.com"
+        },
+        "https://portal.thirdweb.com/payments/x402/facilitator": {
+          "ip": "172.66.159.97",
+          "location": "Toronto, Ontario, Canada",
+          "subject": "portal.thirdweb.com"
+        }
+      }
+    },
+    {
+      "name": "three.ws",
+      "x402scan_id": "three-ws",
+      "api_url": null,
+      "doc_url": "https://three.ws/docs/x402-distribution",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://three.ws/docs/x402-distribution": {
+          "ip": "136.68.246.178",
+          "location": "Kansas City, Missouri, United States",
+          "subject": "three.ws"
+        }
+      }
+    },
+    {
+      "name": "Ultravioleta DAO",
+      "x402scan_id": "ultravioletadao",
+      "api_url": "https://facilitator.ultravioletadao.xyz",
+      "doc_url": "https://facilitator.ultravioletadao.xyz",
+      "x402scan_url": "https://www.x402scan.com/facilitator/ultravioletadao",
+      "chains": [
+        "base"
+      ],
+      "addresses": [
+        "0x103040545ac5031a11e8c03dd11324c7333a13c7",
+        "F742C4VfFLQ9zRQyithoj5229ZgtX2WqKCSFKgH2EThq"
+      ],
+      "sources": [
+        "x402scan",
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://facilitator.ultravioletadao.xyz": {
+          "ip": "18.216.166.145",
+          "location": "Columbus, Ohio, United States",
+          "subject": "facilitator.ultravioletadao.xyz"
+        },
+        "https://www.x402scan.com/facilitator/ultravioletadao": {
+          "ip": "216.150.16.193",
+          "location": "Walnut, California, United States",
+          "subject": "*.x402scan.com"
+        }
+      }
+    },
+    {
+      "name": "Unknown (Near)",
+      "x402scan_id": null,
+      "api_url": "https://x402.mikedotexe.com",
+      "doc_url": "https://x402.mikedotexe.com",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://x402.mikedotexe.com": {
+          "ip": "100.23.147.163",
+          "location": "Boardman, Oregon, United States",
+          "subject": "x402.mikedotexe.com"
+        }
+      }
+    },
+    {
+      "name": "Virtuals Protocol",
+      "x402scan_id": "virtuals",
+      "api_url": null,
+      "doc_url": "https://app.virtuals.io",
+      "x402scan_url": null,
+      "chains": [],
+      "addresses": [],
+      "sources": [
+        "built-in list"
+      ],
+      "errors": [],
+      "fingerprints": {
+        "https://app.virtuals.io": {
+          "ip": "65.9.142.2",
+          "location": "Brisbane, Queensland, Australia",
+          "subject": "*.virtuals.io"
+        }
+      }
+    }
+  ]
+}

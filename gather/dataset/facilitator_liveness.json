@@ -1,0 +1,229 @@
+{
+  "checked_at": "2026-10-08T07:03:16+00:00",
+  "facilitators": [
+    {
+      "name": "402104",
+      "api_url": "https://x402.load.network",
+      "url_called": "https://x402.load.network/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"network\":\"polygon-amoy\",\"scheme\":\"exact\",\"x402Version\":1},{\"network\":\"base-sepolia\",\"scheme\":\"exact\",\"x402Version\":1},{\"network\":\"base\",\"scheme\":\"exact\",\"x402Version\":1}]}"
+    },
+    {
+      "name": "Canton",
+      "api_url": "https://facilitator.ftptech.xyz",
+      "url_called": "https://facilitator.ftptech.xyz/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"canton:mainnet\",\"extra\":{\"transferMethods\":[\"transfer-factory\"],\"synchronizerId\":\"global-domain::1220b1431ef217342db44d516bb9befde802be7d8899637d290895fa58880f19accc\",\"carriages\":[\"inline\"],\"instruments\":[{\"admin\":\"decentralized-usdc-interchain-rep::12208115f1e168dd7e792320be9c4ca720c751a02a3053c7606e1c1cd3dad9bf60ef\",\"instrumentId\":{\"admin\":\"decentralized-usdc-interchain-rep::12208115f1e168dd7e792320be9c4ca720c751a02a3053c7606e1c1cd3dad9bf6... (truncated)"
+    },
+    {
+      "name": "Celo Facilitator",
+      "api_url": "https://api.x402.celo.org",
+      "url_called": "https://api.x402.celo.org/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:42220\",\"extra\":{\"extensions\":[\"eip2612GasSponsoring\"],\"defaultAsset\":{\"asset\":\"0xcebA9300f2b948710d2653dD7B07f33A8B32118C\",\"symbol\":\"USDC\",\"decimals\":6,\"name\":\"USDC\",\"version\":\"2\",\"assetTransferMethod\":\"eip3009\"},\"supportedAssets\":[{\"asset\":\"0xcebA9300f2b948710d2653dD7B07f33A8B32118C\",\"symbol\":\"USDC\",\"decimals\":6,\"name\":\"USDC\",\"version\":\"2\",\"assetTransferMethod\":\"eip3009\"},{\"asset\":\"0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e\",\"symbol\"... (truncated)"
+    },
+    {
+      "name": "CodeNut",
+      "api_url": "https://facilitator.codenut.ai",
+      "url_called": "https://facilitator.codenut.ai/supported",
+      "status": null,
+      "active": false,
+      "response": "(request failed: HTTPSConnectionPool(host='facilitator.codenut.ai', port=443): Max retries exceeded with url: /supported (Caused by ConnectTimeoutError(<HTTPSConnection(host='facilitator.codenut.ai', port=443) at 0x1081d34d0>, 'Connection to facilitator.codenut.ai timed out. (connect timeout=10.0)')))"
+    },
+    {
+      "name": "Coinbase",
+      "api_url": "https://api.cdp.coinbase.com/platform",
+      "url_called": "https://api.cdp.coinbase.com/platform/v2/x402/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"extensions\":[\"bazaar\",\"builder-code\",\"eip2612GasSponsoring\"],\"kinds\":[{\"network\":\"base-sepolia\",\"scheme\":\"exact\",\"x402Version\":1},{\"network\":\"base\",\"scheme\":\"exact\",\"x402Version\":1},{\"extra\":{\"feePayer\":\"Hc3sdEAsCGQcpgfivywog9uwtk8gUBUZgsxdME1EJy88\"},\"network\":\"solana\",\"scheme\":\"exact\",\"x402Version\":1},{\"extra\":{\"feePayer\":\"Hc3sdEAsCGQcpgfivywog9uwtk8gUBUZgsxdME1EJy88\"},\"network\":\"solana-devnet\",\"scheme\":\"exact\",\"x402Version\":1},{\"network\":\"eip155:84532\",\"scheme\":\"exact\",\"x402Version\":2},{\"ext... (truncated)"
+    },
+    {
+      "name": "Daydreams",
+      "api_url": "https://facilitator.daydreams.systems",
+      "url_called": "https://facilitator.daydreams.systems/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:1\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:1\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:8453\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:8453\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:84532\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:84532\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1\",\"extra\":{\"feePayer\":\"DuQ4jFMmVABWGxabYHFkGzdyeJgS1hp4wrRu... (truncated)"
+    },
+    {
+      "name": "Dexter",
+      "api_url": "https://facilitator.dexter.cash",
+      "url_called": "https://x402.dexter.cash/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp\",\"extra\":{\"feePayer\":\"DeXterR2kQm8AvRHnNPatWkE46TfAcMeBDjb6FySoAb8\",\"decimals\":6,\"features\":{\"gasSponsored\":true,\"smartWalletSupported\":true},\"paymentFloorAvailable\":true,\"minPaymentAmountAtomic\":\"1267\",\"minPaymentAmountUsd\":0.00126621}},{\"x402Version\":2,\"scheme\":\"tab\",\"network\":\"solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp\",\"extra\":{\"feePayer\":\"DeXterR2kQm8AvRHnNPatWkE46TfAcMeBDjb6FySoAb8\",\"voucherHeader\":... (truncated)"
+    },
+    {
+      "name": "FareSide",
+      "api_url": "https://facilitator.x402.rs",
+      "url_called": "https://facilitator.x402.rs/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:324705682\",\"extra\":{\"extensions\":[\"eip2612GasSponsoring\"]}},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:72344\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:6343\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:10143\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:10143\",\"extra\":{\"extensions\":[\"eip2612GasSponsoring\"]}},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:998\"},{\"x402Version\":1,\"scheme\":\"exact\",\"ne... (truncated)"
+    },
+    {
+      "name": "Figment",
+      "api_url": "https://api.figment.io/x402",
+      "url_called": "https://api.figment.io/x402/supported",
+      "status": 401,
+      "active": true,
+      "response": "{\n  \"message\":\"Unauthorized\",\n  \"request_id\":\"2d8910649477c372a6598948353ba549\"\n}"
+    },
+    {
+      "name": "FluxA",
+      "api_url": "https://facilitator.fluxapay.xyz",
+      "url_called": "https://facilitator.fluxapay.xyz/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:8453\",\"extra\":{\"extensions\":[]}},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"}],\"extensions\":[],\"signers\":{\"eip155:8453\":[\"0x3be45f576696a2fD5a93C1330cD19F1607ab311D\"]}}"
+    },
+    {
+      "name": "Heurist",
+      "api_url": "https://facilitator.heurist.xyz",
+      "url_called": "https://facilitator.heurist.xyz/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"xlayer\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"stable\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:8453\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:196\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:988\"}],\"kindsByVersion\":{\"1\":[{\"scheme\":\"exact\",\"network\":\"base\"},{\"scheme\":\"exact\",\"network\":\"xlayer\"},{\"scheme\":\"exact\",\"network\":\"stable\"}],\"2\":[{\"scheme\":\"ex... (truncated)"
+    },
+    {
+      "name": "HPP",
+      "api_url": "https://facilitator.hpp.io",
+      "url_called": "https://facilitator.hpp.io/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:190415\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:190415\",\"extra\":{\"facilitatorAddress\":\"0xaA03c7BD2fAf554db507D78CD3bF126a3DD2E033\"}}],\"extensions\":[\"eip2612GasSponsoring\"],\"signers\":{\"eip155:*\":[\"0xaA03c7BD2fAf554db507D78CD3bF126a3DD2E033\"]}}"
+    },
+    {
+      "name": "KAMIYO",
+      "api_url": "https://kamiyo.ai/api/v1/x402",
+      "url_called": "https://www.kamiyo.ai/api/v1/x402/supported",
+      "status": 503,
+      "active": false,
+      "response": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>Service Suspended</title>\n</head>\n<body>\nThis service has been suspended.\n</body>\n</html>\n"
+    },
+    {
+      "name": "Meridian",
+      "api_url": "https://api.mrdn.finance/v1",
+      "url_called": "https://api.mrdn.finance/v1/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"arc\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"ethereum\"},{\"x402Version\":1,\"scheme\":\"upto\",\"network\":\"ethereum\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"avalanche\"},{\"x402Version\":1,\"scheme\":\"upto\",\"network\":\"avalanche\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"},{\"x402Version\":1,\"scheme\":\"upto\",\"network\":\"base\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"optimism\"},{\"x402Version\":1,\"scheme\":\"upto\",\"network\":\"optimism\"},{... (truncated)"
+    },
+    {
+      "name": "Mogami",
+      "api_url": "https://facilitator.mogami.tech",
+      "url_called": "https://facilitator.mogami.tech/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base-sepolia\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"}]}"
+    },
+    {
+      "name": "PayAI",
+      "api_url": "https://facilitator.payai.network",
+      "url_called": "https://facilitator.payai.network/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base-sepolia\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"avalanche-fuji\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"avalanche\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"sei\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"sei-testnet\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"polygon\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"polygon-amoy\"},{\"x402Version\":1,\"scheme\":\"exact\",... (truncated)"
+    },
+    {
+      "name": "Polygon Facilitator",
+      "api_url": "https://x402.polygon.technology",
+      "url_called": "https://x402.polygon.technology/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"polygon\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:137\",\"extra\":{}}],\"extensions\":[],\"signers\":{\"eip155:137\":[\"0x76FCb8ae3365A487E6EA235386C1cf3AbADeDA60\",\"0xfff23108338C218F895d75980E14688218D4E92a\",\"0xd5dD012019C58882Dd507A8b3fCBB7b62e9a24c3\",\"0xF744e153Ef63f7EEe4a58e0F13761D16C2125EE3\",\"0x153F3A70e4400c211d9B482b62aD721Bb02F96F6\",\"0x0a8B10FE8Bd3072351600Adef4796F3F7aF72Ab0\",\"0x9523B120C75640469f1D16490Da0388928229452\",\"0x971b40... (truncated)"
+    },
+    {
+      "name": "Polymer",
+      "api_url": "https://api.polymer.zone/v1",
+      "url_called": "https://api.polymer.zone/v1/supported",
+      "status": 400,
+      "active": false,
+      "response": "Invalid request\n"
+    },
+    {
+      "name": "Primer",
+      "api_url": "https://x402.primer.systems",
+      "url_called": "https://x402.primer.systems/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:8453\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"base-sepolia\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:84532\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"skale-base-sepolia\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:324705682\"},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"skale-base\"},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:1187947933\"},{\"x402... (truncated)"
+    },
+    {
+      "name": "Questflow",
+      "api_url": "https://facilitator.questflow.ai",
+      "url_called": "https://facilitator.questflow.ai/supported",
+      "status": 404,
+      "active": false,
+      "response": ""
+    },
+    {
+      "name": "Solvador",
+      "api_url": "https://api.solvador.com",
+      "url_called": "https://api.solvador.com/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:8453\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:8453\",\"extra\":{\"facilitatorAddress\":\"0xC077C1A915A61021b16d1581067C828b7C76F8e7\"}},{\"x402Version\":2,\"scheme\":\"batch-settlement\",\"network\":\"eip155:8453\",\"extra\":{\"receiverAuthorizer\":\"0xC077C1A915A61021b16d1581067C828b7C76F8e7\"}},{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"eip155:42161\"},{\"x402Version\":2,\"scheme\":\"upto\",\"network\":\"eip155:42161\",\"extra\":{\"facilitatorAddress\":\"0x... (truncated)"
+    },
+    {
+      "name": "Stellar",
+      "api_url": "https://channels.openzeppelin.com/x402",
+      "url_called": "https://channels.openzeppelin.com/x402/supported",
+      "status": 401,
+      "active": true,
+      "response": "{\"success\":false,\"code\":401,\"error\":\"Unauthorized\",\"message\":\"Unauthorized\"}"
+    },
+    {
+      "name": "T54",
+      "api_url": "https://xrpl-facilitator-mainnet.t54.ai",
+      "url_called": "https://xrpl-facilitator-mainnet.t54.ai/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"xrpl:0\"}],\"extensions\":[\"x402Secure\"],\"signers\":{\"xrpl:*\":[]}}"
+    },
+    {
+      "name": "Thirdweb",
+      "api_url": "https://api.thirdweb.com/v1/payments/x402",
+      "url_called": "https://api.thirdweb.com/v1/payments/x402/supported",
+      "status": 401,
+      "active": true,
+      "response": "{\"correlationId\":\"98318e82-0911-4ab0-a310-5468c9f3e846\",\"message\":\"x-secret-key or x-client-id header required\"}"
+    },
+    {
+      "name": "three.ws",
+      "api_url": null,
+      "url_called": null,
+      "status": null,
+      "active": false,
+      "response": null
+    },
+    {
+      "name": "Ultravioleta DAO",
+      "api_url": "https://facilitator.ultravioletadao.xyz",
+      "url_called": "https://facilitator.ultravioletadao.xyz/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"avalanche-fuji\",\"networkAliases\":[\"avalanche-fuji\",\"eip155:43113\"],\"extra\":{\"tokens\":[{\"token\":\"usdc\",\"address\":\"0x5425890298aed601595a70AB815c96711a31Bc65\",\"decimals\":6}]}},{\"x402Version\":1,\"scheme\":\"exact\",\"network\":\"fogo\",\"networkAliases\":[\"fogo\",\"fogo:mainnet\"],\"extra\":{\"feePayer\":\"F742C4VfFLQ9zRQyithoj5229ZgtX2WqKCSFKgH2EThq\",\"tokens\":[{\"token\":\"usdc\",\"address\":\"uSd2czE61Evaf76RNbq4KPpXnkiL3irdzgLFUMe3NoG\",\"decimals\":6}]}},{\"x402Version... (truncated)"
+    },
+    {
+      "name": "Unknown (Near)",
+      "api_url": "https://x402.mikedotexe.com",
+      "url_called": "https://x402.mikedotexe.com/supported",
+      "status": 200,
+      "active": true,
+      "response": "{\"kinds\":[{\"x402Version\":2,\"scheme\":\"exact\",\"network\":\"near:mainnet\"}],\"extensions\":[\"payment-identifier\"],\"signers\":{\"near:mainnet\":[\"x402-relayer2.mike.near\"]}}"
+    },
+    {
+      "name": "Virtuals Protocol",
+      "api_url": null,
+      "url_called": null,
+      "status": null,
+      "active": false,
+      "response": null
+    }
+  ]
+}

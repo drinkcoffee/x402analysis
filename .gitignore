@@ -226,3 +226,7 @@ tempdata/
 # not a bare `localdb/` rule, so it can never shadow a same-named directory
 # elsewhere the way this file's bare `lib/` rule once did.
 /x402-analysis-api/localdb/
+
+# gather/'s local Postgres database (data directory, logs) -- see
+# gather/gatherlib/localdb.py. Its dataset/ directory IS committed.
+/gather/localdb/
