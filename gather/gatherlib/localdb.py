@@ -27,6 +27,7 @@ import time
 from pathlib import Path
 
 import psycopg2
+import psycopg2.errors
 
 from . import GATHER_ROOT
 
@@ -182,11 +183,31 @@ def create_database() -> None:
         conn.close()
 
 
+SCHEMA_LOCK_TIMEOUT = "10s"
+
+
 def ensure_schema(cur) -> None:
     """Creates any table in db/schema.sql the database doesn't have yet --
     e.g. one added to the schema after 00_init_db.py ran. Every statement
-    there is CREATE TABLE IF NOT EXISTS, so existing tables are untouched."""
-    cur.execute(SCHEMA_PATH.read_text())
+    there is CREATE TABLE IF NOT EXISTS (or checks first), so existing
+    tables are untouched.
+
+    Creating a table with a foreign key locks the table it refers to, so
+    it has to wait for any other script that has written to that table
+    and is still running (they each write in one long transaction). Rather
+    than wait silently for hours, this gives up after SCHEMA_LOCK_TIMEOUT
+    and exits with a message."""
+    cur.execute(f"SET LOCAL lock_timeout = '{SCHEMA_LOCK_TIMEOUT}'")
+    try:
+        cur.execute(SCHEMA_PATH.read_text())
+    except psycopg2.errors.LockNotAvailable:
+        print(
+            "couldn't add this script's table to the database: another gather script that writes to it "
+            "(e.g. 05 or 06) is still running. Run this once it has finished.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    cur.execute("SET LOCAL lock_timeout = DEFAULT")
 
 
 def connect_existing():

@@ -17,10 +17,11 @@ module says where it came from.
 | `06_find_clients_solana.py` | The same for Solana: every account that has sent real USDC to a server's Solana address, through Helius's Solana RPC (needs `HELIUS_API_KEY`). Writes `dataset/clients_solana.json`. Takes hours. |
 | `07_find_funders_base.py` | Finds funders on Base: who sent ETH to facilitator and server addresses, and USDC to client addresses, grouped by funding address. Writes `dataset/funders.json`. Doesn't change the database. Takes hours. |
 | `08_find_funders_solana.py` | The same for Solana: who sent SOL to facilitator and server addresses, and USDC to client addresses (needs 06 to have finished). Uses Helius, or Solana's public RPC with `--public-rpc`. Writes `dataset/funders_solana.json`. Doesn't change the database. Can take days: facilitators have millions of transactions. |
+| `09_fetch_metadata_base.py` | Looks up the name, tags and warning notes Blockscout's explorer shows for every facilitator, server, client and funder address on Base (needs 07 to have finished; adds funders to `addresses`). Stores addresses that have any in `address_metadata`, and writes `dataset/metadata_base.json`. |
 
-`01`, `02`, `05` and `06` won't run if their JSON file already exists or their
-table already has rows (for `05` and `06`, rows for their chain), and `07` and
-`08` won't run if their JSON file exists, so nothing is gathered twice by
+`01`, `02`, `05`, `06` and `09` won't run if their JSON file already exists or
+their table already has rows (for `05`, `06` and `09`, rows for their chain),
+and `07` and `08` won't run if their JSON file exists, so nothing is gathered twice by
 accident. Ethereum-style addresses are stored in lower case.
 
 ## Setup
@@ -47,6 +48,7 @@ gather/.venv/bin/python gather/05_find_clients_base.py
 gather/.venv/bin/python gather/06_find_clients_solana.py
 gather/.venv/bin/python gather/07_find_funders_base.py
 gather/.venv/bin/python gather/08_find_funders_solana.py   # or --public-rpc
+gather/.venv/bin/python gather/09_fetch_metadata_base.py
 ```
 
 To start again from scratch, drop the database (`dropdb -p 5434
