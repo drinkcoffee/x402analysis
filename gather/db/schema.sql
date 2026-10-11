@@ -119,21 +119,61 @@ CREATE TABLE IF NOT EXISTS linkaddresses (
 );
 
 -- client_transactions: one USDC transfer from a client address to a
--- server's payment address, on Base (found by 05_find_clients_base.py).
--- `client` is the sending address; `server` is a server that address is
--- linked to -- a payment address shared by several servers gets one row
--- per server, so summing across servers counts those payments more than
--- once. `amount` is in whole units of `currency` (e.g. "0.05" USDC), kept
--- as text so no precision is lost. (tx_hash, log_index) identifies the
--- transfer on chain.
+-- server's payment address -- on Base (found by 05_find_clients_base.py)
+-- or Solana (06_find_clients_solana.py), as `chain` says. `client` is the
+-- paying address; `server` is a server the payment address is linked to
+-- -- a payment address shared by several servers gets one row per server,
+-- so summing across servers counts those payments more than once.
+-- `amount` is in whole units of `currency` (e.g. "0.05" USDC), kept as
+-- text so no precision is lost. (tx_hash, log_index) identifies the
+-- transfer on chain: on Base, the transaction hash and the Transfer
+-- event's log index; on Solana, the transaction signature and the transfer
+-- instruction's position (see 06_find_clients_solana.py).
 CREATE TABLE IF NOT EXISTS client_transactions (
     id         SERIAL PRIMARY KEY,
     client     INTEGER NOT NULL REFERENCES addresses(id),
     server     INTEGER NOT NULL REFERENCES server(id),
     amount     TEXT NOT NULL,
     currency   TEXT NOT NULL,
+    chain      TEXT NOT NULL,  -- "base" or "solana"
     tx_hash    TEXT NOT NULL,
     log_index  INTEGER NOT NULL,
     timestamp  TIMESTAMPTZ,
     CONSTRAINT client_transactions_transfer_server_key UNIQUE (tx_hash, log_index, server)
+);
+-- `chain` was added after the table was first created (when only Base
+-- was gathered): a database from then gets it here, with its existing
+-- rows marked "base". Checked first, rather than ALTER TABLE ... IF NOT
+-- EXISTS, because ALTER TABLE locks the table even when there's nothing
+-- to do -- which would wait for any script that has written to it and
+-- hasn't finished yet.
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'client_transactions' AND column_name = 'chain'
+    ) THEN
+        ALTER TABLE client_transactions ADD COLUMN chain TEXT NOT NULL DEFAULT 'base';
+        ALTER TABLE client_transactions ALTER COLUMN chain DROP DEFAULT;
+    END IF;
+END $$;
+
+-- address_metadata: what Blockscout's public metadata service (the tags an
+-- explorer shows beside an address) says about a facilitator, server,
+-- client or funder address on `chain` -- found by 09_fetch_metadata_base.py,
+-- which only adds rows for addresses that have some. `kinds` is which of
+-- facilitator/server/client/funder the address is (comma-separated);
+-- `name` is its name tag(s), `tags` its other tags, and `notes` its
+-- warning notes ("<alert status>: <text>"), each "; "-separated if more
+-- than one.
+CREATE TABLE IF NOT EXISTS address_metadata (
+    id       SERIAL PRIMARY KEY,
+    address  INTEGER NOT NULL REFERENCES addresses(id),
+    chain    TEXT NOT NULL,
+    kinds    TEXT NOT NULL,
+    name     TEXT,
+    tags     TEXT,
+    notes    TEXT,
+    updated  DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT address_metadata_address_chain_key UNIQUE (address, chain)
 );

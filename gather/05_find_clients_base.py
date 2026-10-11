@@ -29,7 +29,7 @@ dataset/clients.json has each client's totals, per server, plus any
 server address that couldn't be checked.
 
 Exits, changing nothing, if dataset/clients.json exists or
-client_transactions has rows. Everything is written in one transaction at
+client_transactions has Base rows. Everything is written in one transaction at
 the end, so an interrupted run (Ctrl-C) -- or one stopped by five failed
 addresses in a row -- changes nothing. Progress, per server address:
 "[n/total] <address>", a "." per page of transfers (with a page count
@@ -71,7 +71,6 @@ from gatherlib.common import (  # noqa: E402
     get_or_create_address,
     link_address,
     exit_if_exists,
-    table_has_rows,
     write_json,
 )
 
@@ -103,12 +102,13 @@ def check_not_gathered() -> None:
     try:
         with conn.cursor() as cur:
             localdb.ensure_schema(cur)
-            has_rows = table_has_rows(cur, "client_transactions")
+            cur.execute("SELECT EXISTS (SELECT 1 FROM client_transactions WHERE chain = %s)", (CHAIN,))
+            has_rows = cur.fetchone()[0]
         conn.commit()
     finally:
         conn.close()
     if has_rows:
-        print("the client_transactions table already has rows -- nothing done.", file=sys.stderr)
+        print("the client_transactions table already has Base rows -- nothing done.", file=sys.stderr)
         sys.exit(2)
 
 
@@ -229,7 +229,7 @@ class ClientStore:
         psycopg2.extras.execute_values(
             self.cur,
             """
-            INSERT INTO client_transactions (client, server, amount, currency, tx_hash, log_index, timestamp)
+            INSERT INTO client_transactions (client, server, amount, currency, chain, tx_hash, log_index, timestamp)
             VALUES %s
             ON CONFLICT (tx_hash, log_index, server) DO NOTHING
             """,
@@ -298,6 +298,7 @@ def main() -> None:
                                 server_id,
                                 _plain(amount),
                                 CURRENCY,
+                                CHAIN,
                                 transfer.get("transaction_hash"),
                                 transfer.get("log_index"),
                                 transfer.get("timestamp"),
