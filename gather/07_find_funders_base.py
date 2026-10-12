@@ -34,11 +34,21 @@ many addresses they fund, most first. Server/client addresses that
 couldn't be checked are listed too.
 
 Doesn't change the database. Exits, doing nothing, if
-dataset/funders.json exists. The file's only written once every address
-has been checked, so an interrupted run (Ctrl-C) -- or one stopped by five
-failed addresses in a row -- writes nothing. Progress, per address checked:
-"[n/total] <address> <kinds> <asset>", a "." per page of transfers (with a
-page count every 20 pages), then what was found.
+dataset/funders.json exists.
+
+Resumable: as each address is checked, what was found is saved to
+localdb/progress/07_find_funders_base.jsonl, so a run that stops part way
+-- Ctrl-C, a crash, or five failed addresses in a row -- carries on from
+there when it's run again. An explorer outage first pauses the run:
+server errors, timeouts and dropped connections are retried for about 9
+minutes before an address counts as failed. dataset/funders.json is
+written once every address has been checked; the progress file is then
+deleted, unless some addresses failed -- then it's kept, so deleting
+funders.json and running again retries just those.
+
+Progress, per address checked: "[n/total] <address> <kinds> <asset>", a
+"." per page of transfers (with a page count every 20 pages), then what
+was found.
 
 Usage:
     python gather/07_find_funders_base.py
@@ -71,8 +81,10 @@ load_dotenv(GATHER_ROOT / ".env")
 
 from gatherlib import DATASET_DIR, localdb, preflight  # noqa: E402
 from gatherlib.common import exit_if_exists, write_json  # noqa: E402
+from gatherlib.progress import ProgressLog  # noqa: E402
 
 OUTPUT_PATH = DATASET_DIR / "funders.json"
+PROGRESS_NAME = "07_find_funders_base"
 CHAIN = "base"
 KINDS = {0: "facilitator", 1: "server", 2: "client"}
 ETH_FUNDED = ("facilitator", "server")
@@ -92,8 +104,8 @@ USER_AGENT = (
     "(KHTML, like Gecko) Chrome/130 Safari/537.36"
 )
 TIMEOUT = 30.0
-MAX_RETRIES = 5
-NETWORK_RETRY_WAIT = 15.0
+RETRY_WAITS = (15, 30, 60, 120, 300)  # seconds -- about 9 minutes in all
+MAX_RATE_LIMIT_WAITS = 30
 DEFAULT_RETRY_WAIT = 60.0
 PAGE_COUNT_EVERY = 20
 MAX_CONSECUTIVE_FAILURES = 5
@@ -134,32 +146,42 @@ def _reset_wait(response: requests.Response) -> float:
 
 
 def get_page(session: requests.Session, url: str, params: dict, referer: str) -> dict:
-    """One page of results, waiting out the rate limit, and retrying a
-    timeout or dropped connection, if needed."""
-    for attempt in range(MAX_RETRIES):
+    """One page of results. Waits out the rate limit, and retries a server
+    error (5xx), timeout or dropped connection after each of RETRY_WAITS --
+    so an explorer outage of up to about 9 minutes pauses the run rather
+    than failing the address."""
+    failures = rate_limited = 0
+    while True:
         try:
             response = session.get(url, params=params, timeout=TIMEOUT, headers={"Referer": referer})
         except (requests.Timeout, requests.ConnectionError) as exc:
-            if attempt == MAX_RETRIES - 1:
-                raise
-            print(f"\n{type(exc).__name__} -- retrying in {NETWORK_RETRY_WAIT:.0f}s", flush=True)
-            time.sleep(NETWORK_RETRY_WAIT)
-            continue
-        if response.status_code == 429:
-            wait = _reset_wait(response)
-            print(f"\nrate limited -- waiting {wait:.0f}s", flush=True)
-            time.sleep(wait)
-            continue
-        if response.status_code == 403 and "cloudflare" in response.headers.get("server", ""):
-            raise RuntimeError("HTTP 403 from Cloudflare's bot check -- the explorer is refusing scripted requests")
-        if not response.ok:
-            raise RuntimeError(f"HTTP {response.status_code}: {response.text[:300]}")
-        if response.headers.get("x-ratelimit-remaining") == "0":
-            wait = _reset_wait(response)
-            print(f"\nrate limit reached -- waiting {wait:.0f}s", flush=True)
-            time.sleep(wait)
-        return response.json()
-    raise RuntimeError(f"still failing after {MAX_RETRIES} attempts")
+            problem = type(exc).__name__
+        else:
+            if response.status_code == 429:
+                rate_limited += 1
+                if rate_limited > MAX_RATE_LIMIT_WAITS:
+                    raise RuntimeError(f"still rate limited after {MAX_RATE_LIMIT_WAITS} waits")
+                wait = _reset_wait(response)
+                print(f"\nrate limited -- waiting {wait:.0f}s", flush=True)
+                time.sleep(wait)
+                continue
+            if response.status_code == 403 and "cloudflare" in response.headers.get("server", ""):
+                raise RuntimeError("HTTP 403 from Cloudflare's bot check -- the explorer is refusing scripted requests")
+            if response.ok:
+                if response.headers.get("x-ratelimit-remaining") == "0":
+                    wait = _reset_wait(response)
+                    print(f"\nrate limit reached -- waiting {wait:.0f}s", flush=True)
+                    time.sleep(wait)
+                return response.json()
+            if response.status_code < 500:
+                raise RuntimeError(f"HTTP {response.status_code}: {response.text[:300]}")
+            problem = f"HTTP {response.status_code}"
+        if failures == len(RETRY_WAITS):
+            raise RuntimeError(f"{problem}, still, after {failures} retries over {sum(RETRY_WAITS) // 60} minutes")
+        wait = RETRY_WAITS[failures]
+        failures += 1
+        print(f"\n{problem} -- retrying in {wait}s ({failures}/{len(RETRY_WAITS)})", flush=True)
+        time.sleep(wait)
 
 
 class PageCounter:
@@ -259,6 +281,15 @@ class Funding:
             self.first = min(self.first or when, when)
             self.last = max(self.last or when, when)
 
+    def to_record(self) -> list:
+        return [self.transfers, self.internal, self.total, self.first, self.last]
+
+    @classmethod
+    def from_record(cls, record: list) -> "Funding":
+        funding = cls()
+        funding.transfers, funding.internal, funding.total, funding.first, funding.last = record
+        return funding
+
     def as_json(self, decimals: int, show_internal: bool) -> dict:
         out = {"transfers": self.transfers}
         if show_internal:
@@ -338,15 +369,31 @@ def main() -> None:
         f"{len(checks) - eth_count:,} client address(es) for USDC, on Base"
     )
 
+    # funder -> funded address -> asset -> Funding, starting from whatever
+    # an earlier, unfinished run saved.
+    funding: dict = defaultdict(lambda: defaultdict(lambda: defaultdict(Funding)))
+    log = ProgressLog(PROGRESS_NAME)
+    wanted = set(checks)
+    done = 0
+    for record in log.load():
+        key = (record["address"], record["asset"])
+        if key in wanted:
+            wanted.discard(key)
+            done += 1
+            for funder, saved in record["funders"].items():
+                funding[funder][record["address"]][record["asset"]] = Funding.from_record(saved)
+    remaining = [check for check in checks if check in wanted]
+    if done:
+        print(f"resuming: {done:,} of {len(checks):,} check(s) already done, saved in {log.path.relative_to(GATHER_ROOT)}")
+
     session = requests.Session()
     session.headers.update({"User-Agent": USER_AGENT, "Accept": "application/json"})
-    funding: dict = defaultdict(lambda: defaultdict(lambda: defaultdict(Funding)))
     failed: list[dict] = []
     consecutive_failures = 0
     total = len(checks)
 
     try:
-        for n, (address, asset) in enumerate(checks, 1):
+        for n, (address, asset) in enumerate(remaining, done + 1):
             info = addresses[address]
             print(f"[{n}/{total}] {address} {'+'.join(sorted(info['kinds']))} {asset.upper()} ", end="", flush=True)
             counter = PageCounter()
@@ -357,21 +404,27 @@ def main() -> None:
                 failed.append({"address": address, "asset": asset.upper(), "kinds": sorted(info["kinds"]), "error": str(exc)})
                 consecutive_failures += 1
                 if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
-                    print(f"stopping: {consecutive_failures} failures in a row -- nothing written", file=sys.stderr)
+                    print(
+                        f"stopping: {consecutive_failures} failures in a row -- progress is saved; "
+                        "run this again to carry on from here.",
+                        file=sys.stderr,
+                    )
                     sys.exit(1)
                 continue
             consecutive_failures = 0
 
-            funders: set[str] = set()
+            found: dict[str, Funding] = defaultdict(Funding)
             for transfer in received:
                 funder = transfer["from"]
                 if not funder or funder in (ZERO_ADDRESS, address):
                     continue
-                funding[funder][address][asset].add(transfer)
-                funders.add(funder)
-            print(f" {len(received):,} transfer(s) from {len(funders):,} funder(s)", flush=True)
+                found[funder].add(transfer)
+            log.append({"address": address, "asset": asset, "funders": {f: fund.to_record() for f, fund in found.items()}})
+            for funder, fund in found.items():
+                funding[funder][address][asset] = fund
+            print(f" {len(received):,} transfer(s) from {len(found):,} funder(s)", flush=True)
     except KeyboardInterrupt:
-        print("\ninterrupted -- nothing written", file=sys.stderr)
+        print("\ninterrupted -- progress is saved; run this again to carry on from here.", file=sys.stderr)
         sys.exit(130)
 
     output = build_output(funding, addresses, total - len(failed), failed)
@@ -382,7 +435,13 @@ def main() -> None:
         f"wrote {OUTPUT_PATH.relative_to(GATHER_ROOT)}"
     )
     if failed:
-        print(f"{len(failed)} address check(s) failed -- listed in {OUTPUT_PATH.name}", file=sys.stderr)
+        print(
+            f"{len(failed)} address check(s) failed -- listed in {OUTPUT_PATH.name}. To retry just those, "
+            f"delete {OUTPUT_PATH.name} and run this again (progress is kept until a run has no failures).",
+            file=sys.stderr,
+        )
+    else:
+        log.remove()
 
 
 if __name__ == "__main__":

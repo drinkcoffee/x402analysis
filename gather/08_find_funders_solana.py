@@ -46,12 +46,23 @@ addresses they fund, most first. Addresses that couldn't be checked are
 listed too.
 
 Doesn't change the database. Exits, doing nothing, if
-dataset/funders_solana.json exists. The file's only written once every
-address has been checked, so an interrupted run (Ctrl-C) -- or one stopped
-by five failed addresses in a row, e.g. once Helius's credits run out --
-writes nothing. Progress, per address checked: "[n/total] <address>
-<kinds> <asset>", a "." per 100 transactions fetched (with a count every
-2,000), then what was found.
+dataset/funders_solana.json exists.
+
+Resumable: as each address is checked, what was found is saved to
+localdb/progress/08_find_funders_solana.jsonl, so a run that stops part
+way -- Ctrl-C, a crash, or five failed addresses in a row (e.g. once
+Helius's credits run out) -- carries on from there when it's run again.
+An outage first pauses the run: rate limits, server errors, timeouts and
+dropped connections are retried for about 8 minutes before an address
+counts as failed. An address stopped part way is checked again from the
+start. dataset/funders_solana.json is written once every address has been
+checked; the progress file is then deleted, unless some addresses failed
+-- then it's kept, so deleting funders_solana.json and running again
+retries just those.
+
+Progress, per address checked: "[n/total] <address> <kinds> <asset>", a
+"." per 100 transactions fetched (with a count every 2,000), then what
+was found.
 
 Usage:
     python gather/08_find_funders_solana.py [--public-rpc] [--rps N]
@@ -86,8 +97,10 @@ load_dotenv(GATHER_ROOT / ".env")
 
 from gatherlib import DATASET_DIR, localdb, preflight, solana  # noqa: E402
 from gatherlib.common import exit_if_exists, write_json  # noqa: E402
+from gatherlib.progress import ProgressLog  # noqa: E402
 
 OUTPUT_PATH = DATASET_DIR / "funders_solana.json"
+PROGRESS_NAME = "08_find_funders_solana"
 CHAIN = "solana"
 KINDS = {0: "facilitator", 1: "server", 2: "client"}
 SOL_FUNDED = ("facilitator", "server")
@@ -208,6 +221,15 @@ class Funding:
             self.first = min(self.first or when, when)
             self.last = max(self.last or when, when)
 
+    def to_record(self) -> list:
+        return [self.transfers, self.internal, self.total, self.first, self.last]
+
+    @classmethod
+    def from_record(cls, record: list) -> "Funding":
+        funding = cls()
+        funding.transfers, funding.internal, funding.total, funding.first, funding.last = record
+        return funding
+
     def as_json(self, decimals: int, show_internal: bool) -> dict:
         out = {"transfers": self.transfers}
         if show_internal:
@@ -301,15 +323,32 @@ def main() -> None:
         f"{len(checks) - sol_count:,} client address(es) for USDC, on Solana, through {rpc_name}"
     )
 
+    # funder -> funded address -> asset -> Funding, starting from whatever
+    # an earlier, unfinished run saved.
     funding: dict = defaultdict(lambda: defaultdict(lambda: defaultdict(Funding)))
-    failed: list[dict] = []
+    log = ProgressLog(PROGRESS_NAME)
+    wanted = set(checks)
+    done = 0
     missing_total = 0
+    for record in log.load():
+        key = (record["address"], record["asset"])
+        if key in wanted:
+            wanted.discard(key)
+            done += 1
+            missing_total += record.get("missing", 0)
+            for funder, saved in record["funders"].items():
+                funding[funder][record["address"]][record["asset"]] = Funding.from_record(saved)
+    remaining = [check for check in checks if check in wanted]
+    if done:
+        print(f"resuming: {done:,} of {len(checks):,} check(s) already done, saved in {log.path.relative_to(GATHER_ROOT)}")
+
+    failed: list[dict] = []
     consecutive_failures = 0
     total = len(checks)
 
     try:
         with ThreadPoolExecutor(max_workers=TX_WORKERS) as pool:
-            for n, (address, asset) in enumerate(checks, 1):
+            for n, (address, asset) in enumerate(remaining, done + 1):
                 info = addresses[address]
                 print(f"[{n}/{total}] {address} {'+'.join(sorted(info['kinds']))} {asset.upper()} ", end="", flush=True)
                 try:
@@ -319,23 +358,34 @@ def main() -> None:
                     failed.append({"address": address, "asset": asset.upper(), "kinds": sorted(info["kinds"]), "error": str(exc)})
                     consecutive_failures += 1
                     if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
-                        print(f"stopping: {consecutive_failures} failures in a row -- nothing written", file=sys.stderr)
+                        print(
+                            f"stopping: {consecutive_failures} failures in a row -- progress is saved; "
+                            "run this again to carry on from here.",
+                            file=sys.stderr,
+                        )
                         os._exit(1)  # don't wait for the pool's queued requests
                     continue
                 consecutive_failures = 0
                 missing_total += missing
 
-                funders: set[str] = set()
+                found: dict[str, Funding] = defaultdict(Funding)
                 for transfer in received:
-                    funder = transfer["from"]
-                    if funder == address:
-                        continue
-                    funding[funder][address][asset].add(transfer)
-                    funders.add(funder)
+                    if transfer["from"] != address:
+                        found[transfer["from"]].add(transfer)
+                log.append(
+                    {
+                        "address": address,
+                        "asset": asset,
+                        "missing": missing,
+                        "funders": {f: fund.to_record() for f, fund in found.items()},
+                    }
+                )
+                for funder, fund in found.items():
+                    funding[funder][address][asset] = fund
                 not_returned = f", {missing:,} transaction(s) not returned by the RPC" if missing else ""
-                print(f" {len(received):,} transfer(s) from {len(funders):,} funder(s){not_returned}", flush=True)
+                print(f" {len(received):,} transfer(s) from {len(found):,} funder(s){not_returned}", flush=True)
     except KeyboardInterrupt:
-        print("\ninterrupted -- nothing written", file=sys.stderr)
+        print("\ninterrupted -- progress is saved; run this again to carry on from here.", file=sys.stderr)
         os._exit(130)  # don't wait for the pool's queued requests
 
     output = build_output(funding, addresses, total - len(failed), failed, missing_total, rpc_name)
@@ -346,7 +396,13 @@ def main() -> None:
         f"wrote {OUTPUT_PATH.relative_to(GATHER_ROOT)}"
     )
     if failed:
-        print(f"{len(failed)} address check(s) failed -- listed in {OUTPUT_PATH.name}", file=sys.stderr)
+        print(
+            f"{len(failed)} address check(s) failed -- listed in {OUTPUT_PATH.name}. To retry just those, "
+            f"delete {OUTPUT_PATH.name} and run this again (progress is kept until a run has no failures).",
+            file=sys.stderr,
+        )
+    else:
+        log.remove()
 
 
 if __name__ == "__main__":

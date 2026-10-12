@@ -21,8 +21,11 @@ module says where it came from.
 
 `01`, `02`, `05`, `06` and `09` won't run if their JSON file already exists or
 their table already has rows (for `05`, `06` and `09`, rows for their chain),
-and `07` and `08` won't run if their JSON file exists, so nothing is gathered twice by
-accident. Ethereum-style addresses are stored in lower case.
+and `07` and `08` won't run if their JSON file exists, so nothing is gathered
+twice by accident. `07` and `08` are resumable: they save their progress in
+`localdb/progress/` as they go, so if one stops part way, running it again
+carries on from where it got to. Ethereum-style addresses are stored in lower
+case.
 
 ## Setup
 

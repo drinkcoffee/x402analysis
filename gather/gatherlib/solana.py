@@ -33,7 +33,7 @@ TOKEN_PROGRAM = "spl-token"
 
 SIGNATURES_PER_PAGE = 1000
 TIMEOUT = 30.0
-MAX_RETRIES = 8
+MAX_RETRIES = 14  # waits of 1, 2, 4 ... 60s: about 8 minutes in all
 MAX_RETRY_WAIT = 60.0
 DOT_EVERY = 100
 COUNT_EVERY = 2000
@@ -80,7 +80,9 @@ def helius_rps() -> float:
 
 class SolanaRpc:
     """JSON-RPC calls, shared by threads: at most `rps` requests a second
-    in all, retrying rate-limited and failed requests with a growing wait.
+    in all, retrying rate-limited and failed requests (server errors,
+    timeouts, dropped connections) with a growing wait -- for about 8
+    minutes, so an outage pauses a run rather than failing it.
     Being rate limited pauses every thread, not just the one that was
     told. Error messages never include the URL, which carries the API
     key."""
