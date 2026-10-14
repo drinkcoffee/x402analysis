@@ -6,9 +6,10 @@ since one address can fund several. The Solana counterpart of
 07_find_funders_base.py.
 
 Uses Solana's standard JSON-RPC API -- through Helius by default (key in
-gather/.env as HELIUS_API_KEY), or Solana's free public endpoint with
---public-rpc (no key needed, but much more heavily rate limited, so much
-slower). For every Solana address (base58, decoding to 32 bytes):
+gather/.env as HELIUS_API_KEY); any other provider's Solana endpoint
+(Alchemy, QuickNode, Triton, ...) with --rpc-url, its URL in gather/.env
+as SOLANA_RPC_URL; or Solana's free public endpoint with --public-rpc (no
+key needed, but much more heavily rate limited, so much slower). For every Solana address (base58, decoding to 32 bytes):
   - facilitators and servers, for SOL sent to the address: every
     transaction touching it is fetched (getSignaturesForAddress, then
     getTransaction), and each System program transfer, transferWithSeed,
@@ -31,7 +32,8 @@ applies. Solana client addresses come from 06_find_clients_solana.py,
 which has to have finished first.
 
 Requests are spread over TX_WORKERS threads, at most --rps a second in all
-(default: HELIUS_RPS, or 10, for Helius; 3 for the public endpoint).
+(default: HELIUS_RPS, or 10, for Helius; SOLANA_RPC_RPS, or 10, for
+--rpc-url; 3 for the public endpoint).
 Rate-limited and failed requests are retried with a growing wait, saying
 so.
 
@@ -65,7 +67,7 @@ Progress, per address checked: "[n/total] <address> <kinds> <asset>", a
 was found.
 
 Usage:
-    python gather/08_find_funders_solana.py [--public-rpc] [--rps N]
+    python gather/08_find_funders_solana.py [--public-rpc | --rpc-url] [--rps N]
 """
 
 from __future__ import annotations
@@ -109,23 +111,10 @@ TX_WORKERS = 8
 MAX_CONSECUTIVE_FAILURES = 5
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
     parser = argparse.ArgumentParser(description="Find who funds facilitators, servers and clients on Solana.")
-    parser.add_argument(
-        "--public-rpc",
-        action="store_true",
-        help=f"use Solana's public RPC endpoint ({solana.PUBLIC_URL}) instead of Helius -- no key needed, but much slower",
-    )
-    parser.add_argument(
-        "--rps",
-        type=float,
-        help=f"requests a second (default: HELIUS_RPS or {solana.DEFAULT_HELIUS_RPS:g} for Helius, "
-        f"{solana.DEFAULT_PUBLIC_RPS:g} for the public endpoint)",
-    )
-    args = parser.parse_args()
-    if args.rps is not None and args.rps <= 0:
-        parser.error("--rps must be more than 0")
-    return args
+    solana.add_rpc_arguments(parser)
+    return parser, parser.parse_args()
 
 
 def fetch_addresses(cur) -> dict[str, dict]:
@@ -290,13 +279,7 @@ def build_output(funding: dict, addresses: dict[str, dict], checked: int, failed
 
 
 def main() -> None:
-    args = parse_args()
-    if args.public_rpc:
-        rpc_name = "Solana public RPC"
-        rpc = solana.SolanaRpc(solana.PUBLIC_URL, args.rps or solana.DEFAULT_PUBLIC_RPS)
-    else:
-        rpc_name = "Helius"
-        rpc = solana.SolanaRpc(solana.helius_url(), args.rps or solana.helius_rps())
+    rpc, rpc_name, rpc_hint = solana.rpc_from_args(*parse_args())
     preflight.check_or_exit(localdb.preflight_checks)
     exit_if_exists(OUTPUT_PATH)
 
@@ -317,7 +300,7 @@ def main() -> None:
             file=sys.stderr,
         )
         sys.exit(2)
-    solana.check_answering(rpc, rpc_name + ("" if args.public_rpc else " (check HELIUS_API_KEY)"))
+    solana.check_answering(rpc, rpc_name + rpc_hint)
     print(
         f"checking {sol_count:,} facilitator/server address(es) for SOL and "
         f"{len(checks) - sol_count:,} client address(es) for USDC, on Solana, through {rpc_name}"
@@ -353,6 +336,13 @@ def main() -> None:
                 print(f"[{n}/{total}] {address} {'+'.join(sorted(info['kinds']))} {asset.upper()} ", end="", flush=True)
                 try:
                     received, missing = (sol_received if asset == "sol" else usdc_received)(rpc, pool, address)
+                except solana.UsageExhausted as exc:
+                    print(
+                        f"\n{exc} -- stopping. Progress is saved; run this again to carry on once the "
+                        "credits have reset (or with --rpc-url or --public-rpc).",
+                        file=sys.stderr,
+                    )
+                    os._exit(1)  # don't wait for the pool's queued requests
                 except (requests.RequestException, RuntimeError, ValueError, KeyError) as exc:
                     print(f"\n  failed: {exc}", flush=True)
                     failed.append({"address": address, "asset": asset.upper(), "kinds": sorted(info["kinds"]), "error": str(exc)})

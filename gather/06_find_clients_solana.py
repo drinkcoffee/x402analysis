@@ -4,9 +4,12 @@ and stores them in gather's database and in dataset/clients_solana.json.
 The Solana counterpart of 05_find_clients_base.py.
 
 Uses Solana's standard JSON-RPC API, through Helius
-(https://www.helius.dev/; a free key is enough), with the key in
-gather/.env as HELIUS_API_KEY. For every Solana server address (a base58
-address decoding to 32 bytes):
+(https://www.helius.dev/; a free key is enough, with the key in
+gather/.env as HELIUS_API_KEY); any other provider's Solana endpoint
+(Alchemy, QuickNode, Triton, ...) with --rpc-url, its URL in gather/.env
+as SOLANA_RPC_URL; or Solana's free public endpoint with --public-rpc (no
+key needed, but much more heavily rate limited, so much slower). For every Solana server address (a base58 address decoding to 32
+bytes):
   1. getTokenAccountsByOwner finds its USDC token accounts. On Solana,
      tokens aren't held by a wallet address itself but by token accounts it
      owns, and that's where payments arrive. Only real USDC counts (Circle's
@@ -23,15 +26,15 @@ address decoding to 32 bytes):
      payer isn't the client.) Transfers whose authority is the server
      address itself are skipped.
 
-Requests are spread over TX_WORKERS threads, at most HELIUS_RPS a second
-in all (default 10 -- Helius's free plan limit; set HELIUS_RPS in
-gather/.env for a paid plan). Rate-limited and failed requests are retried
+Requests are spread over TX_WORKERS threads, at most --rps a second in all
+(default: HELIUS_RPS, or 10 -- Helius's free plan limit -- for Helius;
+SOLANA_RPC_RPS, or 10, for --rpc-url; 3 for the public endpoint). Rate-limited and failed requests are retried
 with a growing wait, saying so. Errors never show the RPC URL, since it
 carries the API key.
 
 In the database, as 05 does for Base:
   - each client address is added to addresses (as is -- Solana addresses
-    are case-sensitive -- with chains "solana", source "Helius"), with a
+    are case-sensitive -- with chains "solana", source "Helius", "Solana public RPC", or --rpc-url's host name), with a
     clients row linked to it through linkaddresses (owner 2, client).
   - each transfer becomes a client_transactions row, chain "solana":
     client address, server, amount (whole USDC, as text), currency
@@ -40,23 +43,35 @@ In the database, as 05 does for Base:
     instruction in the order it ran (each top-level instruction, then the
     inner ones it made). A payment address shared by several servers gets a
     row per server.
-dataset/clients_solana.json has each client's totals, per server, plus any
-server address that couldn't be checked.
+dataset/clients_solana.json, written at the end from what's in the
+database, has each client's totals, per server, plus any server address
+that couldn't be checked.
 
-Exits, changing nothing, if dataset/clients_solana.json exists or
-client_transactions has Solana rows. Everything is written in one
-transaction at the end, so an interrupted run (Ctrl-C) -- or one stopped
-by five failed addresses in a row, e.g. once the plan's credits run out --
-changes nothing. Progress, per server address: "[n/total] <address>", how
-many USDC accounts it has, a "." per 100 transactions fetched (with a
-count every 2,000), then that address's totals.
+Resumable: each server address's clients and transactions are committed to
+the database as soon as it's been checked, and the address is then noted in
+localdb/progress/06_find_clients_solana.jsonl. If a run stops part way --
+Ctrl-C, a crash, or five failed addresses in a row (e.g. an outage, or the
+plan's credits running out) -- running it again skips the addresses already
+done. (An address that was being checked when it stopped is checked again
+from the start; rows it had already stored are left as they are, not
+duplicated.) When a run finishes with no failed addresses, the progress
+file is removed; otherwise it's kept, and deleting
+dataset/clients_solana.json and running this again retries just the failed
+ones.
+
+Exits, changing nothing, if dataset/clients_solana.json exists, or if
+client_transactions has Solana rows but there's no progress file to carry
+on from. Progress, per server address: "[n/total] <address>", how many USDC
+accounts it has, a "." per 100 transactions fetched (with a count every
+2,000), then that address's totals.
 
 Usage:
-    python gather/06_find_clients_solana.py
+    python gather/06_find_clients_solana.py [--public-rpc | --rpc-url] [--rps N]
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 from collections import defaultdict
@@ -89,18 +104,27 @@ from gatherlib.common import (  # noqa: E402
     exit_if_exists,
     write_json,
 )
+from gatherlib.progress import ProgressLog  # noqa: E402
 
 OUTPUT_PATH = DATASET_DIR / "clients_solana.json"
 OWNER_CLIENT = 2
 CURRENCY = "USDC"
-SOURCE = "Helius"
 CHAIN = "solana"
+PROGRESS_NAME = "06_find_clients_solana"
 
 TX_WORKERS = 8
 MAX_CONSECUTIVE_FAILURES = 5
 
 
-def check_not_gathered() -> None:
+def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
+    parser = argparse.ArgumentParser(description="Find clients that have paid servers in USDC on Solana.")
+    solana.add_rpc_arguments(parser)
+    return parser, parser.parse_args()
+
+
+def check_not_gathered(log: ProgressLog) -> None:
+    """Exits if this has already been run to the end -- unless an earlier
+    run left a progress file to carry on from."""
     exit_if_exists(OUTPUT_PATH)
     conn = localdb.connect_existing()
     try:
@@ -111,8 +135,12 @@ def check_not_gathered() -> None:
         conn.commit()
     finally:
         conn.close()
-    if has_rows:
-        print("the client_transactions table already has Solana rows -- nothing done.", file=sys.stderr)
+    if has_rows and not log.path.exists():
+        print(
+            "the client_transactions table already has Solana rows, and there's no progress file "
+            f"({log.path.relative_to(GATHER_ROOT)}) to carry on from -- nothing done.",
+            file=sys.stderr,
+        )
         sys.exit(2)
 
 
@@ -179,40 +207,81 @@ def _plain(amount: Decimal) -> str:
 class ClientStore:
     """Writes clients and their transactions within the caller's
     transaction, creating each client's addresses/clients/linkaddresses
-    rows the first time it's seen."""
+    rows the first time it's seen -- or reusing them if an earlier run
+    already did."""
 
-    def __init__(self, cur) -> None:
+    def __init__(self, cur, source: str) -> None:
         self.cur = cur
+        self.source = source
         self.address_ids: dict[str, int] = {}
 
     def client_address_id(self, address: str) -> int:
         if address not in self.address_ids:
-            address_id = get_or_create_address(self.cur, address, SOURCE)
+            address_id = get_or_create_address(self.cur, address, self.source)
             self.cur.execute("UPDATE addresses SET chains = %s WHERE id = %s AND chains IS NULL", (CHAIN, address_id))
-            self.cur.execute("INSERT INTO clients DEFAULT VALUES RETURNING id")
-            link_address(self.cur, OWNER_CLIENT, self.cur.fetchone()[0], address_id)
+            self.cur.execute(
+                "SELECT 1 FROM linkaddresses WHERE owner = %s AND address = %s LIMIT 1", (OWNER_CLIENT, address_id)
+            )
+            if self.cur.fetchone() is None:
+                self.cur.execute("INSERT INTO clients DEFAULT VALUES RETURNING id")
+                link_address(self.cur, OWNER_CLIENT, self.cur.fetchone()[0], address_id)
             self.address_ids[address] = address_id
         return self.address_ids[address]
 
-    def add_transactions(self, rows: list[tuple]) -> None:
-        psycopg2.extras.execute_values(
+    def forget(self) -> None:
+        """Drops the cached ids, after the transaction they were created in
+        was rolled back."""
+        self.address_ids.clear()
+
+    def add_transactions(self, rows: list[tuple]) -> int:
+        """Inserts `rows`, skipping any already stored; returns how many
+        were new."""
+        inserted = psycopg2.extras.execute_values(
             self.cur,
             """
             INSERT INTO client_transactions (client, server, amount, currency, chain, tx_hash, log_index, timestamp)
             VALUES %s
             ON CONFLICT (tx_hash, log_index, server) DO NOTHING
+            RETURNING 1
             """,
             rows,
             page_size=1000,
+            fetch=True,
         )
+        return len(inserted)
+
+
+def client_totals(cur) -> list[dict]:
+    """Every Solana client in client_transactions, with its transfers and
+    USDC per server (most USDC first), sorted by address."""
+    cur.execute(
+        """
+        SELECT a.address, s.name, count(*), sum(ct.amount::numeric)
+        FROM client_transactions ct
+        JOIN addresses a ON a.id = ct.client
+        JOIN server s ON s.id = ct.server
+        WHERE ct.chain = %s
+        GROUP BY a.address, s.name
+        """,
+        (CHAIN,),
+    )
+    totals: dict[str, list[dict]] = defaultdict(list)
+    for client, server, count, amount in cur.fetchall():
+        totals[client].append({"server": server, "transfers": count, "usdc": amount})
+    clients = []
+    for client in sorted(totals):
+        servers = sorted(totals[client], key=lambda s: -s["usdc"])
+        clients.append({"address": client, "servers": [{**s, "usdc": _plain(s["usdc"])} for s in servers]})
+    return clients
 
 
 def main() -> None:
-    rpc = solana.SolanaRpc(solana.helius_url(), solana.helius_rps())
+    rpc, rpc_name, rpc_hint = solana.rpc_from_args(*parse_args())
+    log = ProgressLog(PROGRESS_NAME)
     preflight.check_or_exit(localdb.preflight_checks)
-    check_not_gathered()
+    check_not_gathered(log)
 
-    solana.check_answering(rpc, "Helius (check HELIUS_API_KEY)")
+    solana.check_answering(rpc, rpc_name + rpc_hint)
 
     conn = localdb.connect_existing()
     try:
@@ -225,89 +294,105 @@ def main() -> None:
         sys.exit(2)
 
     total = len(server_addresses)
-    print(f"checking {total:,} server address(es) for USDC transfers on Solana")
+    done = 0
+    missing_total = 0
+    for record in log.load():
+        if record["address"] in server_addresses:
+            missing_total += record.get("missing", 0)
+            done += 1
+            del server_addresses[record["address"]]
+    print(f"checking {total:,} server address(es) for USDC transfers on Solana, through {rpc_name}")
+    if done:
+        print(f"resuming: {done:,} of {total:,} already done, saved in {log.path.relative_to(GATHER_ROOT)}")
 
-    # client -> server name -> [transfers, USDC]
-    totals: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(lambda: [0, Decimal(0)]))
     failed: list[dict] = []
     transaction_rows = 0
-    missing_total = 0
     consecutive_failures = 0
 
-    # One transaction for the whole run, committed only at the end.
+    # A transaction per server address, committed once it's been checked.
     conn = localdb.connect_existing()
     try:
         with conn.cursor() as cur, ThreadPoolExecutor(max_workers=TX_WORKERS) as pool:
-            store = ClientStore(cur)
-            for n, (address, servers) in enumerate(server_addresses.items(), 1):
+            store = ClientStore(cur, rpc_name)
+            for n, (address, servers) in enumerate(server_addresses.items(), done + 1):
                 print(f"[{n}/{total}] {address} ", end="", flush=True)
                 try:
                     transfers, _accounts, missing = fetch_transfers(rpc, pool, address)
+                except solana.UsageExhausted as exc:
+                    print(
+                        f"\n{exc} -- stopping. Progress is saved; run this again to carry on once the "
+                        "credits have reset (or with --rpc-url or --public-rpc).",
+                        file=sys.stderr,
+                    )
+                    os._exit(1)  # don't wait for the pool's queued requests
                 except (requests.RequestException, RuntimeError, ValueError, KeyError) as exc:
-                    print(f"\n  failed: {exc}")
+                    print(f"\n  failed: {exc}", flush=True)
                     failed.append({"address": address, "servers": [name for _id, name in servers], "error": str(exc)})
                     consecutive_failures += 1
                     if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
-                        print(f"stopping: {consecutive_failures} failures in a row -- nothing written", file=sys.stderr)
-                        sys.exit(1)
+                        print(
+                            f"stopping: {consecutive_failures} failures in a row -- progress is saved; "
+                            "run this again to carry on from here.",
+                            file=sys.stderr,
+                        )
+                        os._exit(1)  # don't wait for the pool's queued requests
                     continue
                 consecutive_failures = 0
-                missing_total += missing
 
                 rows = []
                 clients: set[str] = set()
                 usdc = Decimal(0)
-                for transfer in transfers:
-                    client = transfer["client"]
-                    if client == address:
-                        continue
-                    client_id = store.client_address_id(client)
-                    clients.add(client)
-                    usdc += transfer["amount"]
-                    for server_id, name in servers:
-                        rows.append(
-                            (
-                                client_id,
-                                server_id,
-                                _plain(transfer["amount"]),
-                                CURRENCY,
-                                CHAIN,
-                                transfer["signature"],
-                                transfer["position"],
-                                transfer["time"],
+                try:
+                    for transfer in transfers:
+                        client = transfer["client"]
+                        if client == address:
+                            continue
+                        client_id = store.client_address_id(client)
+                        clients.add(client)
+                        usdc += transfer["amount"]
+                        for server_id, _name in servers:
+                            rows.append(
+                                (
+                                    client_id,
+                                    server_id,
+                                    _plain(transfer["amount"]),
+                                    CURRENCY,
+                                    CHAIN,
+                                    transfer["signature"],
+                                    transfer["position"],
+                                    transfer["time"],
+                                )
                             )
-                        )
-                        entry = totals[client][name]
-                        entry[0] += 1
-                        entry[1] += transfer["amount"]
-                store.add_transactions(rows)
-                transaction_rows += len(rows)
+                    inserted = store.add_transactions(rows)
+                    conn.commit()
+                except BaseException:
+                    conn.rollback()
+                    store.forget()
+                    raise
+                log.append({"address": address, "missing": missing})
+                missing_total += missing
+                transaction_rows += inserted
                 shared = f", shared by {len(servers)} servers" if len(servers) > 1 else ""
                 not_returned = f", {missing:,} transaction(s) not returned by the RPC" if missing else ""
                 print(
                     f"\n  {len(transfers):,} transfer(s) from {len(clients):,} client(s), "
-                    f"{_plain(usdc)} USDC{shared}{not_returned}"
+                    f"{_plain(usdc)} USDC{shared}{not_returned}",
+                    flush=True,
                 )
-        conn.commit()
+            clients_out = client_totals(cur)
     except KeyboardInterrupt:
-        print("\ninterrupted -- nothing written", file=sys.stderr)
+        print("\ninterrupted -- progress is saved; run this again to carry on from here.", file=sys.stderr)
         os._exit(130)  # don't wait for the pool's queued requests
     finally:
         conn.close()
 
-    clients_out = []
-    for client, by_server in sorted(totals.items()):
-        servers_out = [
-            {"server": name, "transfers": count, "usdc": _plain(amount)}
-            for name, (count, amount) in sorted(by_server.items(), key=lambda item: -item[1][1])
-        ]
-        clients_out.append({"address": client, "servers": servers_out})
     write_json(
         OUTPUT_PATH,
         {
             "gathered_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "chain": CHAIN,
             "currency": CURRENCY,
+            "rpc": rpc_name,
             "server_addresses_checked": total - len(failed),
             "transactions_not_returned": missing_total,
             "failed": failed,
@@ -315,11 +400,17 @@ def main() -> None:
         },
     )
     print(
-        f"found {len(clients_out):,} client(s); stored {transaction_rows:,} client transaction row(s); "
-        f"wrote {OUTPUT_PATH.relative_to(GATHER_ROOT)}"
+        f"found {len(clients_out):,} client(s) in all; stored {transaction_rows:,} client transaction row(s) "
+        f"this run; wrote {OUTPUT_PATH.relative_to(GATHER_ROOT)}"
     )
     if failed:
-        print(f"{len(failed)} server address(es) couldn't be checked -- listed in {OUTPUT_PATH.name}", file=sys.stderr)
+        print(
+            f"{len(failed)} server address(es) couldn't be checked -- listed in {OUTPUT_PATH.name}. To retry just "
+            f"those, delete {OUTPUT_PATH.name} and run this again (progress is kept until a run has no failures).",
+            file=sys.stderr,
+        )
+    else:
+        log.remove()
 
 
 if __name__ == "__main__":

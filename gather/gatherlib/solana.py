@@ -5,18 +5,22 @@ for it, and reading transfers out of parsed transactions.
 Uses Solana's standard JSON-RPC methods only (getTokenAccountsByOwner,
 getSignaturesForAddress, getTransaction), so any RPC endpoint works:
 Helius (https://www.helius.dev/) by default, with its key in gather/.env
-as HELIUS_API_KEY, or Solana's free public endpoint, which is much more
+as HELIUS_API_KEY; any other provider's endpoint (Alchemy, QuickNode,
+Triton, ...) with --rpc-url, its URL in gather/.env as SOLANA_RPC_URL; or
+Solana's free public endpoint with --public-rpc, which is much more
 heavily rate limited.
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Iterator
+from urllib.parse import urlsplit
 
 import requests
 
@@ -24,6 +28,7 @@ HELIUS_URL = "https://mainnet.helius-rpc.com/?api-key={key}"
 PUBLIC_URL = "https://api.mainnet-beta.solana.com"
 DEFAULT_HELIUS_RPS = 10.0  # Helius's free plan limit
 DEFAULT_PUBLIC_RPS = 3.0  # the public endpoint allows ~4 getTransaction calls a second
+DEFAULT_CUSTOM_RPS = 10.0  # roughly what free plans allow; set SOLANA_RPC_RPS for more
 
 USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 USDC_DECIMALS = 6
@@ -69,13 +74,85 @@ def helius_url() -> str:
     return HELIUS_URL.format(key=key)
 
 
+def _env_rps(name: str, default: float) -> float:
+    try:
+        rps = float(os.getenv(name) or default)
+    except ValueError:
+        rps = 0
+    if rps <= 0:
+        print(f"{name} in gather/.env must be a number more than 0.", file=sys.stderr)
+        sys.exit(2)
+    return rps
+
+
 def helius_rps() -> float:
     """Requests a second for Helius: HELIUS_RPS, or DEFAULT_HELIUS_RPS."""
-    try:
-        return float(os.getenv("HELIUS_RPS") or DEFAULT_HELIUS_RPS)
-    except ValueError:
-        print("HELIUS_RPS in gather/.env must be a number.", file=sys.stderr)
+    return _env_rps("HELIUS_RPS", DEFAULT_HELIUS_RPS)
+
+
+def custom_url() -> str:
+    """The RPC URL in SOLANA_RPC_URL; exits with a message if it isn't set
+    or isn't an http(s) URL."""
+    url = (os.getenv("SOLANA_RPC_URL") or "").strip()
+    if not url:
+        print(
+            "SOLANA_RPC_URL isn't set -- add your RPC provider's Solana mainnet URL (with its key) "
+            "to gather/.env to use --rpc-url.",
+            file=sys.stderr,
+        )
         sys.exit(2)
+    if urlsplit(url).scheme not in ("http", "https") or not urlsplit(url).hostname:
+        print("SOLANA_RPC_URL in gather/.env must be an http(s) URL.", file=sys.stderr)
+        sys.exit(2)
+    return url
+
+
+def add_rpc_arguments(parser: argparse.ArgumentParser) -> None:
+    """The options choosing which RPC endpoint to use, and how fast."""
+    endpoint = parser.add_mutually_exclusive_group()
+    endpoint.add_argument(
+        "--public-rpc",
+        action="store_true",
+        help=f"use Solana's public RPC endpoint ({PUBLIC_URL}) instead of Helius -- no key needed, but much slower",
+    )
+    endpoint.add_argument(
+        "--rpc-url",
+        action="store_true",
+        help="use the RPC endpoint in SOLANA_RPC_URL (in gather/.env) instead of Helius -- e.g. Alchemy, "
+        "QuickNode or Triton. The URL is read from .env, not given here, so its key stays out of your "
+        "shell history",
+    )
+    parser.add_argument(
+        "--rps",
+        type=float,
+        help=f"requests a second (default: HELIUS_RPS or {DEFAULT_HELIUS_RPS:g} for Helius, "
+        f"SOLANA_RPC_RPS or {DEFAULT_CUSTOM_RPS:g} for --rpc-url, {DEFAULT_PUBLIC_RPS:g} for --public-rpc)",
+    )
+
+
+def rpc_from_args(parser: argparse.ArgumentParser, args: argparse.Namespace) -> tuple["SolanaRpc", str, str]:
+    """(client, name, what to check if it doesn't answer) for the endpoint
+    the options chose. The name never includes the URL's path or query,
+    where providers put the key -- for --rpc-url it's just the host."""
+    if args.rps is not None and args.rps <= 0:
+        parser.error("--rps must be more than 0")
+    if args.public_rpc:
+        return SolanaRpc(PUBLIC_URL, args.rps or DEFAULT_PUBLIC_RPS), "Solana public RPC", ""
+    if args.rpc_url:
+        url = custom_url()
+        rps = args.rps or _env_rps("SOLANA_RPC_RPS", DEFAULT_CUSTOM_RPS)
+        return SolanaRpc(url, rps), urlsplit(url).hostname, " (check SOLANA_RPC_URL)"
+    return SolanaRpc(helius_url(), args.rps or helius_rps()), "Helius", " (check HELIUS_API_KEY)"
+
+
+# What providers say (in lower case) once a plan's credits are used up:
+# Helius, then Alchemy.
+USAGE_EXHAUSTED_MESSAGES = ("max usage reached", "monthly capacity limit")
+
+
+class UsageExhausted(RuntimeError):
+    """The RPC provider has stopped serving this key until its plan's
+    credits reset -- not worth retrying."""
 
 
 class SolanaRpc:
@@ -132,6 +209,11 @@ class SolanaRpc:
                 # Not str(exc): it includes the URL, and so the API key.
                 problem = type(exc).__name__
             else:
+                if response.status_code == 429 and any(m in response.text.lower() for m in USAGE_EXHAUSTED_MESSAGES):
+                    # The provider's answer once the plan's credits are used
+                    # up: it won't change until they reset, so waiting is no
+                    # use.
+                    raise UsageExhausted(f"{method}: the RPC provider says the plan's usage limit has been reached")
                 if response.status_code == 429 or response.status_code >= 500:
                     problem = f"HTTP {response.status_code}"
                     try:

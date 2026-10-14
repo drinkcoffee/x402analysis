@@ -177,3 +177,41 @@ CREATE TABLE IF NOT EXISTS address_metadata (
     updated  DATE NOT NULL DEFAULT CURRENT_DATE,
     CONSTRAINT address_metadata_address_chain_key UNIQUE (address, chain)
 );
+
+-- --------------------------------------------------------------------------
+-- Sanctions lists, loaded by 20_gather_sanctions_lists.py, which replaces
+-- everything in these two tables each time it runs.
+-- --------------------------------------------------------------------------
+
+-- sanctions_entries: one sanctioned person, entity, vessel or aircraft on
+-- one list -- `list` is "OFAC SDN" or "AU DFAT" (Australia's consolidated
+-- list), and `list_id` its id there (OFAC's uid; DFAT's reference number).
+-- Someone on both lists has an entry for each. `aliases` and `programs`
+-- are "; "-separated; `details` holds the rest of what the list says
+-- (dates of birth, physical addresses, ID documents, remarks, ...), which
+-- differs between the lists.
+CREATE TABLE IF NOT EXISTS sanctions_entries (
+    id        SERIAL PRIMARY KEY,
+    list      TEXT NOT NULL,
+    list_id   TEXT NOT NULL,
+    name      TEXT NOT NULL,
+    type      TEXT,  -- "individual", "entity", "vessel" or "aircraft"
+    aliases   TEXT,
+    programs  TEXT,
+    details   JSONB,
+    updated   DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT sanctions_entries_list_list_id_key UNIQUE (list, list_id)
+);
+
+-- sanctions_addresses: a blockchain address listed for a sanctions entry.
+-- `currency` is as the list gives it (e.g. "ETH", "XBT", "USDT", "TRX").
+-- Ethereum-style (0x...) addresses are stored in lower case, the rest as
+-- listed (base58 and bech32 addresses are case-sensitive).
+CREATE TABLE IF NOT EXISTS sanctions_addresses (
+    id        SERIAL PRIMARY KEY,
+    entry     INTEGER NOT NULL REFERENCES sanctions_entries(id) ON DELETE CASCADE,
+    currency  TEXT NOT NULL,
+    address   TEXT NOT NULL,
+    CONSTRAINT sanctions_addresses_entry_currency_address_key UNIQUE (entry, currency, address)
+);
+CREATE INDEX IF NOT EXISTS sanctions_addresses_address_idx ON sanctions_addresses (address);
