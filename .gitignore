@@ -230,3 +230,7 @@ tempdata/
 # gather/'s local Postgres database (data directory, logs) -- see
 # gather/gatherlib/localdb.py. Its dataset/ directory IS committed.
 /gather/localdb/
+
+# gather/dataset/funders.json is over GitHub's 100 MB limit; commit the
+# pieces gather/40_split_funders_file.py splits it into instead.
+/gather/dataset/funders.json

@@ -1,0 +1,26 @@
+% Written by gather/30_countries_fac.py from dataset/facilitators.json -- don't edit by hand.
+% Needs \usepackage{booktabs}.
+\begin{table}[htbp]
+  \centering
+  \caption{Countries of the 28 facilitators' API and documentation servers}
+  \label{tab:facilitators-countries}
+  \begin{tabular}{lrr}
+    \toprule
+    Country & API servers & Documentation servers \\
+    \midrule
+    Canada & 14 & 12 \\
+    United States & 9 & 15 \\
+    Germany & 1 & 0 \\
+    Japan & 1 & 0 \\
+    Netherlands & 1 & 0 \\
+    Australia & 0 & 1 \\
+    Unknown & 2 & 0 \\
+    \midrule
+    Total & 28 & 28 \\
+    \bottomrule
+  \end{tabular}
+
+  \smallskip
+  \footnotesize Countries are where each server's IP address geolocates. Servers behind a CDN, such as
+  Cloudflare, geolocate to the CDN's location rather than the origin server's.
+\end{table}

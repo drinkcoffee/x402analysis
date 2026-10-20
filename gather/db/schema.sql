@@ -215,3 +215,33 @@ CREATE TABLE IF NOT EXISTS sanctions_addresses (
     CONSTRAINT sanctions_addresses_entry_currency_address_key UNIQUE (entry, currency, address)
 );
 CREATE INDEX IF NOT EXISTS sanctions_addresses_address_idx ON sanctions_addresses (address);
+
+-- erc8004_agents: one AI agent registered in an ERC-8004 identity registry
+-- -- found by 11_gather_base_erc8004.py (chain "base"). `agent_id` is its
+-- token id in the registry; `owner` the address that owns it; and
+-- `agent_wallet` the wallet the registry has verified for it
+-- (getAgentWallet), if any. `agent_uri` is where its registration file
+-- is (inline data:, https or ipfs), and `registration` that file as
+-- fetched -- unless it was too big, or couldn't be fetched or read, which
+-- `error` says. From the file: `name`, `description`, `x402_support` (its
+-- x402Support flag), and the endpoints of its services named "web", "MCP"
+-- and "agentWallet" ("; "-separated if more than one). Ethereum-style
+-- addresses are stored in lower case.
+CREATE TABLE IF NOT EXISTS erc8004_agents (
+    id                 SERIAL PRIMARY KEY,
+    chain              TEXT NOT NULL,
+    agent_id           INTEGER NOT NULL,
+    owner              TEXT NOT NULL,
+    agent_wallet       TEXT,
+    agent_uri          TEXT,
+    name               TEXT,
+    description        TEXT,
+    x402_support       BOOLEAN,
+    web_endpoints      TEXT,
+    mcp_endpoints      TEXT,
+    wallet_endpoints   TEXT,
+    registration       JSONB,
+    error              TEXT,
+    updated            DATE NOT NULL DEFAULT CURRENT_DATE,
+    CONSTRAINT erc8004_agents_chain_agent_id_key UNIQUE (chain, agent_id)
+);
