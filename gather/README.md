@@ -23,6 +23,8 @@ module says where it came from.
 | `30_countries_fac.py` | Counts the facilitators' API and documentation servers by the country their IP address geolocates to (from `dataset/facilitators.json`), and writes them as a LaTeX table to `dataset/facilitators-countries.tex`, sorted by API servers. Doesn't use the database; can be re-run. |
 | `31_countries_servers.py` | The same for servers (from `dataset/services.json`): writes `dataset/servers-countries.tex`, with servers that have no documentation URL in a row of their own. Doesn't use the database; can be re-run. |
 | `32_service_categories.py` | Counts the services in each category (from the hand-annotated `dataset/services-annotated.json`, names as annotated), writes them as a LaTeX table to `dataset/service-categories.tex` in alphabetical order (`*` categories first) with Uncategorised and Service inactive last, and prints the same table. Doesn't use the database; can be re-run. |
+| `33_categorise_metadata_base.py` | Prints the unique names and the unique tags strings in `dataset/metadata_base.json` (tags not split on `;`), in two sections, alphabetically, each with the number of addresses that have it. Doesn't use the database; can be re-run. |
+| `34_check_sanctions_base.py` | Checks every facilitator, server, client and funder address in `dataset/` (Base and Solana; funders from `funders.json` or its pieces) against `dataset/sanctions_list.json`, and prints each one on a list -- address, kinds, and what it's listed as -- or `None`. Doesn't use the database; re-run after 20 or after gathering more addresses. |
 | `40_split_funders_file.py` | `split` cuts `dataset/funders.json` (over GitHub's 100 MB limit, so it's in `.gitignore`) into `dataset/funders.part1.json` and `funders.part2.json`, each valid JSON and about 72 MB; `restore` rebuilds `funders.json` from them, byte-for-byte (checked by SHA-256). Restore won't overwrite a different `funders.json` without `--force`. Doesn't use the database. |
 
 `01`, `02`, `05`, `06` and `09` won't run if their JSON file already exists or
@@ -64,6 +66,8 @@ gather/.venv/bin/python gather/20_gather_sanctions_lists.py   # any time after 0
 gather/.venv/bin/python gather/30_countries_fac.py            # any time after 01; re-run after 01
 gather/.venv/bin/python gather/31_countries_servers.py        # any time after 02; re-run after 02
 gather/.venv/bin/python gather/32_service_categories.py       # re-run after editing dataset/services-annotated.json
+gather/.venv/bin/python gather/33_categorise_metadata_base.py > names-and-tags.txt
+gather/.venv/bin/python gather/34_check_sanctions_base.py       # after 20 and 07
 gather/.venv/bin/python gather/40_split_funders_file.py split  # after 07, before committing; restore after a clone
 ```
 
