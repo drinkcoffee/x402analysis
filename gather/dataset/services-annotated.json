@@ -10864,7 +10864,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/x402/address-intel",
@@ -10884,7 +10884,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/x402/agent-pay-gate",
@@ -10934,7 +10934,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev"
         },
         {
           "path": "/api/x402/ai-extract-batch",
@@ -10964,7 +10964,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "llm-summarise"
         },
         {
           "path": "/api/x402/ai-token-report",
@@ -12855,7 +12855,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-paid-listing"
         },
         {
           "path": "/v1/renewals",
@@ -12865,7 +12865,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-paid-listing"
         }
       ],
       "fingerprints": {
@@ -37491,7 +37491,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*gambling"
         }
       ],
       "fingerprints": {
@@ -37521,7 +37521,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*gambling"
         }
       ],
       "fingerprints": {
@@ -37551,7 +37551,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-list"
         },
         {
           "path": "/report",
@@ -37561,7 +37561,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "x402-service-check"
         },
         {
           "path": "/snapshot",
@@ -37571,7 +37571,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "x402-list"
         }
       ],
       "fingerprints": {
@@ -46983,7 +46983,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/ascii85-decode",
@@ -46993,7 +46993,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/ascii85-encode",
@@ -47003,7 +47003,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base32-decode",
@@ -47013,7 +47013,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base32-encode",
@@ -47023,7 +47023,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base32hex-decode",
@@ -47033,7 +47033,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base32hex-encode",
@@ -47043,7 +47043,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base36-decode",
@@ -47053,7 +47053,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base36-encode",
@@ -47063,7 +47063,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base45-decode",
@@ -47073,7 +47073,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base45-encode",
@@ -47083,7 +47083,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58-decode",
@@ -47093,7 +47093,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58-encode",
@@ -47103,7 +47103,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58check-p2pkh-decode",
@@ -47113,7 +47113,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58check-p2pkh-encode",
@@ -47123,7 +47123,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58check-p2sh-decode",
@@ -47133,7 +47133,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base58check-p2sh-encode",
@@ -47143,7 +47143,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base62-decode",
@@ -47153,7 +47153,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base62-encode",
@@ -47163,7 +47163,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/base64-decode",
@@ -47213,7 +47213,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/bytes-si",
@@ -47223,7 +47223,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-camel",
@@ -47233,7 +47233,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-capitalize",
@@ -47243,7 +47243,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-cobol",
@@ -47253,7 +47253,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-constant",
@@ -47263,7 +47263,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-dot",
@@ -47273,7 +47273,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/case-flat",
@@ -48183,7 +48183,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-mr",
@@ -48373,7 +48373,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-tl",
@@ -48383,7 +48383,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-tn",
@@ -48393,7 +48393,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-tr",
@@ -48403,7 +48403,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-ua",
@@ -48413,7 +48413,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-va",
@@ -48423,7 +48423,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-vg",
@@ -48433,7 +48433,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-iban-xk",
@@ -48443,7 +48443,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-ip-cidr4",
@@ -48453,7 +48453,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-ip-cidr6",
@@ -48463,7 +48463,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-ip-ipv4",
@@ -48473,7 +48473,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-ip-ipv6",
@@ -48483,7 +48483,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-isbn",
@@ -48493,7 +48493,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-isbn-10",
@@ -48503,7 +48503,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-isbn-13",
@@ -48513,7 +48513,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-issn",
@@ -48523,7 +48523,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-jwt-shape",
@@ -48533,7 +48533,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-latlon",
@@ -48563,7 +48563,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-mac-dash",
@@ -48573,7 +48573,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-mac-dot",
@@ -48583,7 +48583,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-mime",
@@ -48593,7 +48593,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-mod97",
@@ -48603,7 +48603,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-phone-e164",
@@ -48613,7 +48613,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-phone-min10",
@@ -48643,7 +48643,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-plus-code",
@@ -48653,7 +48653,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-schema-2019-09",
@@ -48713,7 +48713,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-semver-loose",
@@ -48723,7 +48723,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-semver-strict",
@@ -48733,7 +48733,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-semver-tilde",
@@ -48743,7 +48743,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-upc-a",
@@ -48773,7 +48773,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-url-http",
@@ -48783,7 +48783,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-url-https",
@@ -48793,7 +48793,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-url-web",
@@ -48803,7 +48803,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-vat-at",
@@ -48973,7 +48973,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-vat-se",
@@ -48983,7 +48983,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-vat-si",
@@ -48993,7 +48993,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/check-vat-sk",
@@ -49003,7 +49003,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-adler32-dec",
@@ -49013,7 +49013,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-adler32-hex",
@@ -49023,7 +49023,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc16-ccitt-dec",
@@ -49033,7 +49033,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc16-ccitt-hex",
@@ -49043,7 +49043,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc16-dec",
@@ -49053,7 +49053,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc16-hex",
@@ -49063,7 +49063,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc32-dec",
@@ -49073,7 +49073,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc32-hex",
@@ -49083,7 +49083,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc32c-dec",
@@ -49093,7 +49093,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-crc32c-hex",
@@ -49103,7 +49103,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-fletcher16-dec",
@@ -49113,7 +49113,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-fletcher16-hex",
@@ -49123,7 +49123,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-fletcher32-dec",
@@ -49133,7 +49133,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/checksum-fletcher32-hex",
@@ -49143,7 +49143,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/chunk-text",
@@ -49153,7 +49153,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev"
         },
         {
           "path": "/v1/color-hex-to-hsl",
@@ -49233,7 +49233,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/crockford-encode",
@@ -49243,7 +49243,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "software-dev"
         },
         {
           "path": "/v1/cron-describe",
@@ -49383,7 +49383,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/css-a-hreflang",
@@ -49393,7 +49393,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/v1/css-a-rel",
@@ -84646,7 +84646,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "x402-management"
         },
         {
           "path": "/api/x402/x402-facilitator-cost-comparator",
@@ -84656,7 +84656,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-management"
         },
         {
           "path": "/api/x402/x402-facilitator-readiness-passport",
@@ -84666,7 +84666,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "x402-management"
         },
         {
           "path": "/api/x402/x402-failure-fact-classifier",
@@ -84676,7 +84676,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-management"
         },
         {
           "path": "/api/x402/x402-final-total-delta-guard",
@@ -84686,7 +84686,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "x402-management"
         },
         {
           "path": "/api/x402/x402-llms-txt-agent-buyer-path-mapper",
@@ -84696,7 +84696,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-machine-payment-treasury-dust-map",
@@ -84706,7 +84706,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-app-store-readiness-concierge",
@@ -84716,7 +84716,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-elicitation-consent-transcript-auditor",
@@ -84726,7 +84726,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "researcher"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-operation-stability-ledger",
@@ -84736,7 +84736,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-paid-route-boundary-mapper",
@@ -84746,7 +84746,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-paid-tool-permission-scope-auditor",
@@ -84756,7 +84756,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-registry-release-quality-gate",
@@ -84766,7 +84766,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-resource-shelf-classifier",
@@ -84776,7 +84776,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-sampling-exposure-card",
@@ -84786,7 +84786,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-schema-curb-appeal-grader",
@@ -84796,7 +84796,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-mcp-tool-change-blast-radius-analyzer",
@@ -84806,7 +84806,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-merchant-of-record-boundary-explainer",
@@ -84816,7 +84816,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-multi-chain-facilitator-failover-planner",
@@ -84826,7 +84826,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-multi-provider-challenge-normalizer",
@@ -84836,7 +84836,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "llm-management"
         },
         {
           "path": "/api/x402/x402-network-token-route-planner",
@@ -85066,7 +85066,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-list"
         },
         {
           "path": "/api/v1/x402/routes",
@@ -85076,7 +85076,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-list"
         }
       ],
       "fingerprints": {
@@ -85436,7 +85436,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "llm-unknown"
         }
       ],
       "fingerprints": {
@@ -86744,7 +86744,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "software-dev"
+          "category": "*agent-agent-communications"
         },
         {
           "path": "/watch/standard",
@@ -86754,7 +86754,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "*agent-agent-communications"
         }
       ],
       "fingerprints": {
@@ -86814,7 +86814,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "llm-inference-uncensored"
         }
       ],
       "fingerprints": {
@@ -89831,7 +89831,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "llm-inference"
         },
         {
           "path": "/v1/x402/hive-research/analyses.create",
@@ -89851,7 +89851,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "health"
+          "category": "lead-generation"
         },
         {
           "path": "/v1/x402/leadgen-data/leads.enrich",
@@ -89861,7 +89861,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "health"
+          "category": "lead-generation"
         },
         {
           "path": "/v1/x402/media-studio/generations.create",
@@ -90457,7 +90457,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "dating"
         }
       ],
       "fingerprints": {
@@ -94506,7 +94506,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "health"
         },
         {
           "path": "/api/calc/gupta_mica",
@@ -104167,7 +104167,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "travel"
+          "category": "*esim-list"
         },
         {
           "path": "/api/catalog/esims/orders/info",
@@ -104177,7 +104177,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "llm"
+          "category": "*esim-status"
         },
         {
           "path": "/api/catalog/esims/purchase/info",
@@ -104187,7 +104187,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*esim-purchase"
         },
         {
           "path": "/api/catalog/topups/countries",
@@ -104197,7 +104197,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*esim-list"
         },
         {
           "path": "/api/catalog/topups/offers",
@@ -104207,7 +104207,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "util"
+          "category": "*esim-list"
         },
         {
           "path": "/api/catalog/topups/purchase/info",
@@ -104217,7 +104217,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*esim-purchase"
         },
         {
           "path": "/api/catalog/topups/regions",
@@ -104227,7 +104227,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*esim-list"
         },
         {
           "path": "/api/catalog/vouchers/brands",
@@ -104237,7 +104237,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "*giftcard-list"
         },
         {
           "path": "/api/catalog/vouchers/countries",
@@ -104247,7 +104247,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*giftcard"
+          "category": "*giftcard-list"
         },
         {
           "path": "/api/catalog/vouchers/filters",
@@ -104257,7 +104257,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "search"
+          "category": "*giftcard-list"
         },
         {
           "path": "/api/catalog/vouchers/offers",
@@ -104267,7 +104267,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*giftcard"
+          "category": "*giftcard-list"
         },
         {
           "path": "/api/catalog/vouchers/purchase/info",
@@ -104277,7 +104277,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "*giftcard-purchase"
         }
       ],
       "fingerprints": {
@@ -104789,7 +104789,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/v1/facebook/ad-library/ads/search",
@@ -104809,7 +104809,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/facebook/marketplace/locations/search",
@@ -104819,7 +104819,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/facebook/posts",
@@ -104849,7 +104849,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "software-dev"
+          "category": "social-media"
         },
         {
           "path": "/v1/google/ad-library/advertisers/search",
@@ -104859,7 +104859,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/v1/instagram/posts/transcript",
@@ -104929,7 +104929,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/linkedin/posts",
@@ -104949,7 +104949,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/linkedin/profiles",
@@ -104969,7 +104969,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/pinterest/search",
@@ -104979,7 +104979,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/v1/reddit/posts",
@@ -104989,7 +104989,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/v1/reddit/posts/comments",
@@ -104999,7 +104999,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/v1/reddit/search",
@@ -105009,7 +105009,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/v1/threads/posts",
@@ -105069,7 +105069,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "social-media"
         },
         {
           "path": "/v1/tiktok/users/search",
@@ -105079,7 +105079,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/v1/tiktok/videos/comments",
@@ -105089,7 +105089,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "social-media"
         },
         {
           "path": "/v1/twitter/profiles/:handle",
@@ -105129,7 +105129,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/web/html",
@@ -105139,7 +105139,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/web/markdown",
@@ -105149,7 +105149,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/web/search",
@@ -105159,7 +105159,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "search"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/youtube/playlists",
@@ -105169,7 +105169,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "social-media"
         }
       ],
       "fingerprints": {
@@ -105719,7 +105719,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "llm-inference"
         }
       ],
       "fingerprints": {
@@ -121409,7 +121409,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "util
+          "category": "util"
         },
         {
           "path": "/nlp/readability",
@@ -143597,7 +143597,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "util"
+          "category": "blockchain"
         },
         {
           "path": "/api/v1/x402/datos/concentracion-tenedores",
@@ -143627,7 +143627,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/v1/x402/datos/poderes-admin",
@@ -143637,7 +143637,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/v1/x402/datos/poderes-emisor-b20",
@@ -143667,7 +143667,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "software-dev"
+          "category": "blockchain"
         }
       ],
       "fingerprints": {
@@ -145047,7 +145047,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "llm-inference"
         }
       ],
       "fingerprints": {
@@ -149084,7 +149084,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "unknown"
         },
         {
           "path": "/x402/esims/search",
@@ -149096,7 +149096,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "*esim-list"
         },
         {
           "path": "/x402/gift-cards/search",
@@ -149108,7 +149108,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*giftcard"
+          "category": "*giftcard-list"
         },
         {
           "path": "/x402/invoice/create",
@@ -149120,7 +149120,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*giftcard-invoice"
         },
         {
           "path": "/x402/invoice/pay",
@@ -149132,7 +149132,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*giftcard-purchase"
         },
         {
           "path": "/x402/invoice/status",
@@ -149144,7 +149144,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*giftcard-invoice"
         },
         {
           "path": "/x402/products/detail",
@@ -149156,7 +149156,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*giftcard-list"
         },
         {
           "path": "/x402/topups/search",
@@ -149168,7 +149168,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "*giftcard-list"
         }
       ],
       "fingerprints": {
@@ -160908,7 +160908,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generation"
         }
       ],
       "fingerprints": {
@@ -171052,7 +171052,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/v1/x402/datos/poderes-emisor-b20",
@@ -173503,7 +173503,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "software-dev"
         }
       ],
       "fingerprints": {
@@ -181706,7 +181706,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-service-check"
         }
       ],
       "fingerprints": {
@@ -226352,7 +226352,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "image"
+          "category": "software-dev"
         }
       ],
       "fingerprints": {
@@ -226431,7 +226431,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "util"
+          "category": "software-dev-game"
         },
         {
           "path": "/v1/asset-procedural",
@@ -226441,7 +226441,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev-game"
         },
         {
           "path": "/v1/cross-game-bridge",
@@ -226451,7 +226451,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev"
         },
         {
           "path": "/v1/economy-sink-sim",
@@ -226471,7 +226471,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/v1/matchmaking-mmr",
@@ -226481,7 +226481,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev-game"
         },
         {
           "path": "/v1/nft-metadata-mutate",
@@ -226491,7 +226491,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "software-dev-game"
         },
         {
           "path": "/v1/npc-dialogue-gen",
@@ -226501,7 +226501,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "software-dev-game"
         },
         {
           "path": "/v1/player-churn-risk",
@@ -272633,7 +272633,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/agentWalletTransfer",
@@ -272645,7 +272645,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-transfer"
         },
         {
           "path": "/agentX402Pay",
@@ -272657,7 +272657,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-transfer"
         },
         {
           "path": "/announceAgentConnection",
@@ -272669,7 +272669,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/auth",
@@ -272681,7 +272681,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/bank-recipients",
@@ -272693,7 +272693,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/cancel-intl-order",
@@ -272705,7 +272705,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/create-reloadable-card",
@@ -272717,7 +272717,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/create-saved-card-link",
@@ -272729,7 +272729,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/createAgentApiKey",
@@ -272741,7 +272741,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/createAgentWallet",
@@ -272753,7 +272753,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/createBankingAccount",
@@ -272765,7 +272765,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/createBankingProfile",
@@ -272777,7 +272777,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/createBankingRecipient",
@@ -272789,7 +272789,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/delete-webhook",
@@ -272801,7 +272801,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "*banking-manage"
         },
         {
           "path": "/deleteAddressBookEntry",
@@ -272813,7 +272813,7 @@
           ],
           "method": "DELETE",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/deleteBankingRecipient",
@@ -272825,7 +272825,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/feedback",
@@ -272837,7 +272837,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/fund-card-balance",
@@ -272849,7 +272849,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-transfer"
         },
         {
           "path": "/get-account-balance",
@@ -272861,7 +272861,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-auth-link",
@@ -272873,7 +272873,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-card",
@@ -272885,7 +272885,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-transfer"
         },
         {
           "path": "/get-card-data",
@@ -272897,7 +272897,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-card-deposit-address",
@@ -272909,7 +272909,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-kyc-link",
@@ -272921,7 +272921,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-kyc-status",
@@ -272933,7 +272933,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-payment-status",
@@ -272945,7 +272945,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-push-to-card",
@@ -272957,7 +272957,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-transfer"
         },
         {
           "path": "/get-saved-cards",
@@ -272969,7 +272969,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-webhook",
@@ -272981,7 +272981,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "*banking-manage"
         },
         {
           "path": "/get-withdrawal-status",
@@ -272993,7 +272993,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/getAgentSpendLimit",
@@ -273005,7 +273005,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/getAgentWallet",
@@ -273017,7 +273017,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/getBankingApplication",
@@ -273029,7 +273029,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/getBankingProfileStatus",
@@ -273041,7 +273041,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/getBankingTransaction",
@@ -273053,7 +273053,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/list-card-transactions",
@@ -273065,7 +273065,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/listAddressBook",
@@ -273077,7 +273077,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/listBankingAccounts",
@@ -273089,7 +273089,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/listBankingRecipients",
@@ -273101,7 +273101,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/listBankingTransactions",
@@ -273113,7 +273113,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/order-gift-card",
@@ -273125,7 +273125,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*giftcard"
+          "category": "*giftcard-order"
         },
         {
           "path": "/order-intl-card",
@@ -273137,7 +273137,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*giftcard-order"
         },
         {
           "path": "/payment-recipients",
@@ -273149,7 +273149,7 @@
           ],
           "method": "DELETE",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/refresh",
@@ -273161,7 +273161,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/refresh-card-data",
@@ -273173,7 +273173,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/register-webhook",
@@ -273185,7 +273185,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/saveAddressBookEntry",
@@ -273197,7 +273197,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/search-gift-cards",
@@ -273209,7 +273209,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*giftcard"
+          "category": "*giftcard-list"
         },
         {
           "path": "/search-merchants",
@@ -273221,7 +273221,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "*giftcard-list"
         },
         {
           "path": "/send-bank-payment",
@@ -273233,7 +273233,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-transfer"
         },
         {
           "path": "/send-payment",
@@ -273245,7 +273245,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-transfer"
         },
         {
           "path": "/submitBankingApplication",
@@ -273257,7 +273257,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/updateBankingApplicationDetails",
@@ -273269,7 +273269,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/updateBankingDestination",
@@ -273281,7 +273281,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/uploadBankingDocument",
@@ -273293,7 +273293,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         },
         {
           "path": "/version",
@@ -273305,7 +273305,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "x402-management"
         },
         {
           "path": "/withdraw",
@@ -273317,7 +273317,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*banking-manage"
         },
         {
           "path": "/withdraw-card-balance",
@@ -273329,7 +273329,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*banking-manage"
         }
       ],
       "fingerprints": {
@@ -276823,7 +276823,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-list"
         },
         {
           "path": "/.well-known/locus-tools.json",
@@ -276835,7 +276835,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-list"
         },
         {
           "path": "/api/locus-air-quality-history",
@@ -276847,7 +276847,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-appeal-window",
@@ -276859,7 +276859,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-area-crime-report",
@@ -276871,7 +276871,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-assessment-position",
@@ -276883,7 +276883,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-before-you-sign",
@@ -276895,7 +276895,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-capital-projects",
@@ -276907,7 +276907,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-cleanup-sites",
@@ -276919,7 +276919,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-cmbs-loan-context",
@@ -276931,7 +276931,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-cmbs-maturity-wall",
@@ -276943,7 +276943,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-coastal-overlays",
@@ -276955,7 +276955,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-comps-brief",
@@ -276967,7 +276967,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-data-center-watch",
@@ -276979,7 +276979,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-development-cases",
@@ -276991,7 +276991,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-drinking-water-violations",
@@ -277003,7 +277003,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-electricity-context",
@@ -277015,7 +277015,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-environmental-context",
@@ -277027,7 +277027,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-environmental-history-lookup",
@@ -277039,7 +277039,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-environmental-records-screen",
@@ -277051,7 +277051,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-evaluation-packet",
@@ -277063,7 +277063,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-fair-market-rents",
@@ -277075,7 +277075,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-fema-events",
@@ -277087,7 +277087,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-flood-gauges",
@@ -277099,7 +277099,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-flood-premium-context",
@@ -277111,7 +277111,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-flood-zone",
@@ -277123,7 +277123,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-fraud-alert-pointer",
@@ -277135,7 +277135,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-governing-districts",
@@ -277147,7 +277147,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-groundwater-context",
@@ -277159,7 +277159,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-homeowners-insurance-context",
@@ -277171,7 +277171,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-house-price-index",
@@ -277183,7 +277183,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-housing-stock",
@@ -277195,7 +277195,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-housing-supply-balance",
@@ -277207,7 +277207,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-insurance-context",
@@ -277219,7 +277219,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-landslide-diligence",
@@ -277231,7 +277231,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-large-site-satellite-change",
@@ -277243,7 +277243,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-legistar-property-meetings",
@@ -277253,7 +277253,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-listing-claim-check",
@@ -277263,7 +277263,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-local-fiscal-context",
@@ -277275,7 +277275,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-local-legislation",
@@ -277287,7 +277287,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-local-policy-brief",
@@ -277299,7 +277299,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-local-trend-brief",
@@ -277311,7 +277311,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "util"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-market-context",
@@ -277323,7 +277323,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-metro-permits",
@@ -277335,7 +277335,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-mitigation-incentives",
@@ -277347,7 +277347,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-nearby-places",
@@ -277359,7 +277359,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-nei-emissions-nearby",
@@ -277371,7 +277371,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-nfip-claims",
@@ -277383,7 +277383,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-noise-proximity",
@@ -277395,7 +277395,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "sport"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-nyc-recording-history",
@@ -277407,7 +277407,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-opportunity-zone",
@@ -277419,7 +277419,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-owner-action-brief",
@@ -277431,7 +277431,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-owner-cost-review",
@@ -277443,7 +277443,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-owner-programs",
@@ -277455,7 +277455,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-ownership-loop",
@@ -277467,7 +277467,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-parcel-lookup",
@@ -277479,7 +277479,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "travel"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-parcel-set",
@@ -277491,7 +277491,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-parcel-transfers",
@@ -277503,7 +277503,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-parcel-value",
@@ -277515,7 +277515,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "travel"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-permit-closeout-check",
@@ -277527,7 +277527,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-pfas-occurrence",
@@ -277539,7 +277539,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-place-facts",
@@ -277551,7 +277551,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-place-report",
@@ -277563,7 +277563,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-place-report-batch",
@@ -277575,7 +277575,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-plan-research",
@@ -277587,7 +277587,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-power-water-evidence-pack",
@@ -277599,7 +277599,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-practitioner-read",
@@ -277611,7 +277611,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-program-windows",
@@ -277623,7 +277623,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-flyer",
@@ -277635,7 +277635,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "social-media"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-tax",
@@ -277647,7 +277647,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-tax-context",
@@ -277659,7 +277659,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-tax-estimate",
@@ -277671,7 +277671,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-tax-rates",
@@ -277683,7 +277683,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-property-update",
@@ -277695,7 +277695,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-public-utilities",
@@ -277707,7 +277707,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "health"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-radon-zone",
@@ -277719,7 +277719,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-rcra-handlers",
@@ -277731,7 +277731,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-rebuild-cost-context",
@@ -277743,7 +277743,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-record-batch",
@@ -277755,7 +277755,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-regulated-facility-compliance",
@@ -277767,7 +277767,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-renovation-site-context",
@@ -277779,7 +277779,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-rent-estimate",
@@ -277791,7 +277791,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-rental-operations-brief",
@@ -277803,7 +277803,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-rental-registration-check",
@@ -277815,7 +277815,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-report-compose",
@@ -277827,7 +277827,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-representatives",
@@ -277839,7 +277839,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-road-access",
@@ -277851,7 +277851,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-seismic-design",
@@ -277863,7 +277863,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-soil-context",
@@ -277875,7 +277875,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-solar-property-comparison",
@@ -277887,7 +277887,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-solar-property-screen",
@@ -277899,7 +277899,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-sole-source-aquifer",
@@ -277911,7 +277911,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-special-district-levy",
@@ -277923,7 +277923,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-special-valuation-screen",
@@ -277935,7 +277935,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-storm-events",
@@ -277947,7 +277947,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-tax-liens",
@@ -277959,7 +277959,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-three-property-buyer-comparison",
@@ -277971,7 +277971,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-toxic-releases",
@@ -277983,7 +277983,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-traffic-crash-context",
@@ -277995,7 +277995,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-transaction-follow-up",
@@ -278007,7 +278007,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-transit-context",
@@ -278019,7 +278019,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-transportation-context",
@@ -278031,7 +278031,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "sport"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-underground-storage-tanks",
@@ -278043,7 +278043,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-unemployment",
@@ -278055,7 +278055,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-utility-credits",
@@ -278067,7 +278067,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-valuation-challenge",
@@ -278079,7 +278079,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-water-systems",
@@ -278091,7 +278091,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-wikimedia-commons-area-context",
@@ -278103,7 +278103,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-wikipedia-place-context",
@@ -278115,7 +278115,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-wildfire-history",
@@ -278127,7 +278127,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-wildfire-risk",
@@ -278139,7 +278139,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-workplace-employment-context",
@@ -278151,7 +278151,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-zoning",
@@ -278163,7 +278163,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_3dep_availability",
@@ -278175,7 +278175,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_address_sales_tax",
@@ -278187,7 +278187,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_agent_feedback",
@@ -278199,7 +278199,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "shopping"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_air_quality_current",
@@ -278211,7 +278211,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_appeal_filing_guide",
@@ -278223,7 +278223,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_appeal_outcomes",
@@ -278235,7 +278235,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_appeal_window",
@@ -278247,7 +278247,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_area_incidents",
@@ -278259,7 +278259,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_broadband_check",
@@ -278271,7 +278271,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_capital_projects",
@@ -278283,7 +278283,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_cbp_zip",
@@ -278295,7 +278295,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_cleanup_sites",
@@ -278307,7 +278307,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_coastal_county_catalog",
@@ -278319,7 +278319,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_coastal_county_overlays",
@@ -278331,7 +278331,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_compare_properties",
@@ -278343,7 +278343,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_coverage_check",
@@ -278355,7 +278355,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_coverage_demand",
@@ -278367,7 +278367,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_coverage_map",
@@ -278379,7 +278379,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_data_center_watch",
@@ -278391,7 +278391,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_development_cases",
@@ -278403,7 +278403,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_development_site_discovery",
@@ -278415,7 +278415,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_drinking_water_violations",
@@ -278427,7 +278427,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_drought_status",
@@ -278439,7 +278439,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_electric_utility_resolver",
@@ -278451,7 +278451,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_environmental_history",
@@ -278463,7 +278463,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_environmental_records_screen",
@@ -278475,7 +278475,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_eviction_filings",
@@ -278487,7 +278487,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_fair_market_rents",
@@ -278499,7 +278499,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_fema_events",
@@ -278511,7 +278511,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_fhfa_area_hpi",
@@ -278523,7 +278523,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_flood_determination_inputs",
@@ -278535,7 +278535,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_flood_gauges",
@@ -278547,7 +278547,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_flood_premium_context",
@@ -278559,7 +278559,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_flood_zone",
@@ -278571,7 +278571,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_fraud_alert_pointer",
@@ -278583,7 +278583,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_governing_districts",
@@ -278595,7 +278595,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_groundwater_context",
@@ -278607,7 +278607,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_hmda_tract_context",
@@ -278619,7 +278619,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_homeowners_insurance_context",
@@ -278631,7 +278631,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_house_price_index",
@@ -278643,7 +278643,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_housing_stock",
@@ -278655,7 +278655,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_housing_supply_balance",
@@ -278667,7 +278667,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_landslide_context",
@@ -278679,7 +278679,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_lane_availability",
@@ -278691,7 +278691,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_loan_limits",
@@ -278703,7 +278703,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_local_legislation",
@@ -278715,7 +278715,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_market_context",
@@ -278727,7 +278727,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_medicare_spending",
@@ -278739,7 +278739,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_metro_permits",
@@ -278751,7 +278751,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_mitigation_incentives",
@@ -278763,7 +278763,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_nearby_places",
@@ -278775,7 +278775,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_nfip_claims",
@@ -278787,7 +278787,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_noise_proximity",
@@ -278799,7 +278799,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "sport"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_nyc_recording_history",
@@ -278811,7 +278811,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_open_disaster_assistance",
@@ -278823,7 +278823,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_opportunity_zone",
@@ -278835,7 +278835,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_ordinance_leads",
@@ -278847,7 +278847,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_owner_mortgage_calendar",
@@ -278859,7 +278859,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_owner_programs",
@@ -278871,7 +278871,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_ownership_loop",
@@ -278883,7 +278883,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_parcel_lookup",
@@ -278895,7 +278895,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "travel"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_parcel_set",
@@ -278907,7 +278907,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_parcel_transfers",
@@ -278919,7 +278919,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_permit_rules",
@@ -278931,7 +278931,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_pfas_multimedia_nearby",
@@ -278943,7 +278943,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "util"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_place_facts",
@@ -278955,7 +278955,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_policy_sources",
@@ -278967,7 +278967,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_predevelopment_feasibility",
@@ -278979,7 +278979,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_program_windows",
@@ -278991,7 +278991,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_property_tax_context",
@@ -279003,7 +279003,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_property_tax_estimate",
@@ -279015,7 +279015,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_property_tax_rates",
@@ -279027,7 +279027,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_public_utilities",
@@ -279039,7 +279039,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "health"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_radon_zone",
@@ -279051,7 +279051,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_rcra_handlers",
@@ -279063,7 +279063,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_rebuild_cost_context",
@@ -279075,7 +279075,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_regulated_facility_compliance",
@@ -279087,7 +279087,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_rental_registration_check",
@@ -279099,7 +279099,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_representatives",
@@ -279111,7 +279111,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_request_coverage",
@@ -279123,7 +279123,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_satellite_area_prepare",
@@ -279135,7 +279135,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_satellite_scene_availability",
@@ -279147,7 +279147,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_seismic_design",
@@ -279159,7 +279159,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_service_requests",
@@ -279171,7 +279171,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_sewer_overflow_nearby",
@@ -279183,7 +279183,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_soil_context",
@@ -279195,7 +279195,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_sole_source_aquifer",
@@ -279207,7 +279207,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_source_card_check",
@@ -279219,7 +279219,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_special_district_levy",
@@ -279231,7 +279231,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_special_valuation_screen",
@@ -279243,7 +279243,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_storm_events",
@@ -279255,7 +279255,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_suggest_workflow",
@@ -279267,7 +279267,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_surrounding_parcels",
@@ -279279,7 +279279,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_tax_calendar",
@@ -279291,7 +279291,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_tax_distress",
@@ -279303,7 +279303,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_tax_payment_status",
@@ -279315,7 +279315,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_tax_sale_calendar",
@@ -279327,7 +279327,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_taxing_districts",
@@ -279339,7 +279339,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_terrain_profile",
@@ -279351,7 +279351,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_toxic_releases",
@@ -279363,7 +279363,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_traffic_crash_context",
@@ -279375,7 +279375,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_transit_context",
@@ -279387,7 +279387,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_transportation_context",
@@ -279399,7 +279399,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "sport"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_underground_storage_tanks",
@@ -279411,7 +279411,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_unemployment",
@@ -279423,7 +279423,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_utility_credits",
@@ -279435,7 +279435,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_utility_service_check",
@@ -279447,7 +279447,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_verify_citation",
@@ -279459,7 +279459,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "researcher"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_water_systems",
@@ -279471,7 +279471,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_water_utility_leak_adjustment_rules",
@@ -279483,7 +279483,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_wetland_context",
@@ -279495,7 +279495,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_wildfire_history",
@@ -279507,7 +279507,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_wildfire_risk",
@@ -279519,7 +279519,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/locus_zoning",
@@ -279531,7 +279531,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/property-update-jobs/%7Bid%7D",
@@ -279543,7 +279543,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "job-search"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/graphs/gratitude",
@@ -279555,7 +279555,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/graphs/queries",
@@ -279567,7 +279567,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/handles/%7Bhandle%7D/boons",
@@ -279579,7 +279579,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/handles/%7Bhandle%7D/has-boons",
@@ -279591,7 +279591,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/handles/%7Bhandle%7D/profile",
@@ -279603,7 +279603,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/score",
@@ -279615,7 +279615,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/workflows/cost-preview",
@@ -279627,7 +279627,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/graph",
@@ -279639,7 +279639,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles",
@@ -279651,7 +279651,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D",
@@ -279663,7 +279663,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/activity",
@@ -279675,7 +279675,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/discovery",
@@ -279687,7 +279687,7 @@
           ],
           "method": "PUT",
           "source": "x402scan",
-          "category": "finance"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/discovery/preview",
@@ -279699,7 +279699,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/wallet-links",
@@ -279711,7 +279711,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/wallet-links/%7BlinkId%7D/confirm",
@@ -279723,7 +279723,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/%7BprofileId%7D/wallet-links/%7BwalletRef%7D",
@@ -279735,7 +279735,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/profiles/by-wallet/%7BaccountId%7D/activity",
@@ -279747,7 +279747,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/reviews",
@@ -279759,7 +279759,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/reviews/receipt-verified",
@@ -279771,7 +279771,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/reviews/self-reported",
@@ -279783,7 +279783,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/routes",
@@ -279795,7 +279795,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/routes/%7BrouteId%7D",
@@ -279807,7 +279807,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/routes/%7BrouteId%7D/recognitions",
@@ -279819,7 +279819,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         },
         {
           "path": "/api/v1/x402/routes/%7BrouteId%7D/reviews",
@@ -279831,7 +279831,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "realestate"
         },
         {
           "path": "/tools/call",
@@ -279843,7 +279843,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/tools/list",
@@ -279855,7 +279855,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "search"
+          "category": "realestate"
         }
       ],
       "fingerprints": {
@@ -279893,7 +279893,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/locus-parcel-lookup",
@@ -279903,7 +279903,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "realestate"
         }
       ],
       "fingerprints": {
@@ -405169,7 +405169,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "x402-list"
         },
         {
           "path": "/health",
@@ -405181,7 +405181,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-service-check"
         },
         {
           "path": "/logo.png",
@@ -405193,7 +405193,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-service-png"
         },
         {
           "path": "/metrics",
@@ -405205,7 +405205,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-management"
         },
         {
           "path": "/ready",
@@ -405217,7 +405217,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-management"
         },
         {
           "path": "/report/%7Brun_id%7D",
@@ -405229,7 +405229,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "x402-management"
         },
         {
           "path": "/run",
@@ -405241,7 +405241,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/skill.md",
@@ -405253,7 +405253,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "x402-list"
         },
         {
           "path": "/status/%7Brun_id%7D",
@@ -405265,7 +405265,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "x402-management"
         },
         {
           "path": "/suggest",
@@ -405277,7 +405277,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "llm"
         },
         {
           "path": "/wait/%7Brun_id%7D",
@@ -405289,7 +405289,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "x402-management"
         }
       ],
       "fingerprints": {
@@ -436058,7 +436058,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "unknown"
         },
         {
           "path": "/x402/top-up",
@@ -436070,7 +436070,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         }
       ],
       "fingerprints": {
@@ -455211,7 +455211,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         }
       ],
       "fingerprints": {
@@ -476436,7 +476436,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "blockchain"
         },
         {
           "path": "/api/contract",
@@ -476460,7 +476460,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "blockchain"
         },
         {
           "path": "/api/derivatives",
@@ -476472,7 +476472,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "blockchain"
         },
         {
           "path": "/api/discover",
@@ -476544,7 +476544,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/history",
@@ -476556,7 +476556,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/holders",
@@ -476568,7 +476568,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "unknown"
         },
         {
           "path": "/api/market",
@@ -476580,7 +476580,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "unknown"
         },
         {
           "path": "/api/markets",
@@ -476592,7 +476592,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "unknown"
         },
         {
           "path": "/api/momentum",
@@ -476604,7 +476604,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "unknown"
         },
         {
           "path": "/api/price",
@@ -476724,7 +476724,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "blockchain"
         },
         {
           "path": "/api/signal",
@@ -476808,7 +476808,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "blockchain"
         },
         {
           "path": "/api/tvl",
@@ -476832,7 +476832,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/wallet",
@@ -487266,7 +487266,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         }
       ],
       "fingerprints": {
@@ -494634,7 +494634,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm-inference"
         },
         {
           "path": "/api/inference/v1/completions",
@@ -494646,7 +494646,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm-inference"
         },
         {
           "path": "/x402/api/inference/v1/chat/completions",
@@ -494658,7 +494658,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm-inference"
         },
         {
           "path": "/x402/api/inference/v1/completions",
@@ -494670,7 +494670,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm-inference"
         }
       ],
       "fingerprints": {
@@ -550771,7 +550771,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "game"
         }
       ],
       "fingerprints": {
@@ -551121,7 +551121,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/age-detector",
@@ -551133,7 +551133,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-game"
         },
         {
           "path": "/api/aggregator",
@@ -551145,7 +551145,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/airdrops/active",
@@ -551169,7 +551169,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/alert/token-dumps",
@@ -551193,7 +551193,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/amazon/deals",
@@ -551253,7 +551253,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "unknown"
         },
         {
           "path": "/api/axesso-amazon",
@@ -551277,7 +551277,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "shopping"
         },
         {
           "path": "/api/background-removal4",
@@ -551289,7 +551289,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "image"
         },
         {
           "path": "/api/barcodes1",
@@ -551301,7 +551301,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/baseball-datafeeds",
@@ -551313,7 +551313,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "sport"
         },
         {
           "path": "/api/bb-finance",
@@ -551325,7 +551325,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/binance43",
@@ -551337,7 +551337,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/bionic-reading1",
@@ -551349,7 +551349,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/botometer-pro",
@@ -551361,7 +551361,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/bridge/fees",
@@ -551373,7 +551373,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/bridge/routes",
@@ -551385,7 +551385,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/bridge/swap-rate",
@@ -551397,7 +551397,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "blockchain"
         },
         {
           "path": "/api/business-details",
@@ -551409,7 +551409,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/cnbc",
@@ -551421,7 +551421,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "news"
         },
         {
           "path": "/api/code-explain",
@@ -551433,7 +551433,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm"
         },
         {
           "path": "/api/coinranking1",
@@ -551457,7 +551457,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/contract/events",
@@ -551469,7 +551469,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/contract/is-honeypot",
@@ -551481,7 +551481,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/contract/verify",
@@ -551505,7 +551505,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "unknown"
         },
         {
           "path": "/api/crypto-price",
@@ -551565,7 +551565,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/currency-conversion",
@@ -551577,7 +551577,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/defi/protocol-risk",
@@ -551625,7 +551625,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/dev/repo-health",
@@ -551637,7 +551637,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/dex/new-pairs",
@@ -551745,7 +551745,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/estimated-salary",
@@ -551769,7 +551769,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "finance"
         },
         {
           "path": "/api/exchange/rates",
@@ -551805,7 +551805,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/extract-keywords",
@@ -551817,7 +551817,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/face-detection14",
@@ -551829,7 +551829,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "image"
         },
         {
           "path": "/api/fantasy-stats",
@@ -551841,7 +551841,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/fetchsocial-scraper",
@@ -551853,7 +551853,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "social-media"
         },
         {
           "path": "/api/flashapi1",
@@ -551865,7 +551865,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/forex/calendar",
@@ -551877,7 +551877,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/forex/news",
@@ -551889,7 +551889,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "news"
+          "category": "finance"
         },
         {
           "path": "/api/forex/rate",
@@ -551913,7 +551913,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "util"
+          "category": "finance"
         },
         {
           "path": "/api/gas-estimate",
@@ -552021,7 +552021,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/global-finance",
@@ -552033,7 +552033,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/google/ads",
@@ -552045,7 +552045,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/google/ai-overviews",
@@ -552057,7 +552057,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "search"
         },
         {
           "path": "/api/gov/proposals",
@@ -552069,7 +552069,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "finance"
         },
         {
           "path": "/api/gov/treasury",
@@ -552081,7 +552081,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/gov/vote-results",
@@ -552093,7 +552093,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "blockchain"
         },
         {
           "path": "/api/gov/whale-votes",
@@ -552117,7 +552117,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "blockchain"
         },
         {
           "path": "/api/hash-generate",
@@ -552129,7 +552129,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "message-digest"
         },
         {
           "path": "/api/holder/concentration",
@@ -552141,7 +552141,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/holder/distribution",
@@ -552153,7 +552153,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/holder/whale-entry",
@@ -552165,7 +552165,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/hunter/dev-wallet",
@@ -552189,7 +552189,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/hunter/new-coins",
@@ -552213,7 +552213,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/ig-api-scraper",
@@ -552225,7 +552225,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-cheapest",
@@ -552237,7 +552237,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-data19",
@@ -552249,7 +552249,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-downloader-scraper",
@@ -552261,7 +552261,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-downloader-stories1",
@@ -552273,7 +552273,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-downloader-stories4",
@@ -552285,7 +552285,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-downloader-v2",
@@ -552297,7 +552297,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-downloader-videos-stories",
@@ -552309,7 +552309,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-media-api",
@@ -552321,7 +552321,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-profile-media",
@@ -552333,7 +552333,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper-20251",
@@ -552345,7 +552345,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper-20253",
@@ -552357,7 +552357,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper-analytics",
@@ -552369,7 +552369,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper-api",
@@ -552381,7 +552381,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper-api12",
@@ -552393,7 +552393,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-scraper29",
@@ -552405,7 +552405,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-video-image-downloader",
@@ -552417,7 +552417,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig-viewer-api",
@@ -552429,7 +552429,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig360",
@@ -552441,7 +552441,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig39",
@@ -552453,7 +552453,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/ig452",
@@ -552465,7 +552465,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/images/reverse",
@@ -552477,7 +552477,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "image-util"
         },
         {
           "path": "/api/images/search",
@@ -552489,7 +552489,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "image-util"
         },
         {
           "path": "/api/india/commodities",
@@ -552537,7 +552537,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/india/price-shockers",
@@ -552549,7 +552549,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/india/stock",
@@ -552573,7 +552573,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/indian-stock-exchange",
@@ -552609,7 +552609,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/instagram-statistics",
@@ -552621,7 +552621,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "finance"
+          "category": "social-media"
         },
         {
           "path": "/api/instagram/comments",
@@ -552753,7 +552753,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "game"
         },
         {
           "path": "/api/jsearch",
@@ -552765,7 +552765,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "job-search"
         },
         {
           "path": "/api/json-transform",
@@ -552789,7 +552789,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "sport"
         },
         {
           "path": "/api/live-metal-prices",
@@ -552801,7 +552801,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/livescore6",
@@ -552813,7 +552813,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/llm",
@@ -552837,7 +552837,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/maptiles",
@@ -552849,7 +552849,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "realestate"
         },
         {
           "path": "/api/medium/article",
@@ -552861,7 +552861,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "news"
         },
         {
           "path": "/api/medium/search",
@@ -552873,7 +552873,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "news"
         },
         {
           "path": "/api/medium/user",
@@ -552885,7 +552885,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "news"
         },
         {
           "path": "/api/medium2",
@@ -552897,7 +552897,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "news"
         },
         {
           "path": "/api/mempool/pending",
@@ -552909,7 +552909,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/mempool/sandwich",
@@ -552921,7 +552921,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/mempool/whale-tx",
@@ -552933,7 +552933,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/mlb-live-stats",
@@ -552945,7 +552945,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/news/latest",
@@ -552993,7 +552993,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "sport"
         },
         {
           "path": "/api/nsfw-detection",
@@ -553005,7 +553005,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*image-nsfw-detection"
         },
         {
           "path": "/api/nsfw3",
@@ -553017,7 +553017,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "*image-nsfw-detection"
         },
         {
           "path": "/api/oopspam",
@@ -553029,7 +553029,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/pro-social",
@@ -553041,7 +553041,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/provider/binance43.p.rapidapi.com",
@@ -553149,7 +553149,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "image"
+          "category": "image-search"
         },
         {
           "path": "/api/quote",
@@ -553173,7 +553173,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "image-search"
         },
         {
           "path": "/api/real-time-lens-data",
@@ -553185,7 +553185,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "unknown"
         },
         {
           "path": "/api/real-time-product-search",
@@ -553221,7 +553221,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "util"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/realty-in-us",
@@ -553233,7 +553233,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "unknown"
         },
         {
           "path": "/api/rewriter-paraphraser",
@@ -553245,7 +553245,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm"
         },
         {
           "path": "/api/rug/liquidity-lock",
@@ -553269,7 +553269,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/rug/token-safety",
@@ -553293,7 +553293,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/score/alpha-potential",
@@ -553305,7 +553305,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "finance"
         },
         {
           "path": "/api/score/token-safety",
@@ -553341,7 +553341,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/search",
@@ -553437,7 +553437,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "unknown"
         },
         {
           "path": "/api/sentiment/fear-greed",
@@ -553449,7 +553449,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "util"
+          "category": "unknown"
         },
         {
           "path": "/api/sentiment/news",
@@ -553533,7 +553533,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/smart-money",
@@ -553701,7 +553701,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "llm"
         },
         {
           "path": "/api/telegram-index",
@@ -553713,7 +553713,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "social-media"
         },
         {
           "path": "/api/text-stats",
@@ -553725,7 +553725,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/threads-public-data",
@@ -553737,7 +553737,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok-api-scraper",
@@ -553749,7 +553749,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/tiktok-best-experience",
@@ -553761,7 +553761,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/search",
@@ -553773,7 +553773,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/trending",
@@ -553785,7 +553785,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/user-details",
@@ -553797,7 +553797,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/user-followers",
@@ -553809,7 +553809,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/user-following",
@@ -553821,7 +553821,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/tiktok/user-videos",
@@ -553833,7 +553833,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "social-media"
         },
         {
           "path": "/api/token-dumps",
@@ -553905,7 +553905,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/trading/screener",
@@ -553917,7 +553917,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/api/translate",
@@ -553929,7 +553929,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "util"
         },
         {
           "path": "/api/trending",
@@ -553941,7 +553941,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "unknown"
         },
         {
           "path": "/api/twitter-api-enterprise",
@@ -554217,7 +554217,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/url-to-text",
@@ -554229,7 +554229,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev"
         },
         {
           "path": "/api/usa-lottery",
@@ -554241,7 +554241,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         },
         {
           "path": "/api/wallet/approvals",
@@ -554313,7 +554313,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/website-emails-extractor",
@@ -554325,7 +554325,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/website-social-scraper",
@@ -554337,7 +554337,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/website/social-links",
@@ -554349,7 +554349,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/whale-tracker",
@@ -554373,7 +554373,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/x-com2",
@@ -554385,7 +554385,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/x-twitter-api1",
@@ -554469,7 +554469,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-live-hls",
@@ -554481,7 +554481,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-live-mp4",
@@ -554493,7 +554493,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-scraper7",
@@ -554505,7 +554505,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "software-dev"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-to-server",
@@ -554517,7 +554517,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-to-telegram",
@@ -554529,7 +554529,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube-video-stream",
@@ -554541,7 +554541,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube/channel",
@@ -554553,7 +554553,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube/mp3",
@@ -554565,7 +554565,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube/search",
@@ -554577,7 +554577,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "search"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube/video-details",
@@ -554589,7 +554589,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "social-media"
         },
         {
           "path": "/api/youtube138",
@@ -554601,7 +554601,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "social-media"
         }
       ],
       "fingerprints": {
@@ -556734,7 +556734,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "unknown"
         }
       ],
       "fingerprints": {
@@ -558165,7 +558165,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/background-removal",
@@ -559029,7 +559029,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "util"
         },
         {
           "path": "/daily-space-photo",
@@ -559041,7 +559041,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "util"
         },
         {
           "path": "/daily-verse",
@@ -559053,7 +559053,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "util"
         },
         {
           "path": "/daily-weather-outlook",
@@ -560385,7 +560385,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "game"
         },
         {
           "path": "/identify-text-language",
@@ -560409,7 +560409,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev"
         },
         {
           "path": "/image-caption",
@@ -560421,7 +560421,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/image-cutout",
@@ -560433,7 +560433,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "*image-inpaint"
         },
         {
           "path": "/image-keyword-tags",
@@ -560445,7 +560445,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/image-tags",
@@ -560457,7 +560457,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/image-to-text-description",
@@ -560469,7 +560469,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "image"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/integer-trivia-lookup",
@@ -560481,7 +560481,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "uncategorised"
+          "category": "util"
         },
         {
           "path": "/is-site-up",
@@ -561513,7 +561513,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/pip-dependency-lookup",
@@ -563658,7 +563658,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev"
         },
         {
           "path": "/address/labels",
@@ -569583,7 +569583,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-service-check"
         },
         {
           "path": "/protected/testnet",
@@ -569593,7 +569593,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-service-check"
         }
       ],
       "fingerprints": {
@@ -569623,7 +569623,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "x402-service-check"
         }
       ],
       "fingerprints": {
@@ -569662,7 +569662,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "software-dev"
+          "category": "x402-service-check"
         },
         {
           "path": "/api/v1/preflight",
@@ -569672,7 +569672,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "x402-service-check"
         },
         {
           "path": "/api/v1/preflight/batch",
@@ -569682,7 +569682,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "finance"
+          "category": "x402-service-check"
         },
         {
           "path": "/api/v1/preflight/deep",
@@ -569692,7 +569692,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "network"
+          "category": "x402-service-check"
         }
       ],
       "fingerprints": {
@@ -573287,7 +573287,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generation"
         },
         {
           "path": "/tools/pdf_to_markdown",
@@ -573702,7 +573702,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generation"
         },
         {
           "path": "/api/ipfs/pin",
@@ -574115,7 +574115,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         }
       ],
       "fingerprints": {
@@ -574734,7 +574734,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*game"
         },
         {
           "path": "/earthquake-risk",
@@ -574744,7 +574744,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "realestate"
         },
         {
           "path": "/flood-risk",
@@ -574754,7 +574754,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "shopping"
+          "category": "realestate"
         },
         {
           "path": "/vehicle-safety",
@@ -574794,7 +574794,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "realestate"
         }
       ],
       "fingerprints": {
@@ -591935,7 +591935,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "x402-management"
         }
       ],
       "fingerprints": {

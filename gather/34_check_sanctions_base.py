@@ -39,13 +39,12 @@ GATHER_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(GATHER_ROOT))
 
 from gatherlib import DATASET_DIR  # noqa: E402
+from gatherlib.funders import load_funders  # noqa: E402
 
 SANCTIONS_PATH = DATASET_DIR / "sanctions_list.json"
 FACILITATORS_PATH = DATASET_DIR / "facilitators.json"
 SERVICES_PATH = DATASET_DIR / "services.json"
 CLIENTS_PATH = DATASET_DIR / "clients.json"
-FUNDERS_PATH = DATASET_DIR / "funders.json"
-FUNDERS_PIECES = "funders.part*.json"
 KIND_ORDER = ("facilitator", "server", "client", "funder")
 
 
@@ -61,18 +60,6 @@ def read_json(path: Path, made_by: str):
     return json.loads(path.read_text())
 
 
-def funders() -> list[dict]:
-    """funders.json's funders, or the pieces' if it isn't there."""
-    if FUNDERS_PATH.exists():
-        return json.loads(FUNDERS_PATH.read_text())["funders"]
-    pieces = sorted(DATASET_DIR.glob(FUNDERS_PIECES))
-    if not pieces:
-        sys.exit(
-            f"neither {FUNDERS_PATH.relative_to(GATHER_ROOT)} nor its pieces exist -- run 07_find_funders_base.py first."
-        )
-    return [funder for piece in pieces for funder in json.loads(piece.read_text())["funders"]]
-
-
 def gathered() -> dict[str, set[str]]:
     """Normalised address -> the kinds it is, for every gathered address."""
     kinds: dict[str, set[str]] = defaultdict(set)
@@ -84,7 +71,7 @@ def gathered() -> dict[str, set[str]]:
             kinds[normalise(address)].add("server")
     for client in read_json(CLIENTS_PATH, "05_find_clients_base.py")["clients"]:
         kinds[normalise(client["address"])].add("client")
-    for funder in funders():
+    for funder in load_funders():
         address = normalise(funder["address"])
         kinds[address].add("funder")
         kinds[address].update(funder.get("funder_is") or [])
