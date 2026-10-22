@@ -21,8 +21,15 @@ For each payment address (or group), prints:
   - how much of it came from phishing: USDC paid by clients that are
     themselves marked as phishing, or that a funder marked as phishing
     funded (gatherlib.phishing: "phish" in their Blockscout name or tags,
-    from dataset/metadata_base.json; funders from dataset/funders.json or
-    its pieces). Both are Base data, so it's 0 for Solana addresses.
+    from dataset/metadata_base_phishing_only_annotated.json; funders from dataset/funders.json or
+    its pieces) -- for an address annotated with a "from" time (when it
+    became phishing), only its payments from then on, and only funding it
+    sent from then on, with the clients it funded counted from then on
+    too -- ignoring a funder's sends worth less than US$0.01 in all
+    (--min-funding; ETH at US$2,500, --eth-usd) as dust -- tiny sends are
+    what address poisoning looks like, so they mark a target, not someone
+    the phishing address funded. Both are Base data, so it's 0 for Solana
+    addresses.
     Then that as a percentage of the USDC received.
   - the chain, the address(es), and the servers linked to them (the first
     few, then how many more).
@@ -34,14 +41,34 @@ For each payment address (or group), prints:
     CDN), from the same file: unique, alphabetical.
   - whether the payment address was funded by a funder marked as
     phishing (one of the addresses those funders funded, as in
-    35_malicious_analysis.py): "yes" or "no" -- "n/a" for Solana
+    35_malicious_analysis.py, dust ignored): "yes" or "no" -- "n/a" for Solana
     addresses, since funders were only gathered on Base.
 Sorted by USDC received, most first; the top 20 by default (--top N, 0 for
-all). Every row -- whatever --top says -- is also written to
-dataset/phishing_funds_flow.csv (overwritten each run), with plain numbers
-(USDC to 6 places, no thousands separators) and all the servers, columns:
-rank, usdc_received, transfers, clients, median_transfer, from_phishing,
-from_phishing_percent (to 2 places), chain, country, phishing_funded, payment_addresses, servers, categories
+all).
+
+By default every transfer counts. A window limits that to transfers in it
+-- everything above but the phishing-funded column, since funders were
+gathered without one:
+  --months N          the N months up to each chain's latest transfer
+                      gathered (Base's and Solana's were gathered at
+                      different times, so counting back from today would
+                      leave a gap with no data for one of them).
+  --since DATE        from DATE (YYYY-MM-DD, UTC) on.
+  --since DATE --months N
+                      the N months starting on DATE.
+The window used, per chain, goes to standard error.
+
+Every row -- whatever --top says -- is also written to a CSV file in
+dataset/ (overwritten each run), named for the window and chain:
+  phishing_funds_flow.csv                    all time, both chains
+  phishing_funds_flow-3m.csv                 --months 3
+  phishing_funds_flow-since-2026-07-01.csv   --since 2026-07-01
+  phishing_funds_flow-2026-07-01-3m.csv      --since 2026-07-01 --months 3
+  ...-base.csv / ...-solana.csv              with --chain
+with plain numbers (USDC to 6 places, no thousands separators) and all
+the servers, columns: rank, usdc_received, transfers, clients,
+median_transfer, from_phishing, from_phishing_percent (to 2 places),
+chain, country, phishing_funded, payment_addresses, servers, categories
 (the lists "; "-separated).
 Any USDC sent to the address counts, whatever it was for. Addresses
 05 couldn't check (dataset/clients.json's "failed") aren't in the database,
@@ -51,12 +78,15 @@ Reads the database; changes nothing there. Can be run any number of times.
 
 Usage:
     python gather/36_server_usdc_received.py [--top N] [--chain base|solana]
+                                             [--months N] [--since YYYY-MM-DD]
+                                             [--min-funding USD] [--eth-usd USD]
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+from datetime import date
 import json
 import os
 import re
@@ -70,11 +100,11 @@ sys.path.insert(0, str(GATHER_ROOT))
 
 from gatherlib import DATASET_DIR, localdb  # noqa: E402
 from gatherlib.countries import country  # noqa: E402
-from gatherlib.phishing import phishing_and_funded  # noqa: E402
+from gatherlib.phishing import add_dust_arguments, earliest, phishing_and_funded  # noqa: E402
 
 CLIENTS_PATH = DATASET_DIR / "clients.json"
 SERVICES_PATH = DATASET_DIR / "services-annotated.json"
-CSV_PATH = DATASET_DIR / "phishing_funds_flow.csv"
+CSV_STEM = "phishing_funds_flow"
 CSV_COLUMNS = [
     "rank",
     "usdc_received",
@@ -98,18 +128,23 @@ SOLANA_ADDRESS = re.compile(r"[1-9A-HJ-NP-Za-km-z]{32,44}")
 
 # Each transfer once (credited to every server its address is linked to),
 # then totals per (chain, set of servers); the last, of those paid by the
-# client address ids given.
+# client address ids given ({id: the time from which its payments count,
+# or "-infinity"}, as JSON). Only transfers in each chain's window ({chain:
+# start} and {chain: end}, as JSON; a chain not in one isn't bounded).
 RECEIVED_SQL = """
     WITH transfers AS (
         SELECT chain, tx_hash, log_index, min(amount)::numeric AS amount, min(client) AS client,
+               min(timestamp) AS timestamp,
                array_agg(server ORDER BY server) AS servers
         FROM client_transactions
         WHERE currency = 'USDC' AND chain = ANY(%s)
+          AND timestamp >= coalesce((%s::jsonb ->> chain)::timestamptz, '-infinity')
+          AND timestamp < coalesce((%s::jsonb ->> chain)::timestamptz, 'infinity')
         GROUP BY chain, tx_hash, log_index
     )
     SELECT chain, servers, sum(amount), count(*), count(DISTINCT client),
            percentile_cont(0.5) WITHIN GROUP (ORDER BY amount),
-           coalesce(sum(amount) FILTER (WHERE client = ANY(%s)), 0)
+           coalesce(sum(amount) FILTER (WHERE timestamp >= (%s::jsonb ->> client::text)::timestamptz), 0)
     FROM transfers
     GROUP BY chain, servers
 """
@@ -175,7 +210,7 @@ def percent(part, whole) -> Decimal:
     return Decimal(str(part)) * 100 / whole if whole else Decimal(0)
 
 
-def phishing_funded(chain: str, payment_addresses: list[str], funded: set[str]) -> str:
+def phishing_funded(chain: str, payment_addresses: list[str], funded: dict) -> str:
     if chain != "base":
         return "n/a"
     return "yes" if any(address in funded for address in payment_addresses) else "no"
@@ -186,15 +221,62 @@ def plain(amount) -> str:
     return f"{Decimal(str(amount)).quantize(Decimal('0.000001'))}"
 
 
-def write_csv(records: list[dict]) -> None:
-    """Writes `records` to CSV_PATH via a temporary file renamed into
-    place, so it's never left half-written."""
-    tmp = CSV_PATH.with_suffix(CSV_PATH.suffix + ".tmp")
+def csv_path(months: int | None, since: date | None, chain: str | None) -> Path:
+    """The CSV file for this window and chain (see the module docstring)."""
+    name = CSV_STEM
+    if since and months:
+        name += f"-{since.isoformat()}-{months}m"
+    elif since:
+        name += f"-since-{since.isoformat()}"
+    elif months:
+        name += f"-{months}m"
+    if chain:
+        name += f"-{chain}"
+    return DATASET_DIR / f"{name}.csv"
+
+
+def windows(cur, chains: list[str], months: int | None, since: date | None) -> tuple[dict, dict]:
+    """({chain: window start}, {chain: window end}) as ISO timestamps, for
+    the chains bounded at that end (see the module docstring)."""
+    if not months and not since:
+        return {}, {}
+    if since:
+        start = f"{since.isoformat()}T00:00:00+00:00"
+        if not months:
+            return {chain: start for chain in chains}, {}
+        cur.execute("SELECT %s::timestamptz + make_interval(months => %s)", (start, months))
+        end = cur.fetchone()[0].isoformat()
+        return {chain: start for chain in chains}, {chain: end for chain in chains}
+    cur.execute(
+        """
+        SELECT chain, max(timestamp) - make_interval(months => %s)
+        FROM client_transactions
+        WHERE currency = 'USDC' AND chain = ANY(%s)
+        GROUP BY chain
+        """,
+        (months, chains),
+    )
+    return {chain: start.isoformat() for chain, start in cur.fetchall()}, {}
+
+
+def latest(cur, chains: list[str]) -> dict[str, str]:
+    """Each chain's latest transfer gathered, as a date."""
+    cur.execute(
+        "SELECT chain, max(timestamp)::date FROM client_transactions WHERE currency = 'USDC' AND chain = ANY(%s) GROUP BY chain",
+        (chains,),
+    )
+    return {chain: day.isoformat() for chain, day in cur.fetchall()}
+
+
+def write_csv(path: Path, records: list[dict]) -> None:
+    """Writes `records` to `path` via a temporary file renamed into place,
+    so it's never left half-written."""
+    tmp = path.with_suffix(path.suffix + ".tmp")
     with tmp.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS)
         writer.writeheader()
         writer.writerows(records)
-    os.replace(tmp, CSV_PATH)
+    os.replace(tmp, path)
 
 
 def servers_text(names: list[str]) -> str:
@@ -206,14 +288,29 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--top", type=int, default=DEFAULT_TOP, help=f"how many to show (default {DEFAULT_TOP}; 0: all)")
     parser.add_argument("--chain", choices=CHAINS, help="only this chain (default: both)")
+    parser.add_argument("--months", type=int, help="only the N months up to each chain's latest transfer (or from --since)")
+    parser.add_argument("--since", type=date.fromisoformat, metavar="YYYY-MM-DD", help="only transfers from this date (UTC) on")
+    add_dust_arguments(parser)
     args = parser.parse_args()
+    if args.months is not None and args.months < 1:
+        parser.error("--months must be at least 1")
     chains = [args.chain] if args.chain else list(CHAINS)
-    phishing, funded = phishing_and_funded()
+    output = csv_path(args.months, args.since, args.chain)
+    phishing, funded = phishing_and_funded(args.min_funding, args.eth_usd)
     info = server_info()
 
     with localdb.connect_existing() as conn, conn.cursor() as cur:
-        cur.execute("SELECT id FROM addresses WHERE lower(address) = ANY(%s)", (sorted(phishing | funded),))
-        phishing_ids = [row[0] for row in cur.fetchall()]
+        # Windows' dates and month arithmetic in UTC, whatever the server's
+        # time zone.
+        cur.execute("SET TIME ZONE 'UTC'")
+        since = dict(funded)
+        for address, moment in phishing.items():
+            since[address] = earliest(since[address], moment) if address in since else moment
+        cur.execute("SELECT id, lower(address) FROM addresses WHERE lower(address) = ANY(%s)", (sorted(since),))
+        phishing_ids = {
+            str(address_id): since[address].isoformat() if since[address] else "-infinity"
+            for address_id, address in cur.fetchall()
+        }
         cur.execute("SELECT id, name FROM server")
         names = dict(cur.fetchall())
         cur.execute(ADDRESSES_SQL)
@@ -222,8 +319,16 @@ def main() -> None:
             address = normalise(address)
             if chain_of(address):
                 addresses[(chain_of(address), tuple(server_ids))].append(address)
-        cur.execute(RECEIVED_SQL, (chains, phishing_ids))
+        starts, ends = windows(cur, chains, args.months, args.since)
+        ends_at = latest(cur, chains)
+        cur.execute(RECEIVED_SQL, (chains, json.dumps(starts), json.dumps(ends), json.dumps(phishing_ids)))
         received = cur.fetchall()
+    for chain in chains:
+        if chain in ends_at:
+            start = starts.get(chain, "")[:10] or "the first transfer"
+            end = ends.get(chain, "")[:10]
+            span = f"up to (not including) {end}" if end else f"to the latest transfer gathered, {ends_at[chain]}"
+            print(f"{chain}: transfers from {start} {span}", file=sys.stderr)
     if not received:
         print("None")
         return
@@ -254,6 +359,7 @@ def main() -> None:
             }
         )
     write_csv(
+        output,
         [
             {
                 **r,
@@ -295,8 +401,8 @@ def main() -> None:
     print(
         f"{len(received):,} payment address(es) (or groups) on {', '.join(chains)} received {usdc(total)} USDC; "
         f"{usdc(from_phishing)} of it from {len(phishing):,} phishing address(es) and the {len(funded):,} they "
-        f"funded, paid to {with_phishing:,} payment address(es); showing {len(rows):,}, "
-        f"all {len(records):,} written to {CSV_PATH.relative_to(GATHER_ROOT)}"
+        f"funded with at least US${args.min_funding} (ETH at US${args.eth_usd}), paid to {with_phishing:,} payment address(es); showing {len(rows):,}, "
+        f"all {len(records):,} written to {output.relative_to(GATHER_ROOT)}"
         + (f". {failed:,} Base server address(es) couldn't be checked by 05 and aren't ranked" if failed else ""),
         file=sys.stderr,
     )

@@ -1,0 +1,506 @@
+{
+  "gathered_at": "2026-10-20T07:26:43+00:00",
+  "chain": "base",
+  "chain_id": 8453,
+  "source": "https://metadata.services.blockscout.com/api/v1/metadata",
+  "extracted_from": "metadata_base.json",
+  "match": "name or tags include \"phish\", ignoring case",
+  "fields": [
+    "name",
+    "tags"
+  ],
+  "with_metadata": 6121,
+  "phishing": 54,
+  "addresses": [
+    {
+      "address": "0x0081ad7c12293b86bb760f1b5bfbabee4b7315f2",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1168328",
+      "tags": "Phish / Hack",
+      "notes": null
+    },
+    {
+      "address": "0x06d0ab69cf7bf0644057d5583b920c2bc0acfe8e",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1313331",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x0f55030556b30926f78f73064ff09a0981b5e076",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1208619",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x1705926719f074e00fec95eccbcb2a8295e9b558",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2073959",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x1fe92e288b2b2792bcdee8b8f286e0ed16724da6",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing884730",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x240a3df57aaa7089e7d2e261f0d948a99f43c96a",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing3515348",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x2cff890f0378a11913b6129b2e97417a2c302680",
+      "kinds": [
+        "client",
+        "funder"
+      ],
+      "name": "NEAR Intents: Treasury; Fake_Phishing3515158",
+      "tags": "Phish / Hack; Near; NEAR Intents",
+      "notes": "info: This address was tagged based on this Docs."
+    },
+    {
+      "address": "0x2ec19e982172ead28b312a07faf25105fb3747d8",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing3515334",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x32573ec9734a1054cd0e35f0e28314e688089138",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1210701",
+      "tags": "Farcaster; Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x3304e22ddaa22bcdc5fca2269b418046ae7b566a",
+      "kinds": [
+        "client",
+        "funder"
+      ],
+      "name": "Binance: Hot Wallet",
+      "tags": "Phish / Hack; HOT WALLET; Exchange; Binance",
+      "notes": "info: This address has been tagged based on hildobby compilation."
+    },
+    {
+      "address": "0x346cda8b94d99f77bc6ff54a16db3af46e7c610b",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1622383",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x3d7632d3c961d4e342ee927734659367c1c977ff",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1332321",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x40817fc926794079b0e89c28770bc8352d71867c",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2787432",
+      "tags": "Poisoning Address; Phish / Hack",
+      "notes": "info: There are reports that this address was involved in Address Poisoning. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x43831ccd4d1ade29e185b249c356cf5367350ce2",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing3515710",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x4cd00e387622c35bddb9b4c962c136462338bc31",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Relay Depository",
+      "tags": "Phish / Hack; Relay",
+      "notes": null
+    },
+    {
+      "address": "0x4e60d41538d995d9df5981d42311106c9b66e9f7",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1310041",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x4e7dce1d4413afdaddd3108aee9cb098f044015e",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing311",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x51c72848c68a965f66fa7a88855f9f7784502a7f",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Market Maker: 0x51c7...2a7f; Fake_Phishing4239314; MEV Bot: 0x51C…a7F; Wintermute 1",
+      "tags": "Market Maker",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x61d8e56bc84d46805d2392941d6afea515d1003c",
+      "kinds": [
+        "funder"
+      ],
+      "name": null,
+      "tags": "Phish / Hack",
+      "notes": null
+    },
+    {
+      "address": "0x6508f024fe72e3089b69ce0ed5baa09a4de1debf",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2079202",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x672c3b982325be86e221fe5d0eb5391ffa9cc8fc",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1121053; rxbox.eth",
+      "tags": "Metamask User; Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x6a2754867af13749ec3f1974e072f8bdb6e9f993",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing7031014",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x6b1f4de1041ad1a53c6740cf595f9aa0dcefcc52",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2821885",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x6bf6c46ba7f8536ac1b31757e4b3d82cef1584cb",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1169476",
+      "tags": "Phish / Hack",
+      "notes": null
+    },
+    {
+      "address": "0x6daa79dc6c4941f1df92e1197ae7b4db28b10495",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing4736212",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x6f92c7593d8448121c2e335474a766498c3f3187",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2115054",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x721bc1633350f86fd88b9e2cde1688a20929bddd",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1737189",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x739a4b3ddefc42c069565d0668bf29fb5bf7e01e",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing35833",
+      "tags": "Farcaster; Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x7b6cbbdd36aa57492821c45f8e00005262d93975",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1693403",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x7c75aaf3036010f6d66944d9562409a2fb12ccf2",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2845713",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x856932d1a9d6a1ca4ce24694893be2810b08e079",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2427343",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0x858a9b756bd65a512f009d2d1e6e1ea90519681a",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1250849",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x86a914c729c90b25172b874b0a94bdb985b581d4",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1259637",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x8b228e0a165eb6e7a3820f8d6bb9b5f9678d8e5c",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1372539",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x8c826f795466e39acbff1bb4eeeb759609377ba1",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing4734895; Gas.zip 1",
+      "tags": "Phish / Hack; Bridge",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by ChainPatrol."
+    },
+    {
+      "address": "0x95a361b81d10d98912568bf7b82f284003cfeea3",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1258103",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0x97b9d2102a9a65a26e1ee82d59e42d1b73b68689",
+      "kinds": [
+        "client",
+        "funder"
+      ],
+      "name": "Bitget 3",
+      "tags": "Phish / Hack; Exchange",
+      "notes": null
+    },
+    {
+      "address": "0xa81be0b113bc49b2487fc4fb0ea81cd679b050af",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2831153",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0xb775272e537cc670c65dc852908ad47015244eaf",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing4735275; PancakeV3Pool",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by ChainPatrol."
+    },
+    {
+      "address": "0xbc1d9760bd6ca468ca9fb5ff2cfbeac35d86c973",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Bitget: DEX Aggregator",
+      "tags": "Phish / Hack; Exchange; Bitget",
+      "notes": null
+    },
+    {
+      "address": "0xc8d077444625eb300a427a6dfb2b1dbf9b159040",
+      "kinds": [
+        "client",
+        "funder"
+      ],
+      "name": "Fake_Phishing4734884; ZoraV4CoinHook",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by ChainPatrol."
+    },
+    {
+      "address": "0xcb14588b949f25d46602dae9c8ba596383c97ec3",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2074476",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0xcd1533af9a6e51e52c7ae4b966d1c0995a5d3935",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1622384",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0xd5f2de368439eed5527e88ea52a7fd44758aee99",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2888566",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0xd7e42d9502fbd66d90750e544e05c2b3ca7cbd22",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1701177",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0xe228c34252bd874c489c2a99e03476162d74db02",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake Phishing",
+      "tags": "Farcaster; SCAM",
+      "notes": null
+    },
+    {
+      "address": "0xecec48ec5a7b7f7b96460b0f4e2b99cf0db94cb1",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Possible Phishing: CLPoolSwapStrategy",
+      "tags": null,
+      "notes": null
+    },
+    {
+      "address": "0xf0a79040ac2af78ffc50647e839518ce9f0b828f",
+      "kinds": [
+        "funder"
+      ],
+      "name": null,
+      "tags": "Phish / Hack",
+      "notes": null
+    },
+    {
+      "address": "0xf39fdf817edc78e4709635ece93d097f71422797",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing3124990",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    },
+    {
+      "address": "0xf49d21c1de07706808df9b57d8aa65129cca044d",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing4239566",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by MetaMask."
+    },
+    {
+      "address": "0xf68e63b08906c7709a870de9f2d0392986df6dee",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing13",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0xf70d48de49af4306db2b91d06fabcb0e832fdbef",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing1184946",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was involved in Address Poisoning. Please exercise caution when interacting with it."
+    },
+    {
+      "address": "0xfb4207e5691d37aaad1b2ed4d5817cd4b8233880",
+      "kinds": [
+        "funder"
+      ],
+      "name": null,
+      "tags": "Farcaster; Phish / Hack",
+      "notes": null
+    },
+    {
+      "address": "0xfbad832a3c66a8fd63608602667c96798f9c4418",
+      "kinds": [
+        "funder"
+      ],
+      "name": "Fake_Phishing2831156",
+      "tags": "Phish / Hack",
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by HashDit."
+    }
+  ]
+}

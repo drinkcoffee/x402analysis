@@ -27,7 +27,7 @@ import requests
 HELIUS_URL = "https://mainnet.helius-rpc.com/?api-key={key}"
 PUBLIC_URL = "https://api.mainnet-beta.solana.com"
 DEFAULT_HELIUS_RPS = 10.0  # Helius's free plan limit
-DEFAULT_PUBLIC_RPS = 3.0  # the public endpoint allows ~4 getTransaction calls a second
+DEFAULT_PUBLIC_RPS = 1.0  # measured: faster rates are rate limited (HTTP 429) so often that less gets done
 DEFAULT_CUSTOM_RPS = 10.0  # roughly what free plans allow; set SOLANA_RPC_RPS for more
 
 USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
@@ -302,6 +302,31 @@ def transactions(
         if len(page) < SIGNATURES_PER_PAGE:
             return
         before = page[-1]["signature"]
+
+
+def signature_page(rpc: SolanaRpc, address: str, before: str | None, limit: int = SIGNATURES_PER_PAGE) -> list[dict]:
+    """One page of the signatures of transactions touching `address`,
+    newest first: at most `limit` (up to SIGNATURES_PER_PAGE), older than
+    signature `before` if given. Fewer than `limit` means it's the last."""
+    options: dict = {"limit": min(limit, SIGNATURES_PER_PAGE)}
+    if before:
+        options["before"] = before
+    return rpc.call("getSignaturesForAddress", [address, options]) or []
+
+
+def page_transactions(
+    rpc: SolanaRpc, pool: ThreadPoolExecutor, entries: list[dict], progress: Progress
+) -> Iterator[tuple[dict, dict | None]]:
+    """(signature entry, parsed transaction) for each successful one of
+    `entries` (from signature_page), fetched in parallel on `pool`; the
+    transaction is None if the endpoint listed it but couldn't return it."""
+    succeeded = [entry for entry in entries if entry.get("err") is None]
+    fetched = pool.map(lambda entry: get_transaction(rpc, entry["signature"]), succeeded)
+    for entry, tx in zip(succeeded, fetched):
+        progress.tick()
+        if tx is not None and (tx.get("meta") or {}).get("err") is not None:
+            continue
+        yield entry, tx
 
 
 def instructions_in_order(tx: dict) -> Iterator[tuple[int, dict, bool]]:

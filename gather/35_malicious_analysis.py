@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Finds the addresses in dataset/metadata_base.json (written by
-09_fetch_metadata_base.py) whose Blockscout name or tags include "phish",
-ignoring case -- so "Phish / Hack" tags and "Fake_Phishing..." names both
+"""Finds the addresses in dataset/metadata_base_phishing_only_annotated.json
+(09_fetch_metadata_base.py's Blockscout metadata, cut down to the phishing
+addresses by 09a_extract_phishing.py, then reviewed by hand) whose name or
+tags include "phish", ignoring case -- so "Phish / Hack" tags and "Fake_Phishing..." names both
 count (see gatherlib.phishing) -- and prints them.
 
 Prints a row per address, sorted by address, tab-separated: the address,
@@ -10,6 +11,13 @@ is followed by the addresses it funded, from dataset/funders.json (or its
 pieces; see gatherlib.funders), one per line, indented two spaces and
 sorted by address, each with which of those it is, and -- for a client
 already listed under an earlier funder -- a third column, "duplicate".
+Addresses a funder sent only dust are left out: less than US$0.01 in all
+(--min-funding), counting ETH at US$2,500 (--eth-usd) -- tiny sends are
+what address poisoning looks like, so they mark a target, not someone the
+phishing address funded (see gatherlib.phishing). So are addresses a
+funder annotated with a "from" time (when it became phishing, e.g. a
+compromised wallet) last sent before then; such a funder's line has a
+third column, "phishing from" and the time, in UTC.
 A funded server also has a fourth column, the server's api_url, and a
 fifth, the categories of the services it offers (unique, alphabetical,
 comma-separated), from dataset/services-annotated.json; an address that
@@ -28,7 +36,7 @@ funder shows the phishing funders alone.
 Doesn't use the database. Can be run any number of times.
 
 Usage:
-    python gather/35_malicious_analysis.py [--only KIND [KIND ...]]
+    python gather/35_malicious_analysis.py [--only KIND [KIND ...]] [--min-funding USD] [--eth-usd USD]
 """
 
 from __future__ import annotations
@@ -44,7 +52,16 @@ sys.path.insert(0, str(GATHER_ROOT))
 
 from gatherlib import DATASET_DIR  # noqa: E402
 from gatherlib.funders import load_funders  # noqa: E402
-from gatherlib.phishing import WORD, load_metadata, phishing_entries  # noqa: E402
+from gatherlib.phishing import (  # noqa: E402
+    ANNOTATED_PATH,
+    WORD,
+    add_dust_arguments,
+    entry_from,
+    funded_after,
+    is_dust,
+    load_metadata,
+    phishing_entries,
+)  # noqa: E402
 
 SERVICES_PATH = DATASET_DIR / "services-annotated.json"
 KIND_ORDER = ("facilitator", "server", "client", "funder")
@@ -112,13 +129,30 @@ def main() -> None:
         metavar="KIND",
         help=f"only show addresses that are one of these kinds ({', '.join(KIND_ORDER)})",
     )
-    only = set(parser.parse_args().only or [])
+    add_dust_arguments(parser)
+    args = parser.parse_args()
+    only = set(args.only or [])
     addresses = load_metadata()
     found = phishing_entries(addresses)
     funded = {}
     if any("funder" in (entry.get("kinds") or []) for entry in found):
         wanted = {entry["address"] for entry in found}
         funded = {f["address"]: f.get("funded") or [] for f in load_funders() if f["address"] in wanted}
+    since = {entry["address"]: entry_from(entry) for entry in found}
+    dust = sum(is_dust(item, args.min_funding, args.eth_usd) for items in funded.values() for item in items)
+    earlier = sum(
+        not is_dust(item, args.min_funding, args.eth_usd) and not funded_after(item, since[address])
+        for address, items in funded.items()
+        for item in items
+    )
+    funded = {
+        address: [
+            item
+            for item in items
+            if not is_dust(item, args.min_funding, args.eth_usd) and funded_after(item, since[address])
+        ]
+        for address, items in funded.items()
+    }
     servers = {}
     if any("server" in (item.get("kinds") or []) for items in funded.values() for item in items):
         servers = servers_by_address()
@@ -131,7 +165,8 @@ def main() -> None:
             lines, count, marked = funded_lines(funded.get(entry["address"], []), servers, listed, only)
         if only and not only & set(kinds) and not lines:
             continue
-        print(row(entry["address"], kinds_text(kinds)))
+        moment = since[entry["address"]]
+        print(row(entry["address"], kinds_text(kinds), f"phishing from {moment:%Y-%m-%d %H:%M:%S} UTC" if moment else ""))
         for line in lines:
             print(line)
         shown += 1
@@ -140,9 +175,11 @@ def main() -> None:
     if not shown:
         print("None")
     print(
-        f"{len(found):,} of {len(addresses):,} address(es) with metadata have \"{WORD}\" in their name or tags"
+        f"{len(found):,} of {len(addresses):,} address(es) in dataset/{ANNOTATED_PATH.name} have \"{WORD}\" in their name or tags"
         + (f" ({shown:,} shown: --only {' '.join(k for k in KIND_ORDER if k in only)})" if only else "")
-        + f"; listed {funded_count:,} address(es) they funded, {duplicates:,} of them clients already listed (duplicate)",
+        + f"; listed {funded_count:,} address(es) they funded, {duplicates:,} of them clients already listed (duplicate)"
+        + f"; ignored {dust:,} sent less than US${args.min_funding} (dust; ETH at US${args.eth_usd})"
+        + f" and {earlier:,} last sent before their funder's \"from\"",
         file=sys.stderr,
     )
 
