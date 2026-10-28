@@ -71617,7 +71617,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/api/invoice-parse",
@@ -73762,7 +73762,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/api/x402/aman-keywords",
@@ -74517,7 +74517,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*giftcard"
+          "category": "shopping"
         },
         {
           "path": "/v1/landed-cost",
@@ -75151,7 +75151,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "unknown"
         },
         {
           "path": "/x402/geo/audit",
@@ -75403,7 +75403,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/x402/media/video",
@@ -75415,7 +75415,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/x402/mesh/find",
@@ -80027,7 +80027,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/x402/pdf-text",
@@ -80037,7 +80037,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/api/x402/place-conditions",
@@ -82500,7 +82500,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "social-media"
         }
       ],
       "fingerprints": {
@@ -82530,7 +82530,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "finance"
         },
         {
           "path": "/v1/skills/code-review/file",
@@ -86301,7 +86301,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "researcher"
         },
         {
           "path": "/v1/upto/think",
@@ -87787,7 +87787,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         }
       ],
       "fingerprints": {
@@ -89328,7 +89328,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-inpaint-sfw"
         },
         {
           "path": "/x402/api/v1/music",
@@ -89941,7 +89941,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/v1/x402/swarm/runs.create",
@@ -90750,7 +90750,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/v1/compare-product-photo",
@@ -90760,7 +90760,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/v1/find-near-duplicate",
@@ -90810,7 +90810,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/v2/calendar",
@@ -102801,7 +102801,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/api/deadlines",
@@ -104077,7 +104077,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         }
       ],
       "fingerprints": {
@@ -106861,7 +106861,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         }
       ],
       "fingerprints": {
@@ -109494,7 +109494,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "llm"
         },
         {
           "path": "/hyperliquid-ballenas-pago",
@@ -109504,7 +109504,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "uncategorised"
+          "category": "blockchain"
         },
         {
           "path": "/hyperliquid-basis-pago",
@@ -113874,7 +113874,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "llm"
         },
         {
           "path": "/v1/hyperliquid-basis",
@@ -117923,7 +117923,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/v1/llm",
@@ -118003,7 +118003,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/search",
@@ -118163,7 +118163,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/v1/web/changed",
@@ -118213,7 +118213,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev-scraping"
         },
         {
           "path": "/v1/web/jsonld",
@@ -125462,7 +125462,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/ad_copy_generator",
@@ -131246,7 +131246,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/image_audio_describer",
@@ -131270,7 +131270,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/image_generator",
@@ -131282,7 +131282,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-generate"
         },
         {
           "path": "/indoor_plant_care_advisor",
@@ -132350,7 +132350,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "health"
         },
         {
           "path": "/medical_symptom_checker",
@@ -135782,7 +135782,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "unknown"
         },
         {
           "path": "/sports_match_predictor",
@@ -137078,7 +137078,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_edit",
@@ -137090,7 +137090,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_game_character_builder",
@@ -137102,7 +137102,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_game_level_designer",
@@ -137114,7 +137114,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "software-dev"
         },
         {
           "path": "/video_scene_detector",
@@ -137126,7 +137126,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_script",
@@ -137138,7 +137138,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_script_generator",
@@ -137150,7 +137150,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_script_writer",
@@ -137162,7 +137162,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_summarize",
@@ -137174,7 +137174,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/video_summarizer",
@@ -137186,7 +137186,7 @@
           ],
           "method": "",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "image-util"
         },
         {
           "path": "/virtual_college_tour_guide",
@@ -148056,7 +148056,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*image-inpaint"
         },
         {
           "path": "/stability-ai/outpaint",
@@ -148068,7 +148068,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "blockchain"
+          "category": "*image-outpaint"
         },
         {
           "path": "/stability-ai/remove-background",
@@ -156092,7 +156092,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-generation"
+          "category": "*image-generate"
         },
         {
           "path": "/api/store/agent-services/cc0-print/invoke",
@@ -161176,7 +161176,7 @@
           ],
           "method": "GET",
           "source": "x402scan",
-          "category": "*giftcard"
+          "category": "finance"
         },
         {
           "path": "/ticker/brief",
@@ -221348,7 +221348,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*image-to-be-sorted"
+          "category": "*image-inpaint"
         },
         {
           "path": "/v1/ai/image-styled",
@@ -230880,7 +230880,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*giftcard"
+          "category": "*giftcard-list"
         }
       ],
       "fingerprints": {
@@ -234791,7 +234791,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "*giftcard"
+          "category": "util"
         },
         {
           "path": "/api/v1/country/FR/national_day",
@@ -263603,7 +263603,7 @@
           ],
           "method": "POST",
           "source": "x402scan",
-          "category": "*image-to-be-sorted"
+          "category": "*image-inpaint"
         },
         {
           "path": "/v1/marketplace/api/548",
@@ -542342,7 +542342,7 @@
           "tags": [],
           "method": null,
           "source": "Bazaar",
-          "category": "blockchain"
+          "category": "message-digest"
         },
         {
           "path": "/crypto/verify",

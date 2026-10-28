@@ -1,5 +1,5 @@
 {
-  "gathered_at": "2026-10-22T06:52:07+00:00",
+  "gathered_at": "2026-10-22T11:38:51+00:00",
   "chain": "solana",
   "currency": "USDC",
   "rpc": "Solana public RPC",
@@ -23,7 +23,7 @@
   ],
   "incomplete": {
     "note": "These server addresses' transactions were read newest first and stopped at --max-transactions, so older transfers (and clients) are missing; run 06 with --more-transactions to read more. transactions_read: so far.",
-    "count": 30,
+    "count": 13,
     "addresses": [
       {
         "address": "4a8o45skRPcyjAdyR8yES215Swvh8uTpZD6KLarhxCJ7",
@@ -37,108 +37,42 @@
         "servers": [
           "sol.blockrun.ai"
         ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "Bd2xS189uhhnxUeBeVF3JFXrg8zQgrvqZtpqh8hgkCEQ",
         "servers": [
           "x402.sniperx.fun"
         ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "Bn7sLNmcL9ru5kt9gNwVn8e8Sx912dBTxiUBNiwjbiY8",
         "servers": [
           "api.deepnets.ai"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "CHHWRYyo8exGvcLGn3AxzHEZseLZDTnq3FaYkzZVQDQr",
-        "servers": [
-          "ReadX — X/Twitter JSON API, Paid Per Call",
-          "readx.sh"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "CXSdm7NgrFXooHbvN6CdNgMvmqTkVLzu6JCVZR3J3Ygh",
-        "servers": [
-          "GlianaAI — pay-per-call AI inference across 90+ models"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "CcYVS3Jbb1JnE8xSpQQmkBWy3ttKadUmqAzNo52HeUMJ",
-        "servers": [
-          "OnchainExpat x402 APIs"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "CvX23FNQsNQww8ALR3EWgQv2Wt5yM7VvU4HRigGBMMJu",
         "servers": [
           "Vishwa"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "DUPiupXtuox38dcGoXUKer5mAydCzmaHjrbQ66qeEm8s",
-        "servers": [
-          "loonie-toll.onrender.com"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "DdeMfXrDae49VAkvVZHUhWh7FDuirAuFCuuJruqXv5G2",
         "servers": [
           "Laevitas API V2"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "DxnVaGNqTm1yX4Bm5YqtRzfUytF5ZiZ7N2eVXZpVPPP3",
-        "servers": [
-          "grov.fun"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "FCFgb8Z63uwim2QpDJW4TGwLqZoENjckwGosLmg26zBS",
-        "servers": [
-          "Agentic Reservations — Restaurant Bookings for AI Agents",
-          "agentic-reservations.vercel.app",
-          "api.aidress.ai"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "FJqAJ4dXkFbrp3EEo8E9x98iaBGUQwaU8Srz5ePfUXLH",
         "servers": [
           "agentutility — paid x402 API catalog"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "GedsrmCHThhYpCVmxBuCVariiXXeVN8iJPtbuXDouJ3K",
-        "servers": [
-          "stablecrypto.dev"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "GgS891nMiEETjBEFw1QQxVcAqsRV34mDYpxh24TrpCiD",
-        "servers": [
-          "api.carbon-cashmere.de"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "GptpyPWpqUJHXs7G1Xp7zMs1MXidunsWDW4APKArRhez",
-        "servers": [
-          "intel.degenscan.io"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "GpxxoH3s8CqxyyWJvbDQDERbJpRgXei5jSHJjKmELtSZ",
@@ -146,14 +80,6 @@
           "FarOut, Pay-Per-Call AI Models over x402"
         ],
         "transactions_read": 50
-      },
-      {
-        "address": "GqSs5L9aPWGJwyRQe35YKQaWMDPh3R1dMqfSEPhSgkM",
-        "servers": [
-          "Palmyr",
-          "tiktok.palmyr.ai"
-        ],
-        "transactions_read": 400
       },
       {
         "address": "GsKr5q9TmiJQcEgUpBp2X6SmvSg3dnXuw2uxYJxgPTk8",
@@ -175,87 +101,35 @@
           "walletintel.waltsoft.net",
           "webpulse.waltsoft.net"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "Gzehfseq1k9AcHFSoV7qHmDGQx92nLMw78XXdqVWQQWa",
-        "servers": [
-          "x402-gateway-production.up.railway.app",
-          "x402engine — Pay-per-call APIs for AI Agents"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "H7xWGsxkgahW2yuYNYJCibGQS8Q99EKys8kZcyhf9qPd",
-        "servers": [
-          "flipr-x402.fly.dev"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "HFYkH6SUuXLvzGbuB76vJ8u76NG3X25wdd1A7mDM4cSw",
-        "servers": [
-          "proxy.suverse.io"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "HcjfmZLgWRZzwj4deEiS7pewc4KBYSw39mW5nTyt3pz2",
-        "servers": [
-          "api.vextorium.com"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "J7ZvJEspvwP1oRxQZ7mYmNmT22NTm3GWq3t7HEbvPZYx",
         "servers": [
           "Nansen AI - Trade Everything Onchain with AI"
         ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "J7aN3PLJnTCF5qpEnvJHJsnCjcGuqC2rYtEM8Gv3xwg",
         "servers": [
           "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "TW6ntaGzvj63ZgPjszd4FCGmVTGfzv1MAYZbjYcyWhn",
-        "servers": [
-          "2s — the (most) everything API",
-          "2s-3cpr6qm6j-alleyford.vercel.app",
-          "2s-rjsw718bb-alleyford.vercel.app"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "d8X2MdS7QMiMFVWzYMVTeKhm1BVx75GoHskf9ws74nM",
         "servers": [
           "BotPay — AI Agent Payment Network and x402 Infrastructure"
         ],
-        "transactions_read": 400
-      },
-      {
-        "address": "jPt2dffmPi7WEtV8J6UFHJQaatEJVyuSFmz5b4DHFG8",
-        "servers": [
-          "Messari API — The Institutional Standard for Crypto Data"
-        ],
-        "transactions_read": 400
-      },
-      {
-        "address": "sLJ4uneGcD1mg6hKtkLYsY5HCw1nJ8GpNAmbzBWPBgk",
-        "servers": [
-          "X402 Protocol Test"
-        ],
-        "transactions_read": 400
+        "transactions_read": 1400
       },
       {
         "address": "wwwwwDxFWRn7grgr3Esrsg5C6NvDoDHSA4gaCffccrU",
         "servers": [
           "three.ws — The 3D Agent Layer of the Internet"
         ],
-        "transactions_read": 400
+        "transactions_read": 1400
       }
     ]
   },
@@ -397,6 +271,21 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "0.000017"
+        }
+      ]
+    },
+    {
+      "address": "12yZQTaGM1Bx5dYPitYzq5iFvEXgU6ocNMKZR4c5zGEo",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 1,
+          "usdc": "0.001"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 1,
+          "usdc": "0.001"
         }
       ]
     },
@@ -765,8 +654,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -880,8 +769,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -1085,8 +974,8 @@
         },
         {
           "server": "stablecrypto.dev",
-          "transfers": 2,
-          "usdc": "0.02"
+          "transfers": 3,
+          "usdc": "0.03"
         },
         {
           "server": "api.aidress.ai",
@@ -1110,8 +999,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 334,
-          "usdc": "0.334"
+          "transfers": 1149,
+          "usdc": "1.21025"
         }
       ]
     },
@@ -1434,6 +1323,11 @@
           "usdc": "0.08"
         },
         {
+          "server": "X402 Protocol Test",
+          "transfers": 2,
+          "usdc": "0.026"
+        },
+        {
           "server": "StableTravel",
           "transfers": 1,
           "usdc": "0.01"
@@ -1494,12 +1388,12 @@
       "address": "26edvkZ99Lfs6LEwfSbfbJG17NM6z4BqrWMk7Z8hTe4D",
       "servers": [
         {
-          "server": "api.suverse.io",
-          "transfers": 2,
-          "usdc": "0.002"
+          "server": "proxy.suverse.io",
+          "transfers": 10,
+          "usdc": "1.517601"
         },
         {
-          "server": "proxy.suverse.io",
+          "server": "api.suverse.io",
           "transfers": 2,
           "usdc": "0.002"
         }
@@ -1970,8 +1864,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -2522,6 +2416,21 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "2F6WCrEUuS4a2cNkZoWbgqs1Myy6VFSBPMzgFDtBJQUY",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 36,
+          "usdc": "0.036"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 36,
+          "usdc": "0.036"
         }
       ]
     },
@@ -3096,6 +3005,21 @@
       ]
     },
     {
+      "address": "2Lf719PRrGmpGXM4FowxM2YL1XXn7MKeeBL7RF2PDnE2",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 1,
+          "usdc": "0.001"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 1,
+          "usdc": "0.001"
+        }
+      ]
+    },
+    {
       "address": "2LmoEwydW5RMTfign5EKPQu9HSaQuG1hXqhs6V6isN8z",
       "servers": [
         {
@@ -3129,6 +3053,11 @@
       "address": "2MFoS3MPtvyQ4Wh4M9pdfPjz6UhVoNbFbGJAskCPCj3h",
       "servers": [
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 7,
+          "usdc": "175.787775"
+        },
+        {
           "server": "Laso Finance | Crypto Prepaid Cards & Gift Cards",
           "transfers": 1,
           "usdc": "165.61071"
@@ -3137,6 +3066,11 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "165.61071"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 3,
+          "usdc": "2.367957"
         }
       ]
     },
@@ -3260,8 +3194,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -3671,6 +3605,16 @@
       ]
     },
     {
+      "address": "2SSXzY2BvmLQvB6nWwGQagfZfFUaQJSKYn2uu6d8n2BJ",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 7,
+          "usdc": "0.007"
+        }
+      ]
+    },
+    {
       "address": "2SXyLtcCqnuQG9dSZ1K5LNrRRqsUGVN72UJeDWzGBs4n",
       "servers": [
         {
@@ -3870,8 +3814,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -4109,19 +4053,19 @@
           "usdc": "4.909"
         },
         {
+          "server": "api.vextorium.com",
+          "transfers": 509,
+          "usdc": "1.856"
+        },
+        {
           "server": "api.deepnets.ai",
-          "transfers": 107,
-          "usdc": "1.07"
+          "transfers": 154,
+          "usdc": "1.54"
         },
         {
           "server": "SolEnrich — Onchain Intelligence for Solana Agents",
           "transfers": 96,
           "usdc": "1.026"
-        },
-        {
-          "server": "api.vextorium.com",
-          "transfers": 297,
-          "usdc": "0.962"
         },
         {
           "server": "glim.sh",
@@ -4147,6 +4091,11 @@
           "server": "svm402.com",
           "transfers": 9,
           "usdc": "0.15"
+        },
+        {
+          "server": "x402.sniperx.fun",
+          "transfers": 8,
+          "usdc": "0.12"
         },
         {
           "server": "cyre.dev",
@@ -4201,11 +4150,6 @@
         {
           "server": "www.aidatatools.dev",
           "transfers": 5,
-          "usdc": "0.05"
-        },
-        {
-          "server": "x402.sniperx.fun",
-          "transfers": 3,
           "usdc": "0.05"
         },
         {
@@ -4621,6 +4565,16 @@
       ]
     },
     {
+      "address": "2Z2nrKdw2z3e4eZ4zpEZBEd3Tn7K9EF3HDeXi8iunKFG",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
+        }
+      ]
+    },
+    {
       "address": "2Z7Ho9d24tPMPeY5JLofyTBKk11gH7wiNUZ34HyYXtcn",
       "servers": [
         {
@@ -4680,8 +4634,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 14,
-          "usdc": "0.86"
+          "transfers": 78,
+          "usdc": "3.57"
         }
       ]
     },
@@ -4932,6 +4886,11 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 9,
           "usdc": "0.09"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 3,
+          "usdc": "0.03"
         }
       ]
     },
@@ -5274,6 +5233,11 @@
           "usdc": "0.005"
         },
         {
+          "server": "x402.sniperx.fun",
+          "transfers": 5,
+          "usdc": "0.005"
+        },
+        {
           "server": "toolvend.dev",
           "transfers": 1,
           "usdc": "0.002"
@@ -5281,11 +5245,6 @@
         {
           "server": "x402-gateway-production.up.railway.app",
           "transfers": 1,
-          "usdc": "0.002"
-        },
-        {
-          "server": "x402.sniperx.fun",
-          "transfers": 2,
           "usdc": "0.002"
         },
         {
@@ -5380,8 +5339,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -5405,8 +5364,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -5710,8 +5669,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -6866,6 +6825,16 @@
       ]
     },
     {
+      "address": "2vZwBubrtYfUkgxn6uLCGNNDW42h9Grq7NaRHMqD7wxb",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 7,
+          "usdc": "0.007"
+        }
+      ]
+    },
+    {
       "address": "2vmCVqHzwcbmX5ag2RFybXBXyYXbkeyDhRpknGMwsdWi",
       "servers": [
         {
@@ -7289,6 +7258,11 @@
       "address": "2zaR4W327AtHr94QFpki5nTewWe2wL1Ac6pP8rB5jCHC",
       "servers": [
         {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 4,
+          "usdc": "1.5"
+        },
+        {
           "server": "Zerion API - Wallet Data for Apps and Agents",
           "transfers": 3,
           "usdc": "0.03"
@@ -7340,8 +7314,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 13,
+          "usdc": "0.013"
         }
       ]
     },
@@ -7437,6 +7411,21 @@
           "server": "Bitrefill x402",
           "transfers": 102,
           "usdc": "15643.007567"
+        }
+      ]
+    },
+    {
+      "address": "3283CAWMLsNHQUjRb5dEiykmCxw2WA7hNCMiPaJWvtbZ",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 2,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -7734,6 +7723,11 @@
           "usdc": "0.911"
         },
         {
+          "server": "api.vextorium.com",
+          "transfers": 157,
+          "usdc": "0.61"
+        },
+        {
           "server": "astro-agent.dev",
           "transfers": 11,
           "usdc": "0.35"
@@ -7742,11 +7736,6 @@
           "server": "www.aidatatools.dev",
           "transfers": 11,
           "usdc": "0.35"
-        },
-        {
-          "server": "api.vextorium.com",
-          "transfers": 103,
-          "usdc": "0.337"
         },
         {
           "server": "api.loopholetape.com",
@@ -7807,6 +7796,11 @@
           "server": "WhaleTape · Hyperliquid Smart Money",
           "transfers": 6,
           "usdc": "0.091"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 6,
+          "usdc": "0.06"
         },
         {
           "server": "cyre.dev",
@@ -7932,6 +7926,11 @@
           "server": "47620.xyz",
           "transfers": 1,
           "usdc": "0.0001"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.0001"
         }
       ]
     },
@@ -7970,8 +7969,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 115,
+          "usdc": "2.3"
         }
       ]
     },
@@ -8077,6 +8076,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "19.61"
+        }
+      ]
+    },
+    {
+      "address": "36TSxLvhq3qj71pvTa7hFMT8tqoL8dHHg7d9Sh9SQdPh",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "11.300197"
         }
       ]
     },
@@ -8636,6 +8645,16 @@
       ]
     },
     {
+      "address": "39QcPLQ6TEJSoZbXpvnqc3d3PVxxCC3c5VeQvuJ5rCWB",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "84.451835"
+        }
+      ]
+    },
+    {
       "address": "39aByri9fbuQwdVMqVmAxCERpRWJLw55riCwjoHtq6CL",
       "servers": [
         {
@@ -8911,6 +8930,16 @@
       ]
     },
     {
+      "address": "3Bz7PJir6SSxq3zj2G3QHwKmZHxTfvDT6B6ygyR42VtF",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "45.214655"
+        }
+      ]
+    },
+    {
       "address": "3C1jg1ig2iY6dmd1MXCpnD6bEnnYyMQCpSnTDVmKF1yd",
       "servers": [
         {
@@ -8945,8 +8974,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 113,
+          "usdc": "2.26"
         }
       ]
     },
@@ -9125,8 +9154,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 13,
+          "usdc": "0.013"
         }
       ]
     },
@@ -9252,6 +9281,11 @@
           "server": "loonie-toll.onrender.com",
           "transfers": 3,
           "usdc": "11.458766"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 1,
+          "usdc": "0.800113"
         }
       ]
     },
@@ -9346,6 +9380,16 @@
       ]
     },
     {
+      "address": "3FqNAdmbVC8zwzbQ6LARnsiPNKXdb3aUKAxNDjim3fJk",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "30.829034"
+        }
+      ]
+    },
+    {
       "address": "3G3B9GohvEZLY8rWCbEXdPw1amcqgLKeKTjqnzNW3cGd",
       "servers": [
         {
@@ -9412,6 +9456,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 3,
           "usdc": "622"
+        }
+      ]
+    },
+    {
+      "address": "3GgwH4jTmm6KbNhJXzppQBBiyM6ZwFX1CLSZy7Fbg8Zn",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "100.064266"
         }
       ]
     },
@@ -9555,8 +9609,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 33,
-          "usdc": "0.66"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -10376,6 +10430,16 @@
       ]
     },
     {
+      "address": "3QskubkvzM2SLAD2azD3MbS1fJV4h8LK2zPhULUPDVAp",
+      "servers": [
+        {
+          "server": "OnchainExpat x402 APIs",
+          "transfers": 1,
+          "usdc": "2.743061"
+        }
+      ]
+    },
+    {
       "address": "3R1cvagqD9H2g8dr3rwhMwQ7pVEtkfgyp99hn8egNKGC",
       "servers": [
         {
@@ -10395,8 +10459,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -10696,6 +10760,16 @@
       ]
     },
     {
+      "address": "3USeTmG1CRvSaoHpcX1MwpRpRZKtbZHmSvpXEPpMAqJN",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "19.950503"
+        }
+      ]
+    },
+    {
       "address": "3UTQaNFKUZWkyQVCgvgtaX6FNZkYapfgxXR1ikdfp6oR",
       "servers": [
         {
@@ -10737,6 +10811,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "1.06"
+        }
+      ]
+    },
+    {
+      "address": "3Uy36HaAAxSAvrenRTvLD2gioxz1b5iR4t7UzEBgtdf6",
+      "servers": [
+        {
+          "server": "api.carbon-cashmere.de",
+          "transfers": 2,
+          "usdc": "3.543103"
         }
       ]
     },
@@ -10812,6 +10896,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 10,
           "usdc": "441.77"
+        }
+      ]
+    },
+    {
+      "address": "3VaXM8KmxfmK4Hb4RZhu3ZUWoJDEEMd8sjv9rk1e3keS",
+      "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 1,
+          "usdc": "1.990378"
         }
       ]
     },
@@ -11095,8 +11189,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -11355,8 +11449,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -11375,8 +11469,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 6,
-          "usdc": "0.006041"
+          "transfers": 21,
+          "usdc": "0.021214"
         }
       ]
     },
@@ -11412,6 +11506,11 @@
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
           "transfers": 21,
           "usdc": "4.3"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 3,
+          "usdc": "0.03"
         }
       ]
     },
@@ -11700,8 +11799,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -11915,8 +12014,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 25,
-          "usdc": "0.97"
+          "transfers": 72,
+          "usdc": "3.24"
         }
       ]
     },
@@ -12371,6 +12470,16 @@
       ]
     },
     {
+      "address": "3jmJoiNTSNCM2YKX5PtBqZ1pT3bVDeYF7a5WqsT4vyMj",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "33.375751"
+        }
+      ]
+    },
+    {
       "address": "3jnnh6FHZfNJvChwskf9ZWr5YdinGkTZYeDJroTGHbME",
       "servers": [
         {
@@ -12605,8 +12714,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 9,
-          "usdc": "0.024184"
+          "transfers": 28,
+          "usdc": "0.072131"
         }
       ]
     },
@@ -12637,6 +12746,36 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "664.94"
+        }
+      ]
+    },
+    {
+      "address": "3mVeWQ8kkoPDZDtqfBREMgfi9Dxy6nAroDx2kMtuCbzp",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "1.42"
+        }
+      ]
+    },
+    {
+      "address": "3mVeiynQpjj6vpLgxp8xoDxMMDYq62N8ujyJrdbX6bzp",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.0001"
+        }
+      ]
+    },
+    {
+      "address": "3mVemQedxEH3LWbjzRk3yo6UhsowcR6evgQXWwQ2zczp",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.000193"
         }
       ]
     },
@@ -12767,6 +12906,11 @@
           "server": "intel.degenscan.io",
           "transfers": 1,
           "usdc": "92.632766"
+        },
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "0.991913"
         }
       ]
     },
@@ -12880,8 +13024,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -13251,6 +13395,16 @@
       ]
     },
     {
+      "address": "3s9Ez8o7fx32rKVtHAhB7KupBwq396DVQmPNgVKVvTVf",
+      "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 3,
+          "usdc": "0.012524"
+        }
+      ]
+    },
+    {
       "address": "3sAfDVeqkbhvySNSRUaoMZv6cD4PHbHtPvog94QapLse",
       "servers": [
         {
@@ -13314,6 +13468,11 @@
           "usdc": "0.009"
         },
         {
+          "server": "x402.sniperx.fun",
+          "transfers": 8,
+          "usdc": "0.008"
+        },
+        {
           "server": "Losbeto — LLM inference + cross-asset market data for AI agents (x402)",
           "transfers": 2,
           "usdc": "0.007"
@@ -13322,11 +13481,6 @@
           "server": "Scry Wallet Intelligence",
           "transfers": 1,
           "usdc": "0.005"
-        },
-        {
-          "server": "x402.sniperx.fun",
-          "transfers": 3,
-          "usdc": "0.003"
         },
         {
           "server": "AgentFeed",
@@ -13367,6 +13521,16 @@
           "server": "Bitrefill x402",
           "transfers": 106,
           "usdc": "12468.485103"
+        }
+      ]
+    },
+    {
+      "address": "3tD34VtprDSkYCnATtQLCiVgTkECU3d12KtjupeR6N2X",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 5,
+          "usdc": "141.380752"
         }
       ]
     },
@@ -13612,6 +13776,11 @@
           "server": "PrintMoneyLab - Automate &amp; Earn",
           "transfers": 1,
           "usdc": "298.995194"
+        },
+        {
+          "server": "intel.degenscan.io",
+          "transfers": 2,
+          "usdc": "281.420876"
         }
       ]
     },
@@ -13651,12 +13820,22 @@
       ]
     },
     {
+      "address": "3vXZLMWPjuVRiSpjF3zLtvoRYAm2DLdu3DBEfQHZsW1x",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 2,
+          "usdc": "7.741649"
+        }
+      ]
+    },
+    {
       "address": "3vXos9zqsAFZfoEZz4LwTvNQaGLjd3uFPJpvof84mF3G",
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -13680,8 +13859,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -13747,6 +13926,16 @@
           "server": "api.groundtruths.xyz",
           "transfers": 9,
           "usdc": "0.09"
+        }
+      ]
+    },
+    {
+      "address": "3wUd5dQHRP4KH6CJ7wfV7ggTHeh31dCoKQGiMWu8vYov",
+      "servers": [
+        {
+          "server": "agentutility — paid x402 API catalog",
+          "transfers": 1,
+          "usdc": "0.001"
         }
       ]
     },
@@ -13980,8 +14169,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -14127,6 +14316,11 @@
           "server": "sol-meme-intel - EVM meme-coin signals for AI agents",
           "transfers": 1,
           "usdc": "203.451575"
+        },
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 6,
+          "usdc": "108.918598"
         }
       ]
     },
@@ -14240,8 +14434,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 25,
-          "usdc": "0.88"
+          "transfers": 99,
+          "usdc": "3.87"
         }
       ]
     },
@@ -14925,6 +15119,11 @@
         },
         {
           "server": "AiSpace x402 Marketplace | Pay-per-request AI for agents",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "api.deepnets.ai",
           "transfers": 1,
           "usdc": "0.01"
         },
@@ -15644,6 +15843,11 @@
           "usdc": "0.00115"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.001"
+        },
+        {
           "server": "anchor-x402 — 18 x402 pay-per-call services for AI agents",
           "transfers": 1,
           "usdc": "0.001"
@@ -15885,8 +16089,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -15895,8 +16099,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 15,
+          "usdc": "0.015"
         }
       ]
     },
@@ -16200,8 +16404,8 @@
       "servers": [
         {
           "server": "Laevitas API V2",
-          "transfers": 14,
-          "usdc": "1.4"
+          "transfers": 15,
+          "usdc": "1.5"
         }
       ]
     },
@@ -16225,8 +16429,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 23,
-          "usdc": "1.22"
+          "transfers": 81,
+          "usdc": "3.69"
         }
       ]
     },
@@ -16537,6 +16741,26 @@
           "server": "stablestudio.io",
           "transfers": 1,
           "usdc": "0.21"
+        },
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 2,
+          "usdc": "0.026"
+        },
+        {
+          "server": "2s — the (most) everything API",
+          "transfers": 5,
+          "usdc": "0.006"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 5,
+          "usdc": "0.006"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 5,
+          "usdc": "0.006"
         }
       ]
     },
@@ -16771,6 +16995,21 @@
       ]
     },
     {
+      "address": "4BHvciXs2nUgS28DEgUcEfFYuKL3kpiyPR7XivNESLc7",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 2,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 2,
+          "usdc": "0.002"
+        }
+      ]
+    },
+    {
       "address": "4BNov61uD76Q6P1Q9qsWZtECdkwWEVi9s81V5qJ6CCW4",
       "servers": [
         {
@@ -16895,8 +17134,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -16992,6 +17231,11 @@
           "server": "api.loopholetape.com",
           "transfers": 47,
           "usdc": "0.856198"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -17177,6 +17421,16 @@
           "server": "Bitrefill x402",
           "transfers": 97,
           "usdc": "17083.473199"
+        }
+      ]
+    },
+    {
+      "address": "4GPho5nEUrmV6H3FzoXW6tdDexpz7L4k5bkEqhiGgVJT",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "37.973295"
         }
       ]
     },
@@ -17430,8 +17684,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -18209,6 +18463,21 @@
           "usdc": "0.024"
         },
         {
+          "server": "2s — the (most) everything API",
+          "transfers": 16,
+          "usdc": "0.0204"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 16,
+          "usdc": "0.0204"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 16,
+          "usdc": "0.0204"
+        },
+        {
           "server": "X402 Protocol Test",
           "transfers": 2,
           "usdc": "0.019"
@@ -18229,21 +18498,6 @@
           "usdc": "0.015"
         },
         {
-          "server": "2s — the (most) everything API",
-          "transfers": 4,
-          "usdc": "0.0084"
-        },
-        {
-          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
-          "transfers": 4,
-          "usdc": "0.0084"
-        },
-        {
-          "server": "2s-rjsw718bb-alleyford.vercel.app",
-          "transfers": 4,
-          "usdc": "0.0084"
-        },
-        {
           "server": "ApiToll — Crypto & DeFi market data for AI agents",
           "transfers": 8,
           "usdc": "0.008"
@@ -18257,6 +18511,26 @@
           "server": "Otto AI x402 — Market Intelligence, DeFi & Trading",
           "transfers": 2,
           "usdc": "0.002"
+        }
+      ]
+    },
+    {
+      "address": "4LqNacxDYFqwm3boNpXqNEVmidAVaZFtF3kXjYJxa4Kc",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 7,
+          "usdc": "0.007"
+        }
+      ]
+    },
+    {
+      "address": "4MB2yiq54PHkJ11YPoZGYgVzew9zFRRms41PAFoXaevg",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "1.42"
         }
       ]
     },
@@ -18317,6 +18591,11 @@
           "server": "www.trezalabs.com",
           "transfers": 1,
           "usdc": "0.06"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -18350,8 +18629,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -18711,6 +18990,16 @@
       ]
     },
     {
+      "address": "4SC7cUiNqcD7YUxzq1BhRv3yD2QMxC2fmUfsRdnmbyMM",
+      "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 1,
+          "usdc": "0.013"
+        }
+      ]
+    },
+    {
       "address": "4SHJqJzZ5oJ9Ps2D5bQ1Bcew9U9zimnzAtma3hdEz3dC",
       "servers": [
         {
@@ -18810,8 +19099,8 @@
       "servers": [
         {
           "server": "grov.fun",
-          "transfers": 1,
-          "usdc": "0.025"
+          "transfers": 3,
+          "usdc": "0.075"
         }
       ]
     },
@@ -18890,18 +19179,18 @@
       "servers": [
         {
           "server": "2s — the (most) everything API",
-          "transfers": 9,
-          "usdc": "1.1745"
+          "transfers": 11,
+          "usdc": "1.4355"
         },
         {
           "server": "2s-3cpr6qm6j-alleyford.vercel.app",
-          "transfers": 9,
-          "usdc": "1.1745"
+          "transfers": 11,
+          "usdc": "1.4355"
         },
         {
           "server": "2s-rjsw718bb-alleyford.vercel.app",
-          "transfers": 9,
-          "usdc": "1.1745"
+          "transfers": 11,
+          "usdc": "1.4355"
         },
         {
           "server": "CPG data analytics for AI agents",
@@ -19525,8 +19814,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -19740,8 +20029,8 @@
       "servers": [
         {
           "server": "loonie-toll.onrender.com",
-          "transfers": 1,
-          "usdc": "0.002151"
+          "transfers": 2,
+          "usdc": "0.663506"
         }
       ]
     },
@@ -19774,6 +20063,11 @@
           "usdc": "0.2"
         },
         {
+          "server": "api.aidress.ai",
+          "transfers": 8,
+          "usdc": "0.108"
+        },
+        {
           "server": "glim.sh",
           "transfers": 11,
           "usdc": "0.099"
@@ -19787,11 +20081,6 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 11,
           "usdc": "0.099"
-        },
-        {
-          "server": "api.aidress.ai",
-          "transfers": 7,
-          "usdc": "0.098"
         },
         {
           "server": "Exa | Search API for AI Agents — Real-Time Web Data",
@@ -19812,6 +20101,16 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 2,
           "usdc": "0.02"
+        },
+        {
+          "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "agentic-reservations.vercel.app",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -19972,6 +20271,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "21.42"
+        }
+      ]
+    },
+    {
+      "address": "4d5ZhpczD8iDa7V2Ho85PgXKmykqp85yKHunZ1W7cvz3",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "37.029625"
         }
       ]
     },
@@ -20580,8 +20889,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 28,
-          "usdc": "0.73"
+          "transfers": 88,
+          "usdc": "3.49"
         }
       ]
     },
@@ -20990,8 +21299,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -21191,6 +21500,16 @@
       ]
     },
     {
+      "address": "4rk2VuywdpsBuBgFMqdJivjXArkVptMMKqMJCQgse3Gi",
+      "servers": [
+        {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 3,
+          "usdc": "0.85"
+        }
+      ]
+    },
+    {
       "address": "4rqDodBGwKBRveYMXQhuDLYiCaRSWMCXbaEqkPzDi1CT",
       "servers": [
         {
@@ -21242,6 +21561,11 @@
           "server": "StableEnrich",
           "transfers": 89,
           "usdc": "1.78"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -21527,6 +21851,11 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 11,
           "usdc": "0.015"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -21784,6 +22113,11 @@
           "usdc": "3813.968878"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 8,
+          "usdc": "235.784607"
+        },
+        {
           "server": "insider-radar-agent.insider-radar-agent.workers.dev",
           "transfers": 1,
           "usdc": "101.477379"
@@ -21794,9 +22128,9 @@
           "usdc": "101.477379"
         },
         {
-          "server": "loonie-toll.onrender.com",
-          "transfers": 1,
-          "usdc": "64.691356"
+          "server": "proxy.suverse.io",
+          "transfers": 9,
+          "usdc": "7.200868"
         },
         {
           "server": "GameDataKit — Steam and Twitch data for AI agents",
@@ -22000,8 +22334,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 26,
-          "usdc": "1.07"
+          "transfers": 86,
+          "usdc": "3.65"
         }
       ]
     },
@@ -22170,8 +22504,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -22191,12 +22525,22 @@
       ]
     },
     {
+      "address": "52GpkBu9eBMmeJtj7PU789Mpn5svDAeiBqKLFG7AL1Wy",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
+        }
+      ]
+    },
+    {
       "address": "52HMbpqCMcePEY8ACzRPuz9ER6cge5ErKfs5dkLwyzQ9",
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -22290,8 +22634,8 @@
       "servers": [
         {
           "server": "Nansen AI - Trade Everything Onchain with AI",
-          "transfers": 280,
-          "usdc": "3.96"
+          "transfers": 376,
+          "usdc": "5.56"
         },
         {
           "server": "Zerion API - Wallet Data for Apps and Agents",
@@ -22387,6 +22731,21 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 3,
           "usdc": "1400"
+        }
+      ]
+    },
+    {
+      "address": "53qpEqSQfUVQ1cWgieaQvq3GNqEEFYMpwgc2pmKPU5x3",
+      "servers": [
+        {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -22679,6 +23038,11 @@
           "usdc": "13.924073"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.642466"
+        },
+        {
           "server": "DexL Agents",
           "transfers": 6,
           "usdc": "0.302338"
@@ -22742,6 +23106,11 @@
           "server": "Arkham API",
           "transfers": 3,
           "usdc": "4.4"
+        },
+        {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 1,
+          "usdc": "0.05"
         }
       ]
     },
@@ -22750,8 +23119,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 14,
+          "usdc": "0.014"
         }
       ]
     },
@@ -23010,8 +23379,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -23226,8 +23595,33 @@
       ]
     },
     {
+      "address": "5ER86rCHfvCBdNwN5cqsLynqqzH6YXw2DiEFwhw67dV",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 21,
+          "usdc": "0.0021"
+        }
+      ]
+    },
+    {
+      "address": "5ERpEpeRfSuSVC4byYJtswvNpjERemj57My9xi3WE7dV",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 19,
+          "usdc": "0.0019"
+        }
+      ]
+    },
+    {
       "address": "5ERpHautALLY5j9cqLetHb29r9Avfm9AvRRcRGvX67dV",
       "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 224,
+          "usdc": "4.2"
+        },
         {
           "server": "content.hugen.tokyo",
           "transfers": 2,
@@ -23597,6 +23991,16 @@
           "server": "Bitrefill x402",
           "transfers": 107,
           "usdc": "11569.256028"
+        }
+      ]
+    },
+    {
+      "address": "5JdBHA6sZCcUN5Dd7ciMAUgh45LaALQasawJobFvhhDd",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "60.952547"
         }
       ]
     },
@@ -24220,8 +24624,13 @@
         },
         {
           "server": "loonie-toll.onrender.com",
+          "transfers": 37,
+          "usdc": "385.46206"
+        },
+        {
+          "server": "proxy.suverse.io",
           "transfers": 1,
-          "usdc": "1.057981"
+          "usdc": "0.799526"
         },
         {
           "server": "derivatives-pricer-production.up.railway.app",
@@ -24442,6 +24851,16 @@
           "server": "x402 Meta Gateway — AI Meta Intelligence",
           "transfers": 4,
           "usdc": "0.08"
+        },
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 1,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 1,
+          "usdc": "0.002"
         }
       ]
     },
@@ -25080,8 +25499,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -25092,6 +25511,16 @@
           "server": "Bitrefill x402",
           "transfers": 97,
           "usdc": "11497.731291"
+        }
+      ]
+    },
+    {
+      "address": "5XMV9NvhaAFyk9dFbXgwBv4Uv9zGeDFnjofR35kswL9w",
+      "servers": [
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 1,
+          "usdc": "0.001"
         }
       ]
     },
@@ -25155,8 +25584,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -25165,8 +25594,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 36,
-          "usdc": "1.08"
+          "transfers": 101,
+          "usdc": "3.89"
         }
       ]
     },
@@ -25222,6 +25651,21 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "0.0011"
+        }
+      ]
+    },
+    {
+      "address": "5XyGGyazg6rGJU3Hjkrx1PDM1rBE3FraRnMauSR46rW1",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 2,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -25400,8 +25844,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 29,
-          "usdc": "1.01"
+          "transfers": 83,
+          "usdc": "3.44"
         }
       ]
     },
@@ -26037,6 +26481,11 @@
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
           "transfers": 9,
           "usdc": "1.37"
+        },
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.03"
         }
       ]
     },
@@ -26065,8 +26514,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 112,
+          "usdc": "2.24"
         }
       ]
     },
@@ -26424,6 +26873,11 @@
           "usdc": "1.1346"
         },
         {
+          "server": "stablecrypto.dev",
+          "transfers": 7,
+          "usdc": "0.07"
+        },
+        {
           "server": "Sponge Gateway",
           "transfers": 3,
           "usdc": "0.03"
@@ -26739,6 +27193,11 @@
           "usdc": "0.06"
         },
         {
+          "server": "stablecrypto.dev",
+          "transfers": 2,
+          "usdc": "0.02"
+        },
+        {
           "server": "socialintel.dev",
           "transfers": 1,
           "usdc": "0.01"
@@ -26847,6 +27306,16 @@
           "server": "Syra — Machine Money for Agents",
           "transfers": 1,
           "usdc": "0.15"
+        }
+      ]
+    },
+    {
+      "address": "5mhj94sapL2YDPRBGTF6G7K6Th4NPgb519yQC6rGKrap",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "4.027384"
         }
       ]
     },
@@ -27575,8 +28044,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -27825,18 +28294,18 @@
       "servers": [
         {
           "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 5,
+          "usdc": "0.032"
         },
         {
           "server": "agentic-reservations.vercel.app",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 5,
+          "usdc": "0.032"
         },
         {
           "server": "api.aidress.ai",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 5,
+          "usdc": "0.032"
         }
       ]
     },
@@ -28002,6 +28471,16 @@
           "server": "Syra — Machine Money for Agents",
           "transfers": 5,
           "usdc": "0.07"
+        }
+      ]
+    },
+    {
+      "address": "61R1ndXxvsWXXkWSyNkCxnzwd3zUNB8Q2ibmkiLPC8ht",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 2,
+          "usdc": "0.720436"
         }
       ]
     },
@@ -28470,8 +28949,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 115,
+          "usdc": "2.3"
         }
       ]
     },
@@ -30216,6 +30695,21 @@
       ]
     },
     {
+      "address": "6JTbi1EyaoMZNBJp2z5GhqxuTxQARkUKDzDo15CCuqJZ",
+      "servers": [
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 385,
+          "usdc": "3.85"
+        },
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 2,
+          "usdc": "0.026"
+        }
+      ]
+    },
+    {
       "address": "6JUpvZCoxrav71ybysHBrDpcGM7beK8MiZorzhszpZTC",
       "servers": [
         {
@@ -30400,8 +30894,13 @@
         },
         {
           "server": "loonie-toll.onrender.com",
-          "transfers": 2,
-          "usdc": "95.811556"
+          "transfers": 8,
+          "usdc": "223.016219"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 7,
+          "usdc": "5.594229"
         },
         {
           "server": "sol-meme-intel - EVM meme-coin signals for AI agents",
@@ -30515,8 +31014,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -30751,12 +31250,22 @@
       ]
     },
     {
+      "address": "6QBzGFixxXYkxgaSH2ZgqMAkjJQNiWEL5vxXc4urLPC4",
+      "servers": [
+        {
+          "server": "intel.degenscan.io",
+          "transfers": 2,
+          "usdc": "0.000002"
+        }
+      ]
+    },
+    {
       "address": "6QBzUEUhvuBDgBBrMfEdrdaxvGU5YCv8twyRd21iTRBo",
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 3,
-          "usdc": "0.000003"
+          "transfers": 10,
+          "usdc": "0.00001"
         }
       ]
     },
@@ -30906,12 +31415,22 @@
       ]
     },
     {
+      "address": "6RdS2UShNBGUQ2v7JzsbYR7F1wGtcLNYPPTiwaYZE24F",
+      "servers": [
+        {
+          "server": "intel.degenscan.io",
+          "transfers": 4,
+          "usdc": "0.22"
+        }
+      ]
+    },
+    {
       "address": "6RdSBs5PBcKbsKqSa2W4QB7ZUKN14pyCSjkYva4jy3jK",
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 2,
-          "usdc": "0.000002"
+          "transfers": 5,
+          "usdc": "0.000005"
         }
       ]
     },
@@ -30930,8 +31449,8 @@
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 1,
-          "usdc": "0.000001"
+          "transfers": 9,
+          "usdc": "0.000009"
         }
       ]
     },
@@ -31064,6 +31583,16 @@
           "usdc": "1433.960286"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 6,
+          "usdc": "97.083136"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 5,
+          "usdc": "3.997887"
+        },
+        {
           "server": "WhaleTape · Hyperliquid Smart Money",
           "transfers": 1,
           "usdc": "2.07739"
@@ -31110,8 +31639,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 10,
-          "usdc": "0.025419"
+          "transfers": 28,
+          "usdc": "0.073152"
         }
       ]
     },
@@ -31185,8 +31714,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -31280,8 +31809,8 @@
       "servers": [
         {
           "server": "grov.fun",
-          "transfers": 384,
-          "usdc": "22.925"
+          "transfers": 661,
+          "usdc": "31.35"
         }
       ]
     },
@@ -31397,6 +31926,16 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "6WXRgbLLa6Zb434MQKcaRZ7C45ywHeLvSC9Sfnods1Zw",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "37.878325"
         }
       ]
     },
@@ -31658,6 +32197,21 @@
     {
       "address": "6YVeDDToK3JHdqjPozyAL6sp1WUVmnrryPBMBTQFRbxk",
       "servers": [
+        {
+          "server": "2s — the (most) everything API",
+          "transfers": 8,
+          "usdc": "0.7009"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 8,
+          "usdc": "0.7009"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 8,
+          "usdc": "0.7009"
+        },
         {
           "server": "enrichx402.com",
           "transfers": 6,
@@ -32101,6 +32655,16 @@
       ]
     },
     {
+      "address": "6bskSanDywHt17rRXRbnx1zoErCeCpst5P4544s6cZka",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 17,
+          "usdc": "17.159154"
+        }
+      ]
+    },
+    {
       "address": "6c6qcWE3vJ8QJDfC5tbv7GnXXETS9LPXJWqEVtJeXvA9",
       "servers": [
         {
@@ -32332,6 +32896,11 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 2,
           "usdc": "0.009"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 1,
+          "usdc": "0.001"
         }
       ]
     },
@@ -32524,6 +33093,11 @@
       "address": "6hV75eLcqrmGW6hA3ixRKveRADm6h8pxNnXqk6goG4gy",
       "servers": [
         {
+          "server": "stablecrypto.dev",
+          "transfers": 3,
+          "usdc": "1.02"
+        },
+        {
           "server": "enrichx402.com",
           "transfers": 3,
           "usdc": "0.0695"
@@ -32626,6 +33200,16 @@
       ]
     },
     {
+      "address": "6igGYPREUmPy1gTq5gUnmip8743aodzZJdrR9XSpoKYw",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "16.207784"
+        }
+      ]
+    },
+    {
       "address": "6ith8k7Jm51313wsZutKdq9e5bW2Udim9DMGijmQUPri",
       "servers": [
         {
@@ -32652,6 +33236,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "44.657527"
+        }
+      ]
+    },
+    {
+      "address": "6jWVPVbFagJWpibQiaiCZu8gxTTjUPTm8FUwbNQHps7m",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "29.518902"
         }
       ]
     },
@@ -32920,8 +33514,8 @@
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 2,
-          "usdc": "0.001601"
+          "transfers": 3,
+          "usdc": "0.008602"
         }
       ]
     },
@@ -33291,6 +33885,16 @@
       ]
     },
     {
+      "address": "6qHdJMjt1MGcMw5TrYEZtm7Y3PCD3o6a8ZsVi3jjPgj6",
+      "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 3,
+          "usdc": "0.065"
+        }
+      ]
+    },
+    {
       "address": "6qLadN4mPQ2B1uPuW4DspBvSEAQMaXcAeip4AW6jNPrp",
       "servers": [
         {
@@ -33445,8 +34049,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 20,
-          "usdc": "1.01"
+          "transfers": 86,
+          "usdc": "3.65"
         }
       ]
     },
@@ -33630,8 +34234,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 20,
-          "usdc": "1.01"
+          "transfers": 74,
+          "usdc": "3.35"
         }
       ]
     },
@@ -33695,8 +34299,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -33755,8 +34359,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -33795,8 +34399,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -33975,8 +34579,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -34125,8 +34729,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -34325,8 +34929,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -34442,6 +35046,16 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 2,
           "usdc": "0.02"
+        }
+      ]
+    },
+    {
+      "address": "6zW9i3ZVwTCNWo5QtKRaKDTX7obEUhjyteS2Xsp9F3SU",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "46.103612"
         }
       ]
     },
@@ -34606,12 +35220,22 @@
       ]
     },
     {
+      "address": "71wsjS4M4cZgWRxzsA2Y9B7PVE8n9SPJ3SHgEhZ3sxQ3",
+      "servers": [
+        {
+          "server": "Laevitas API V2",
+          "transfers": 2,
+          "usdc": "0.0002"
+        }
+      ]
+    },
+    {
       "address": "71wsvVRapA89vPqMbUTQ8ewWK9c9qAtymUHrwaQRsxQ3",
       "servers": [
         {
           "server": "Laevitas API V2",
-          "transfers": 228,
-          "usdc": "22.8"
+          "transfers": 1225,
+          "usdc": "122.5"
         }
       ]
     },
@@ -34835,8 +35459,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -35630,8 +36254,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -35705,8 +36329,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -35750,8 +36374,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -35940,8 +36564,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 7,
-          "usdc": "0.007"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -35967,6 +36591,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "18.52"
+        }
+      ]
+    },
+    {
+      "address": "7GmDCbu7bYiWJvFaNUyPNiM8PjvvBcmyBcZY1qSsAGi2",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "150.222134"
         }
       ]
     },
@@ -36675,8 +37309,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -36912,6 +37546,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 9,
           "usdc": "1465.86"
+        }
+      ]
+    },
+    {
+      "address": "7NbPAgjn6W9xH6G1opqYAXVVuJBAtn67DDbD5PTCbA3o",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "11.905922"
         }
       ]
     },
@@ -37740,8 +38384,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -37955,8 +38599,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -37980,8 +38624,8 @@
       "servers": [
         {
           "server": "OnchainExpat x402 APIs",
-          "transfers": 1,
-          "usdc": "0.01"
+          "transfers": 3,
+          "usdc": "0.03"
         }
       ]
     },
@@ -38310,8 +38954,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -38387,6 +39031,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "105"
+        }
+      ]
+    },
+    {
+      "address": "7bEHZPUXK1q6nGuo5fieUMuvFToE5Gkt1EaxmBhaYmxC",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "42.477325"
         }
       ]
     },
@@ -39041,6 +39695,16 @@
       ]
     },
     {
+      "address": "7hub2n1hHQpnmKoXGETP2fKmEE8SgKNtgkrFmxngDvAb",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 11,
+          "usdc": "0.011"
+        }
+      ]
+    },
+    {
       "address": "7humAWQSWpP2gkVaoukVjD4dZXyzoUA4jSK3x8yKzGL1",
       "servers": [
         {
@@ -39105,8 +39769,8 @@
       "servers": [
         {
           "server": "api.carbon-cashmere.de",
-          "transfers": 245,
-          "usdc": "10.375"
+          "transfers": 475,
+          "usdc": "23.451"
         }
       ]
     },
@@ -39252,6 +39916,11 @@
           "server": "Delx — Independent AI Agent Lab",
           "transfers": 2,
           "usdc": "0.02"
+        },
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.003"
         }
       ]
     },
@@ -40105,8 +40774,8 @@
       "servers": [
         {
           "server": "grov.fun",
-          "transfers": 1,
-          "usdc": "0.025"
+          "transfers": 6,
+          "usdc": "0.15"
         }
       ]
     },
@@ -40261,12 +40930,22 @@
       ]
     },
     {
+      "address": "7qbRF6YsyGuLUVs6Y1q64bdVrfe4ZcUUz1JRdoVNUJnm",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 13,
+          "usdc": "58.530392"
+        }
+      ]
+    },
+    {
       "address": "7qn7ibagpoWyofCrrzsyfJ8FGpLh298A3ZRUeDjMSRBE",
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -40318,6 +40997,11 @@
     {
       "address": "7rhxnLV8C77o6d8oz26AgK8x8m5ePsdeRawjqvojbjnQ",
       "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 1,
+          "usdc": "99.891583"
+        },
         {
           "server": "svg-lite.agent.amnt.io",
           "transfers": 1,
@@ -40640,8 +41324,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -40762,6 +41446,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 15,
           "usdc": "2671.075669"
+        }
+      ]
+    },
+    {
+      "address": "7tzYhtPBijMYJkTdtrrCQ673rN8mspSnYUAiP7eyTcTw",
+      "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 1,
+          "usdc": "0.132988"
         }
       ]
     },
@@ -40890,8 +41584,13 @@
         },
         {
           "server": "stablecrypto.dev",
-          "transfers": 76,
-          "usdc": "22.8"
+          "transfers": 254,
+          "usdc": "52.08"
+        },
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 4,
+          "usdc": "0.0585"
         }
       ]
     },
@@ -41255,8 +41954,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -41265,8 +41964,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -41465,8 +42164,8 @@
       "servers": [
         {
           "server": "loonie-toll.onrender.com",
-          "transfers": 89,
-          "usdc": "1535.605217"
+          "transfers": 110,
+          "usdc": "1780.753404"
         }
       ]
     },
@@ -41564,6 +42263,11 @@
       "address": "83v8iPyZihDEjDdY8RdZddyZNyUtXngz69Lgo9Kt5d6d",
       "servers": [
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 2,
+          "usdc": "58.252071"
+        },
+        {
           "server": "clawg.fixr-the-buildr.workers.dev",
           "transfers": 1,
           "usdc": "7.802837"
@@ -41572,11 +42276,6 @@
           "server": "clawg.network",
           "transfers": 1,
           "usdc": "7.802837"
-        },
-        {
-          "server": "loonie-toll.onrender.com",
-          "transfers": 1,
-          "usdc": "1.48711"
         },
         {
           "server": "grov.fun",
@@ -41985,8 +42684,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -43365,8 +44064,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 33,
-          "usdc": "0.66"
+          "transfers": 115,
+          "usdc": "2.3"
         }
       ]
     },
@@ -43419,6 +44118,11 @@
       "address": "8K68fCYhPc6n8Sgyz48frUy1um3srs3aQh68zd9WiTDF",
       "servers": [
         {
+          "server": "proxy.suverse.io",
+          "transfers": 2,
+          "usdc": "0.506"
+        },
+        {
           "server": "glim.sh",
           "transfers": 1,
           "usdc": "0.005"
@@ -43432,6 +44136,16 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "8KN1vDCgBsamWLWSWL21vnV21bfGjNSq6t93crugQwtb",
+      "servers": [
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 2,
+          "usdc": "0.02"
         }
       ]
     },
@@ -43501,6 +44215,16 @@
       ]
     },
     {
+      "address": "8KVuQ5b9WFNKCGbynZLzTtKT15UWSaqyVvs2LShtrmHk",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "50.530189"
+        }
+      ]
+    },
+    {
       "address": "8KcDrkcJM4w6G8kg5J54ywN2xPjksj36sk96jLaXRJBg",
       "servers": [
         {
@@ -43520,8 +44244,8 @@
       "servers": [
         {
           "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
-          "transfers": 173,
-          "usdc": "2.153"
+          "transfers": 542,
+          "usdc": "3.064"
         },
         {
           "server": "Chit402 — A receipt you still hold if the agent wallet moves.",
@@ -43596,8 +44320,28 @@
       ]
     },
     {
+      "address": "8LZ5zAxdX4jZk2DxepWzNLMxsCYh2Gq6v2zcSHCWwyza",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.0001"
+        }
+      ]
+    },
+    {
       "address": "8LZj73rMvKMWekH4TLLszDywpr4WxeauhGcJ57qhwyza",
       "servers": [
+        {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 874,
+          "usdc": "11.26"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 899,
+          "usdc": "8.99"
+        },
         {
           "server": "SolEnrich — Onchain Intelligence for Solana Agents",
           "transfers": 659,
@@ -43802,16 +44546,6 @@
           "server": "youtube.use.x402atlas.com",
           "transfers": 483,
           "usdc": "2.8721"
-        },
-        {
-          "server": "api.deepnets.ai",
-          "transfers": 264,
-          "usdc": "2.64"
-        },
-        {
-          "server": "Nansen AI - Trade Everything Onchain with AI",
-          "transfers": 42,
-          "usdc": "0.74"
         }
       ]
     },
@@ -43995,8 +44729,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -44655,8 +45389,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -44676,12 +45410,42 @@
       ]
     },
     {
+      "address": "8Ri4naoLGsUe4fAXtBgCMSqg8CqGCFaXzhU9847RuqTn",
+      "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 3,
+          "usdc": "0.039"
+        }
+      ]
+    },
+    {
       "address": "8RuKcuUSNFhdBohE3bBHGzydo2XFwvC3mQVjcpwFFyQw",
       "servers": [
         {
           "server": "Bitrefill x402",
           "transfers": 104,
           "usdc": "10067.606846"
+        }
+      ]
+    },
+    {
+      "address": "8SCetym5CHZWU3qhoyaYGxQuQaeUMAShmc9y28ECPYa9",
+      "servers": [
+        {
+          "server": "2s — the (most) everything API",
+          "transfers": 23,
+          "usdc": "0.038"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 23,
+          "usdc": "0.038"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 23,
+          "usdc": "0.038"
         }
       ]
     },
@@ -45315,8 +46079,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 14,
+          "usdc": "0.014"
         }
       ]
     },
@@ -45665,8 +46429,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -45675,8 +46439,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -45796,6 +46560,16 @@
       ]
     },
     {
+      "address": "8dsHJGtg8wmJQ7BD4N17cFSNbTc6BkUDwHP8XKqFbzyw",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "18.715707"
+        }
+      ]
+    },
+    {
       "address": "8eAGMbdAwFeTTuFBn1U3x9DGBUMTjk3hFRk1WMLAzDMi",
       "servers": [
         {
@@ -45844,6 +46618,11 @@
           "usdc": "53.16348"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 3,
+          "usdc": "23.024815"
+        },
+        {
           "server": "intel.degenscan.io",
           "transfers": 1,
           "usdc": "22.675606"
@@ -45852,11 +46631,6 @@
           "server": "GameDataKit — Steam and Twitch data for AI agents",
           "transfers": 1,
           "usdc": "15.351207"
-        },
-        {
-          "server": "loonie-toll.onrender.com",
-          "transfers": 1,
-          "usdc": "13.105919"
         },
         {
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
@@ -46436,6 +47210,16 @@
       ]
     },
     {
+      "address": "8ht1MT7eTrnMyKowsB8PLXhVZ4HjgSyUMLMSPcPjyBkc",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "36.932791"
+        }
+      ]
+    },
+    {
       "address": "8hy27ZAyYEBFpHYS5eGHoTtsvueyxBm1sXgJVtYVMqw8",
       "servers": [
         {
@@ -46537,6 +47321,16 @@
           "server": "Syra — Machine Money for Agents",
           "transfers": 1,
           "usdc": "0.1"
+        }
+      ]
+    },
+    {
+      "address": "8ibBt2DV4koacVzyHDZX2rej62eTTs6RK6sQSc9ZX42u",
+      "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 1,
+          "usdc": "10"
         }
       ]
     },
@@ -46647,6 +47441,16 @@
           "server": "Bitrefill x402",
           "transfers": 104,
           "usdc": "18801.538538"
+        }
+      ]
+    },
+    {
+      "address": "8kX1rzNUAvRP2QJXcNMvyFPEhHrqe5czjGa1zZBv4tyk",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "110.490551"
         }
       ]
     },
@@ -46875,8 +47679,8 @@
       "servers": [
         {
           "server": "X402 Protocol Test",
-          "transfers": 54,
-          "usdc": "0.2914"
+          "transfers": 216,
+          "usdc": "0.494753"
         }
       ]
     },
@@ -47152,6 +47956,16 @@
           "server": "Bitrefill x402",
           "transfers": 96,
           "usdc": "15732.921973"
+        }
+      ]
+    },
+    {
+      "address": "8qEie48sHpFM4ce11DQqFPooU3uHZEoXdAGJYE8mdm72",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.003"
         }
       ]
     },
@@ -47475,8 +48289,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -47979,6 +48793,11 @@
           "usdc": "4.342255"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "3.028159"
+        },
+        {
           "server": "api.marketintelligenceapi.com",
           "transfers": 1,
           "usdc": "1.331017"
@@ -47987,6 +48806,16 @@
           "server": "svm402.com",
           "transfers": 1,
           "usdc": "1.000013"
+        },
+        {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
+          "transfers": 1,
+          "usdc": "0.719708"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 1,
+          "usdc": "0.719708"
         }
       ]
     },
@@ -47995,8 +48824,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -48110,8 +48939,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 16,
+          "usdc": "0.016"
         }
       ]
     },
@@ -48381,6 +49210,26 @@
       ]
     },
     {
+      "address": "8xCTFreDRhaVbLxWMMvvFyyjPwwvT3JHTJVaQEi589nj",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 2,
+          "usdc": "0.11"
+        }
+      ]
+    },
+    {
+      "address": "8xPM8ND1NUvbqKcbPBmFwyoq2z78p6kadgPxB3PzRoe6",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "18"
+        }
+      ]
+    },
+    {
       "address": "8xbXHAhiVe2BrYDq4qpTA5SSYJG9XNjNN6jcrudhTKCM",
       "servers": [
         {
@@ -48452,6 +49301,11 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 6,
           "usdc": "0.06"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -48663,6 +49517,11 @@
     {
       "address": "8zQ9FJVGY7seg3V2K9VEQCnq3j4RCRzEVUEYmCpZE3y",
       "servers": [
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 1,
+          "usdc": "0.1"
+        },
         {
           "server": "enrichx402.com",
           "transfers": 1,
@@ -49156,6 +50015,11 @@
         {
           "server": "analyst.lonestaroracle.xyz",
           "transfers": 1,
+          "usdc": "0.03"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 3,
           "usdc": "0.03"
         },
         {
@@ -49704,6 +50568,11 @@
           "usdc": "0.012"
         },
         {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
           "server": "svm402.com",
           "transfers": 1,
           "usdc": "0.01"
@@ -49845,8 +50714,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 15,
+          "usdc": "0.015"
         }
       ]
     },
@@ -50120,8 +50989,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 26,
-          "usdc": "0.89"
+          "transfers": 87,
+          "usdc": "3.57"
         }
       ]
     },
@@ -50505,8 +51374,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -50532,6 +51401,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "6.58"
+        }
+      ]
+    },
+    {
+      "address": "995GbxaPacqJEzZxWTCsc8Pbykqty8Kxf1aw9Ya643wo",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 1,
+          "usdc": "0.001"
         }
       ]
     },
@@ -50675,8 +51554,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -50685,8 +51564,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -50717,6 +51596,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "686.24"
+        }
+      ]
+    },
+    {
+      "address": "9Aj5uUAQTq5EDp46KuQ3Jdq7y9KwGXpHvqx3PzV7N333",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "10.163929"
         }
       ]
     },
@@ -51000,8 +51889,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -51050,8 +51939,8 @@
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 59,
-          "usdc": "107475"
+          "transfers": 79,
+          "usdc": "174607"
         }
       ]
     },
@@ -51115,8 +52004,8 @@
       "servers": [
         {
           "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
-          "transfers": 73,
-          "usdc": "8.639"
+          "transfers": 186,
+          "usdc": "11.924"
         },
         {
           "server": "Chit402 — A receipt you still hold if the agent wallet moves.",
@@ -51170,8 +52059,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -51194,12 +52083,12 @@
           "usdc": "0.09"
         },
         {
-          "server": "stable-studio-git-mason-migrate-off-prices-map-merit-systems.vercel.app",
-          "transfers": 1,
-          "usdc": "0.01"
+          "server": "stablecrypto.dev",
+          "transfers": 3,
+          "usdc": "0.03"
         },
         {
-          "server": "stablecrypto.dev",
+          "server": "stable-studio-git-mason-migrate-off-prices-map-merit-systems.vercel.app",
           "transfers": 1,
           "usdc": "0.01"
         },
@@ -51375,13 +52264,13 @@
       "servers": [
         {
           "server": "Palmyr",
-          "transfers": 1,
-          "usdc": "0.01"
+          "transfers": 7,
+          "usdc": "0.07"
         },
         {
           "server": "tiktok.palmyr.ai",
-          "transfers": 1,
-          "usdc": "0.01"
+          "transfers": 7,
+          "usdc": "0.07"
         }
       ]
     },
@@ -51450,8 +52339,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -51510,8 +52399,8 @@
       "servers": [
         {
           "server": "Messari API — The Institutional Standard for Crypto Data",
-          "transfers": 58,
-          "usdc": "14.5"
+          "transfers": 61,
+          "usdc": "15.25"
         }
       ]
     },
@@ -51881,6 +52770,16 @@
       ]
     },
     {
+      "address": "9M3dxsdawnK8Qp6oWEUWeeWW4aybAsYWqQ5KYhocumTP",
+      "servers": [
+        {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 2,
+          "usdc": "0.02"
+        }
+      ]
+    },
+    {
       "address": "9MADQPMyZKM8zmHnf8XAfufuuBfVSgCPJtsKQyUWbde1",
       "servers": [
         {
@@ -52170,8 +53069,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -52367,6 +53266,16 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "9RnanCMpfYi2uf5EFuVnYadEx8VmvhSFJTvzep6K48cd",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 1,
+          "usdc": "0.025"
         }
       ]
     },
@@ -52630,8 +53539,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -52704,6 +53613,11 @@
           "usdc": "0.68"
         },
         {
+          "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
+          "transfers": 6,
+          "usdc": "0.6"
+        },
+        {
           "server": "Biotech Catalyst Sentinel — accurate FDA PDUFA dates for agents",
           "transfers": 29,
           "usdc": "0.58"
@@ -52725,6 +53639,11 @@
         },
         {
           "server": "api.cookin.fun",
+          "transfers": 43,
+          "usdc": "0.43"
+        },
+        {
+          "server": "api.deepnets.ai",
           "transfers": 43,
           "usdc": "0.43"
         },
@@ -52751,11 +53670,6 @@
         {
           "server": "aijobsboom-x402.sonofgus.workers.dev",
           "transfers": 30,
-          "usdc": "0.3"
-        },
-        {
-          "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 3,
           "usdc": "0.3"
         },
         {
@@ -52847,11 +53761,6 @@
           "server": "pay.edge-agents.ai",
           "transfers": 28,
           "usdc": "0.28"
-        },
-        {
-          "server": "api.deepnets.ai",
-          "transfers": 23,
-          "usdc": "0.23"
         },
         {
           "server": "reader.outbid.sh",
@@ -53654,6 +54563,11 @@
           "usdc": "0.05"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 43,
+          "usdc": "0.043"
+        },
+        {
           "server": "ApiToll — Base mainnet gas snapshot for AI agents",
           "transfers": 43,
           "usdc": "0.043"
@@ -53819,11 +54733,6 @@
           "usdc": "0.028"
         },
         {
-          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
-          "transfers": 27,
-          "usdc": "0.027"
-        },
-        {
           "server": "agentpaystore.com",
           "transfers": 26,
           "usdc": "0.026"
@@ -53867,6 +54776,11 @@
           "server": "saylorinnovations.com",
           "transfers": 5,
           "usdc": "0.005"
+        },
+        {
+          "server": "x402.sniperx.fun",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -53985,8 +54899,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -54735,8 +55649,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -55465,8 +56379,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -55929,9 +56843,19 @@
           "usdc": "837.430892"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 9,
+          "usdc": "207.759158"
+        },
+        {
           "server": "sol-meme-intel - EVM meme-coin signals for AI agents",
           "transfers": 2,
           "usdc": "24.16953"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 7,
+          "usdc": "5.596948"
         },
         {
           "server": "Free Crypto Derivatives Data: Liquidations, Funding | ByKaranteli",
@@ -56345,8 +57269,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -56895,8 +57819,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -57745,8 +58669,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -57925,8 +58849,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -58416,6 +59340,16 @@
       ]
     },
     {
+      "address": "A9oJYVAFNeGiVceUS2Jb4v6AX5zRRNKJwwAtvGT564Er",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 6,
+          "usdc": "0.006"
+        }
+      ]
+    },
+    {
       "address": "AA9HQGeNLN4ZWev2M8uRoBPU6NyLeDwgUk2ppc6BaULL",
       "servers": [
         {
@@ -58445,8 +59379,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -58645,8 +59579,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 3,
+          "usdc": "0.003"
         }
       ]
     },
@@ -59626,6 +60560,16 @@
       ]
     },
     {
+      "address": "ANu3SAh199zxbqv42MBMT3txvdYYRDmVZWPq1Wgg7Vwp",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "36.357961"
+        }
+      ]
+    },
+    {
       "address": "AP9aPjZnmZQm2wQHLG3gM5uLR84whGqLcZiB6S3oPxqq",
       "servers": [
         {
@@ -59660,8 +60604,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -59732,6 +60676,16 @@
           "server": "vme5zb7fll.execute-api.us-east-1.amazonaws.com",
           "transfers": 1,
           "usdc": "0.001"
+        }
+      ]
+    },
+    {
+      "address": "AQ7VuQzMmk29BFV1RzYT1eoKbP4YzVWEce7V1kj95z1d",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -60301,6 +61255,16 @@
       ]
     },
     {
+      "address": "ARzJJmkkfRDg5U6itCGMy8djb3uxdPaR7QuLbWQ9jz5m",
+      "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 7,
+          "usdc": "0.091"
+        }
+      ]
+    },
+    {
       "address": "AS5MV3ear4NZPMWXbCsEz3AdbCaXEnq4ChdaWsvLgkcM",
       "servers": [
         {
@@ -60399,24 +61363,24 @@
       "address": "ASwXW7mbni9FYTSRj1HW2FsNsXFnJBavFpi2iXWQ2cft",
       "servers": [
         {
-          "server": "Financial Newsletters &amp; Podcasts for AI Agents | Drip",
-          "transfers": 1,
-          "usdc": "0.1"
-        },
-        {
           "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
-          "transfers": 13,
-          "usdc": "0.094"
+          "transfers": 40,
+          "usdc": "0.328"
         },
         {
           "server": "agentic-reservations.vercel.app",
-          "transfers": 13,
-          "usdc": "0.094"
+          "transfers": 40,
+          "usdc": "0.328"
         },
         {
           "server": "api.aidress.ai",
-          "transfers": 13,
-          "usdc": "0.094"
+          "transfers": 40,
+          "usdc": "0.328"
+        },
+        {
+          "server": "Financial Newsletters &amp; Podcasts for AI Agents | Drip",
+          "transfers": 1,
+          "usdc": "0.1"
         }
       ]
     },
@@ -60605,8 +61569,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -60765,8 +61729,8 @@
       "servers": [
         {
           "server": "loonie-toll.onrender.com",
-          "transfers": 38,
-          "usdc": "731.734056"
+          "transfers": 71,
+          "usdc": "1651.727591"
         }
       ]
     },
@@ -61259,6 +62223,11 @@
           "usdc": "0.05"
         },
         {
+          "server": "api.deepnets.ai",
+          "transfers": 4,
+          "usdc": "0.04"
+        },
+        {
           "server": "maraventanoindex.com",
           "transfers": 4,
           "usdc": "0.04"
@@ -61320,11 +62289,6 @@
         },
         {
           "server": "AgentMail | Email Inbox API for AI Agents",
-          "transfers": 1,
-          "usdc": "0.01"
-        },
-        {
-          "server": "api.deepnets.ai",
           "transfers": 1,
           "usdc": "0.01"
         },
@@ -61730,8 +62694,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 6,
-          "usdc": "0.006"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -62255,8 +63219,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -62772,6 +63736,21 @@
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
           "transfers": 10,
           "usdc": "0.5"
+        }
+      ]
+    },
+    {
+      "address": "AkY9B13hu9wHL4vhfCaZ6HGZxabn1kx5eCkrqXy2vKkk",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 3,
+          "usdc": "0.003"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 3,
+          "usdc": "0.003"
         }
       ]
     },
@@ -63470,8 +64449,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 6,
-          "usdc": "0.006"
+          "transfers": 15,
+          "usdc": "0.015"
         }
       ]
     },
@@ -63487,6 +64466,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "1"
+        }
+      ]
+    },
+    {
+      "address": "AqJ5JYNb7ApkJwvbuXxPnTtKeuizjvC1s2fkp382y9LC",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "10.900735"
         }
       ]
     },
@@ -64234,6 +65223,11 @@
       "address": "AuvCpTVJE4NcDof4JpcdbyT6Mhg2EfqQbPPvJ1GWKBg8",
       "servers": [
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.02"
+        },
+        {
           "server": "api.aidress.ai",
           "transfers": 1,
           "usdc": "0.01"
@@ -64402,6 +65396,16 @@
           "server": "Otto AI x402 — Market Intelligence, DeFi & Trading",
           "transfers": 1,
           "usdc": "0.001"
+        }
+      ]
+    },
+    {
+      "address": "Avt6mPrrT1mSsCCtXmksEqUUAMuyc39HaXdEAg64tcss",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -64585,8 +65589,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -64902,6 +65906,21 @@
           "server": "api.limitguard.ai",
           "transfers": 23,
           "usdc": "47.15"
+        }
+      ]
+    },
+    {
+      "address": "B1YEboAH3ZDscqni7cyVnGkcDroB2kqLXCwLs3Ez8oX3",
+      "servers": [
+        {
+          "server": "Palmyr",
+          "transfers": 2,
+          "usdc": "181.682375"
+        },
+        {
+          "server": "tiktok.palmyr.ai",
+          "transfers": 2,
+          "usdc": "181.682375"
         }
       ]
     },
@@ -65559,6 +66578,21 @@
       "address": "B7wd9W3E7UKf3Ziw8dRCXrCoxMZd3iM4zYCtVB51pBKe",
       "servers": [
         {
+          "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
+          "transfers": 2,
+          "usdc": "0.02"
+        },
+        {
+          "server": "agentic-reservations.vercel.app",
+          "transfers": 2,
+          "usdc": "0.02"
+        },
+        {
+          "server": "api.aidress.ai",
+          "transfers": 2,
+          "usdc": "0.02"
+        },
+        {
           "server": "SolEnrich — Onchain Intelligence for Solana Agents",
           "transfers": 1,
           "usdc": "0.02"
@@ -65570,8 +66604,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -65725,8 +66759,8 @@
       "servers": [
         {
           "server": "intel.degenscan.io",
-          "transfers": 3,
-          "usdc": "5300"
+          "transfers": 8,
+          "usdc": "10637"
         }
       ]
     },
@@ -65785,8 +66819,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 15,
-          "usdc": "0.96"
+          "transfers": 82,
+          "usdc": "3.61"
         }
       ]
     },
@@ -66126,6 +67160,16 @@
       ]
     },
     {
+      "address": "BG6asTsXP7LHkhi5zxHCqxcGNvHsrgdeedJBgMihGWs8",
+      "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 47,
+          "usdc": "7.654536"
+        }
+      ]
+    },
+    {
       "address": "BGKZpsrHAAvEitsqv1RfGSqJF9ajk1AbMgNNJHCXh1ou",
       "servers": [
         {
@@ -66329,6 +67373,11 @@
       "address": "BJ4mERdSSKFC3wzaZGAS2S4AXkVXVUA8fEtJwUvtTcu7",
       "servers": [
         {
+          "server": "X402 Protocol Test",
+          "transfers": 4,
+          "usdc": "0.589"
+        },
+        {
           "server": "content.hugen.tokyo",
           "transfers": 1,
           "usdc": "0.25"
@@ -66491,6 +67540,26 @@
       ]
     },
     {
+      "address": "BLHhDaVmNvN2DxoZLPTiP2wTQ74WFdzXRLhoEiM776Uy",
+      "servers": [
+        {
+          "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "agentic-reservations.vercel.app",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "api.aidress.ai",
+          "transfers": 1,
+          "usdc": "0.01"
+        }
+      ]
+    },
+    {
       "address": "BLHo1fLuLuhERRrr7Pw64HfSZ7aDbfPg5PziWbrhhsPd",
       "servers": [
         {
@@ -66645,8 +67714,8 @@
       "servers": [
         {
           "server": "Nansen AI - Trade Everything Onchain with AI",
-          "transfers": 47,
-          "usdc": "0.75"
+          "transfers": 64,
+          "usdc": "1.04"
         }
       ]
     },
@@ -66655,8 +67724,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -66781,6 +67850,16 @@
       ]
     },
     {
+      "address": "BPJqzcyZF3BuXXFdyV5Zon6PM1KZC7sU4Bh2Bq2DGeB4",
+      "servers": [
+        {
+          "server": "flipr-x402.fly.dev",
+          "transfers": 22,
+          "usdc": "22.925306"
+        }
+      ]
+    },
+    {
       "address": "BPLgHLFtHCYg7sRPwLnqgr2QoKutih8ZRtfVki4Efmpa",
       "servers": [
         {
@@ -66854,9 +67933,19 @@
       "address": "BQ72nSv9f3PRyRKCBnHLVrerrv37CYTHm5h3s9VSGQDV",
       "servers": [
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 3,
+          "usdc": "148.003729"
+        },
+        {
           "server": "intel.degenscan.io",
           "transfers": 1,
           "usdc": "19.208455"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 8,
+          "usdc": "6.396096"
         }
       ]
     },
@@ -67600,8 +68689,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 38,
-          "usdc": "1.37"
+          "transfers": 113,
+          "usdc": "3.74"
         }
       ]
     },
@@ -67843,6 +68932,11 @@
     {
       "address": "BZtgQEyS6eXUXicYPHecYQ7PybqodXQMvkjUbP4R8mUU",
       "servers": [
+        {
+          "server": "intel.degenscan.io",
+          "transfers": 1,
+          "usdc": "998.795841"
+        },
         {
           "server": "Laso Finance | Crypto Prepaid Cards & Gift Cards",
           "transfers": 1,
@@ -68390,8 +69484,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -68534,6 +69628,11 @@
           "usdc": "4.685708"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 3,
+          "usdc": "0.06"
+        },
+        {
           "server": "NetIntel API",
           "transfers": 4,
           "usdc": "0.02"
@@ -68625,8 +69724,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 15,
+          "usdc": "0.015"
         }
       ]
     },
@@ -68787,6 +69886,16 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "Bjp4ZvqALmHBZS2jHH2jxXYakLTcXg2mbeAMpuWCFtTU",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -69035,83 +70144,83 @@
       "servers": [
         {
           "server": "agentaudit.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "codepulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "costpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "datapulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "dnspulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "escrowpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "fishpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "floodpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "ippulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "searchpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "shieldform.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "sitepulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "solarpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "threatpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "walletintel.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         },
         {
           "server": "webpulse.waltsoft.net",
-          "transfers": 231,
-          "usdc": "12.365"
+          "transfers": 1082,
+          "usdc": "109.095"
         }
       ]
     },
@@ -69172,6 +70281,16 @@
           "server": "Bitrefill x402",
           "transfers": 103,
           "usdc": "11334.158937"
+        }
+      ]
+    },
+    {
+      "address": "Bnqj5jicWmrH9nLCg12uWas3Tw4kFJms2biAoc9ZYANf",
+      "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 2,
+          "usdc": "0.0011"
         }
       ]
     },
@@ -69491,6 +70610,16 @@
       ]
     },
     {
+      "address": "BqiRfq9LSfcLXkiwFoBFEKhjCUgtGzTh5zfddVqLqKN2",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "28.846286"
+        }
+      ]
+    },
+    {
       "address": "BqjgxxofQoAzsS9rihZvciQSVxcJQKNYu3PeRhS4rQDt",
       "servers": [
         {
@@ -69562,6 +70691,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "150"
+        }
+      ]
+    },
+    {
+      "address": "Brb3WCGzMiN8qjxGaqni955GQCRC5yhJZZCkXKzVWSPp",
+      "servers": [
+        {
+          "server": "api.vextorium.com",
+          "transfers": 95,
+          "usdc": "0.5215"
         }
       ]
     },
@@ -69720,8 +70859,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -69772,6 +70911,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "110"
+        }
+      ]
+    },
+    {
+      "address": "BveR2eAGcCLheSqn6XxgU6wSsLk5HYFkgyA9waMD9N2A",
+      "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 2,
+          "usdc": "0.00523"
         }
       ]
     },
@@ -69942,6 +71091,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "1005.86"
+        }
+      ]
+    },
+    {
+      "address": "BwwrNgexbk8HsJJ8yAaCT36QKpAZoSoPNEhBztR8puSw",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "27.264985"
         }
       ]
     },
@@ -70250,8 +71409,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 22,
-          "usdc": "0.94"
+          "transfers": 90,
+          "usdc": "3.78"
         }
       ]
     },
@@ -71252,6 +72411,16 @@
           "server": "pro-api.coingecko.com",
           "transfers": 1,
           "usdc": "0.01"
+        },
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 6,
+          "usdc": "0.006"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -71417,6 +72586,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 5,
           "usdc": "135.8"
+        }
+      ]
+    },
+    {
+      "address": "CBYMYxfMGdA98qkzrYqTzTiQhP3H2scU95EB4ZxoRxuM",
+      "servers": [
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 1,
+          "usdc": "5"
         }
       ]
     },
@@ -71900,8 +73079,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 9,
-          "usdc": "0.023346"
+          "transfers": 29,
+          "usdc": "0.072256"
         }
       ]
     },
@@ -72117,6 +73296,21 @@
           "server": "Bitrefill x402",
           "transfers": 109,
           "usdc": "20134.339999"
+        }
+      ]
+    },
+    {
+      "address": "CK5BynZLn96ceYG3JrTnUGMJiouAdL8NDh7FWAwArP1T",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 499,
+          "usdc": "9.95"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 499,
+          "usdc": "9.95"
         }
       ]
     },
@@ -72570,8 +73764,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -72781,6 +73975,16 @@
       ]
     },
     {
+      "address": "CN8M75cH57DuZNzW5wSUpTXtMrSfXBFScJoQxVCgAXes",
+      "servers": [
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 1,
+          "usdc": "0.799918"
+        }
+      ]
+    },
+    {
       "address": "CNF3JLENrcWZ9XAKonGB7YetQTu4KnG4PCJSidpvZ5uo",
       "servers": [
         {
@@ -72835,8 +74039,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 9,
-          "usdc": "0.024613"
+          "transfers": 28,
+          "usdc": "0.073543"
         }
       ]
     },
@@ -73945,8 +75149,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -74065,8 +75269,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -74109,6 +75313,11 @@
           "usdc": "536.822924"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 10,
+          "usdc": "315.281504"
+        },
+        {
           "server": "Laso Finance | Crypto Prepaid Cards & Gift Cards",
           "transfers": 2,
           "usdc": "100.999945"
@@ -74117,6 +75326,11 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 2,
           "usdc": "100.999945"
+        },
+        {
+          "server": "proxy.suverse.io",
+          "transfers": 4,
+          "usdc": "3.19906"
         },
         {
           "server": "clawg.fixr-the-buildr.workers.dev",
@@ -74375,8 +75589,8 @@
       "servers": [
         {
           "server": "GlianaAI — pay-per-call AI inference across 90+ models",
-          "transfers": 22,
-          "usdc": "1002.1763"
+          "transfers": 23,
+          "usdc": "1003.1763"
         }
       ]
     },
@@ -74650,8 +75864,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -74660,8 +75874,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 15,
+          "usdc": "0.015"
         }
       ]
     },
@@ -74705,8 +75919,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 18,
-          "usdc": "0.089759"
+          "transfers": 72,
+          "usdc": "0.376522"
         }
       ]
     },
@@ -74826,6 +76040,16 @@
       ]
     },
     {
+      "address": "Ch3RjtDHudyEBSbtpNn63Cy3iRdzjMLJbkZ2u7qoYGSD",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "15.10636"
+        }
+      ]
+    },
+    {
       "address": "Ch7PepAVKbJgs46kGpmAaL2JPcPMi6CPUzuySZ5smVuG",
       "servers": [
         {
@@ -74937,6 +76161,16 @@
           "server": "Bitrefill x402",
           "transfers": 100,
           "usdc": "13926.904068"
+        }
+      ]
+    },
+    {
+      "address": "CiPrgq9AYdnishJ32t4CVz1BwrdQ35ZchQZ5qBZmLsXY",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -75910,8 +77144,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -76045,8 +77279,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -76085,8 +77319,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 33,
-          "usdc": "0.66"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -76931,6 +78165,16 @@
       ]
     },
     {
+      "address": "D4sAeRiHK9ov27HvsijmxgwYyESWtkoB6KLbmcq12Shw",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 6,
+          "usdc": "0.84"
+        }
+      ]
+    },
+    {
       "address": "D4v5SfKinXXZgvfzCzNUJLwXqzn8FpqL87fmirEATtff",
       "servers": [
         {
@@ -77415,8 +78659,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -77535,8 +78779,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -77694,6 +78938,11 @@
           "usdc": "1043.058951"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "10.284669"
+        },
+        {
           "server": "svm402.com",
           "transfers": 1,
           "usdc": "1.004065"
@@ -77795,8 +79044,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -77820,14 +79069,19 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
     {
       "address": "DCAkxCtD7wdoZy1KnSavP5PU1v6qEk9r5BPddv5F9EUX",
       "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 10,
+          "usdc": "0.13"
+        },
         {
           "server": "enrichx402.com",
           "transfers": 4,
@@ -78070,8 +79324,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -78113,6 +79367,11 @@
     {
       "address": "DEwjDH65Mkp2hi4M8P24NPNgNJEZ5q1ptAH6JVtKCbBN",
       "servers": [
+        {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 12,
+          "usdc": "0.36"
+        },
         {
           "server": "travel.brij.fi",
           "transfers": 2,
@@ -78180,8 +79439,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -78366,6 +79625,16 @@
       ]
     },
     {
+      "address": "DGeHFkGH2phXXHDoPq1queBszZd3kDdAtmndHRUZgiiD",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "41.225572"
+        }
+      ]
+    },
+    {
       "address": "DGq1mSeiD5M2pB7m6UKUDitfNCqsC7Q5xfqX8A3xbEZA",
       "servers": [
         {
@@ -78468,6 +79737,11 @@
     {
       "address": "DHPHERSkqfckRSEWCt1Kh6ajk2XypCwUC4rz3NtN3nHT",
       "servers": [
+        {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 2,
+          "usdc": "0.4"
+        },
         {
           "server": "api.aidress.ai",
           "transfers": 18,
@@ -78645,8 +79919,18 @@
       "servers": [
         {
           "server": "grov.fun",
+          "transfers": 2,
+          "usdc": "15.409365"
+        },
+        {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
           "transfers": 1,
-          "usdc": "4.975244"
+          "usdc": "7.208113"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 1,
+          "usdc": "7.208113"
         }
       ]
     },
@@ -78875,8 +80159,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -79109,6 +80393,11 @@
       "address": "DPwRj9yvAKQMGb3bJvCxTpHim3GnTkLoq7sgeQEjCkHa",
       "servers": [
         {
+          "server": "stablecrypto.dev",
+          "transfers": 5,
+          "usdc": "0.05"
+        },
+        {
           "server": "Sponge Gateway",
           "transfers": 1,
           "usdc": "0.01"
@@ -79162,6 +80451,16 @@
           "server": "travel.brij.fi",
           "transfers": 1,
           "usdc": "0.1"
+        }
+      ]
+    },
+    {
+      "address": "DQbUWSZoLpuHmdyqnJzpctPBkoKdJhMZdE1cJoWk2pnt",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 7,
+          "usdc": "4.198861"
         }
       ]
     },
@@ -79254,6 +80553,16 @@
       "address": "DRvfcEcHV8ydjYi92UFznHzVRTaqWwzX62Aqc9L7DPEi",
       "servers": [
         {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
+          "transfers": 152,
+          "usdc": "1.52"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 152,
+          "usdc": "1.52"
+        },
+        {
           "server": "Twitter / X API — pay per call in USDC | fetcher.sh",
           "transfers": 121,
           "usdc": "0.605"
@@ -79287,16 +80596,6 @@
           "server": "StableEnrich",
           "transfers": 11,
           "usdc": "0.0964"
-        },
-        {
-          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
-          "transfers": 4,
-          "usdc": "0.04"
-        },
-        {
-          "server": "readx.sh",
-          "transfers": 4,
-          "usdc": "0.04"
         },
         {
           "server": "PayWeave Cloudflare · Pay-per-call API",
@@ -79872,6 +81171,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "44.57"
+        }
+      ]
+    },
+    {
+      "address": "DYAME6NxWkVT5ej93gwsUuYKx4RhbXSAUfA6Htq7C3SP",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 2,
+          "usdc": "0.16"
         }
       ]
     },
@@ -80664,6 +81973,11 @@
           "usdc": "0.701"
         },
         {
+          "server": "api.carbon-cashmere.de",
+          "transfers": 23,
+          "usdc": "0.553"
+        },
+        {
           "server": "content.hugen.tokyo",
           "transfers": 24,
           "usdc": "0.365"
@@ -80714,6 +82028,11 @@
           "usdc": "0.3"
         },
         {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 3,
+          "usdc": "0.3"
+        },
+        {
           "server": "api.aidress.ai",
           "transfers": 19,
           "usdc": "0.19"
@@ -80742,6 +82061,16 @@
           "server": "img402.dev",
           "transfers": 1,
           "usdc": "0.01"
+        },
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 1,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 1,
+          "usdc": "0.002"
         }
       ]
     },
@@ -80874,6 +82203,11 @@
           "usdc": "4.05"
         },
         {
+          "server": "api.carbon-cashmere.de",
+          "transfers": 122,
+          "usdc": "3.957"
+        },
+        {
           "server": "api.aidress.ai",
           "transfers": 242,
           "usdc": "2.42"
@@ -80917,6 +82251,16 @@
           "server": "sol.blockrun.ai",
           "transfers": 2,
           "usdc": "0.052"
+        },
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 7,
+          "usdc": "0.027"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 7,
+          "usdc": "0.027"
         },
         {
           "server": "files.camelai.io",
@@ -81661,6 +83005,16 @@
       ]
     },
     {
+      "address": "Dnqp3xeYg3hAE4YzPkVqdmakXoNwKYBagjc861gM4J1c",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 11,
+          "usdc": "0.011"
+        }
+      ]
+    },
+    {
       "address": "Dnrt99JpZ98CzdKG4DrMAdFwrau1cFYg5891xar1oDw5",
       "servers": [
         {
@@ -81777,6 +83131,11 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 26,
           "usdc": "0.58"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 55,
+          "usdc": "0.55"
         },
         {
           "server": "enrichx402.com",
@@ -82141,6 +83500,16 @@
       ]
     },
     {
+      "address": "Drbi2Jkcg5jqbv6USxiQ6K4aGtZUwZSGif6NcPAwro7Z",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "13.50266"
+        }
+      ]
+    },
+    {
       "address": "Drhvo7r72yH2TTb4xUL9q6BvvqKSpYsVeax9jknzSPT8",
       "servers": [
         {
@@ -82170,8 +83539,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 3,
+          "usdc": "0.003"
         }
       ]
     },
@@ -82375,8 +83744,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -83151,6 +84520,16 @@
       ]
     },
     {
+      "address": "E2VRFtHaUg49gRPcAtZMBvdL3MgeBiRs7KQCXNSv1vv",
+      "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 1,
+          "usdc": "0.559632"
+        }
+      ]
+    },
+    {
       "address": "E2Vy2ZGu4EpHzzYQbc6XMRDjjhan5H2Uo1vSDCDBuJGJ",
       "servers": [
         {
@@ -83291,6 +84670,16 @@
       ]
     },
     {
+      "address": "E3ewErmuFvnUPSELxWjDHPH8YJYBwSZSJczDLYR6dxvN",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "61.90149"
+        }
+      ]
+    },
+    {
       "address": "E3kkZ1qQMPuUtGcYjEtqZbbFpeapW2LBwYVC8gyg5y3a",
       "servers": [
         {
@@ -83366,6 +84755,91 @@
       ]
     },
     {
+      "address": "E52n53YP2qEf5RHjotpi1yyeZPkbL1bBkwaMfS4i11kR",
+      "servers": [
+        {
+          "server": "agentaudit.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "codepulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "costpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "datapulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "dnspulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "escrowpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "fishpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "floodpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "ippulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "searchpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "shieldform.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "sitepulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "solarpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "threatpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "walletintel.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        },
+        {
+          "server": "webpulse.waltsoft.net",
+          "transfers": 101,
+          "usdc": "46.36"
+        }
+      ]
+    },
+    {
       "address": "E56LedrFmmWAoH4jT176yEwKnF7VHTewCtsLgWhQPjuH",
       "servers": [
         {
@@ -83400,8 +84874,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 6,
-          "usdc": "0.006"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -83905,8 +85379,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 25,
-          "usdc": "1.06"
+          "transfers": 86,
+          "usdc": "3.83"
         }
       ]
     },
@@ -84275,8 +85749,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -84330,8 +85804,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 33,
-          "usdc": "0.66"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -85260,8 +86734,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -85302,6 +86776,16 @@
           "server": "agentsvc.io",
           "transfers": 20,
           "usdc": "0.4725"
+        }
+      ]
+    },
+    {
+      "address": "ELLRVhBvSnzSS6E7XFXDPN38SBig4xYbp6MyV3PFYjka",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 1,
+          "usdc": "9.375"
         }
       ]
     },
@@ -85814,6 +87298,11 @@
           "usdc": "18.733"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 3,
+          "usdc": "0.015"
+        },
+        {
           "server": "Oblique Markets — pay-per-call APIs for AI agents",
           "transfers": 1,
           "usdc": "0.002"
@@ -85865,8 +87354,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -85897,6 +87386,26 @@
           "server": "twitter.surf.cascade.fyi",
           "transfers": 1,
           "usdc": "0.005"
+        }
+      ]
+    },
+    {
+      "address": "ESSLD645LCL3Qs54GBB68vCAhCRSbx3Ko3ujzjxioHzi",
+      "servers": [
+        {
+          "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
+          "transfers": 1,
+          "usdc": "0.1"
+        },
+        {
+          "server": "agentic-reservations.vercel.app",
+          "transfers": 1,
+          "usdc": "0.1"
+        },
+        {
+          "server": "api.aidress.ai",
+          "transfers": 1,
+          "usdc": "0.1"
         }
       ]
     },
@@ -86000,8 +87509,8 @@
       "servers": [
         {
           "server": "BotPay — AI Agent Payment Network and x402 Infrastructure",
-          "transfers": 23,
-          "usdc": "0.86"
+          "transfers": 83,
+          "usdc": "3.53"
         }
       ]
     },
@@ -86290,8 +87799,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -86407,6 +87916,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "115"
+        }
+      ]
+    },
+    {
+      "address": "EXpEvVgTW8fTPgupwSZdruobkpUbBuRBhFLDrrzEfXo4",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
         }
       ]
     },
@@ -86761,6 +88280,16 @@
       ]
     },
     {
+      "address": "Ebt8NLDyP8ChppwAzku6x2EYMvNNfvgQBm4mMWBNCd8n",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 2,
+          "usdc": "11.483349"
+        }
+      ]
+    },
+    {
       "address": "Ec9K79d2KJ3gVPdvQXVjbAyXRZDz5s4i82pULgmzKiER",
       "servers": [
         {
@@ -87010,8 +88539,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -87545,8 +89074,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -88376,6 +89905,21 @@
       ]
     },
     {
+      "address": "EqtygUCptoLUG8vdkBn62TV319T4jNVNEYvxiZQPjSsN",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 1,
+          "usdc": "0.001"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 1,
+          "usdc": "0.001"
+        }
+      ]
+    },
+    {
       "address": "Eqv1tJGkLFeH4giGy8vqKxF4NJBHtGR5cGmKG6cpVy4Z",
       "servers": [
         {
@@ -88405,8 +89949,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -89241,6 +90785,16 @@
       ]
     },
     {
+      "address": "F1zcmprvzQFrix13PH8sJEuQXVDKqnRzeWkrXLw7MV2f",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 4,
+          "usdc": "0.004"
+        }
+      ]
+    },
+    {
       "address": "F213LJN5WAWVmbr9DJVeZmHn7qFAAkCTetPLqCjjj9Xi",
       "servers": [
         {
@@ -89852,6 +91406,11 @@
           "server": "Otto AI x402 — Market Intelligence, DeFi & Trading",
           "transfers": 13,
           "usdc": "0.013"
+        },
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 9,
+          "usdc": "0.009"
         },
         {
           "server": "OpenRelay",
@@ -90685,8 +92244,8 @@
       "servers": [
         {
           "server": "X402 Protocol Test",
-          "transfers": 25,
-          "usdc": "0.572"
+          "transfers": 95,
+          "usdc": "1.937"
         }
       ]
     },
@@ -90994,6 +92553,11 @@
           "usdc": "0.01"
         },
         {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
           "server": "pay.edge-agents.ai",
           "transfers": 1,
           "usdc": "0.01"
@@ -91017,6 +92581,11 @@
           "server": "Scry Wallet Intelligence",
           "transfers": 1,
           "usdc": "0.005"
+        },
+        {
+          "server": "api.vextorium.com",
+          "transfers": 1,
+          "usdc": "0.003"
         },
         {
           "server": "Blocksize Agentic Market Intelligence | MCP Market Data for AI Agents",
@@ -91320,8 +92889,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -91475,8 +93044,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -91527,6 +93096,16 @@
           "server": "weather.hugen.tokyo",
           "transfers": 11,
           "usdc": "0.06"
+        },
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 26,
+          "usdc": "0.042"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 26,
+          "usdc": "0.042"
         }
       ]
     },
@@ -91732,6 +93311,16 @@
           "server": "AgentMail | Email Inbox API for AI Agents",
           "transfers": 1,
           "usdc": "2"
+        }
+      ]
+    },
+    {
+      "address": "FHzp3zfe737ET5vKfjkRwkSNb8jDXL2UHdiD9RfXfy8x",
+      "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 11,
+          "usdc": "1.205747"
         }
       ]
     },
@@ -92007,6 +93596,16 @@
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
           "transfers": 1,
           "usdc": "0.1"
+        }
+      ]
+    },
+    {
+      "address": "FL7u5gJ2rBJoh1nqh3HxGXMhhmcZMKqXkAxopfeeuXmV",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "37.596952"
         }
       ]
     },
@@ -92540,8 +94139,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 5,
-          "usdc": "0.005"
+          "transfers": 13,
+          "usdc": "0.013"
         }
       ]
     },
@@ -92710,8 +94309,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 13,
+          "usdc": "0.013"
         }
       ]
     },
@@ -93050,8 +94649,8 @@
       "servers": [
         {
           "server": "Nansen AI - Trade Everything Onchain with AI",
-          "transfers": 6,
-          "usdc": "0.22"
+          "transfers": 36,
+          "usdc": "1.32"
         }
       ]
     },
@@ -93146,6 +94745,16 @@
       ]
     },
     {
+      "address": "FXStP2RDEGc3Wticu8Sro8QnfgPto1QuhFGeXjtDfh5b",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.003"
+        }
+      ]
+    },
+    {
       "address": "FXb1KhMcKK9tEhuYY47quo7ikYKiUoaRg4HQrMC2VZNW",
       "servers": [
         {
@@ -93157,6 +94766,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "149.24"
+        }
+      ]
+    },
+    {
+      "address": "FXfSAjZ6dErUkKg9C4wC4tz7xbV48M4F6mLMbrkEaPJx",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.005"
         }
       ]
     },
@@ -93243,6 +94862,11 @@
     {
       "address": "FY4ZgpYxunQRPVKiCYZyvdxqJufDLAJXfebu8dY3jCNi",
       "servers": [
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 12,
+          "usdc": "0.156"
+        },
         {
           "server": "content.hugen.tokyo",
           "transfers": 8,
@@ -93410,8 +95034,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 4,
+          "usdc": "0.004"
         }
       ]
     },
@@ -93626,6 +95250,16 @@
       ]
     },
     {
+      "address": "FbHtMoXU5iEUi2ruGScQrP1CodSYpNzjveD1efkoNhK1",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 5,
+          "usdc": "0.005"
+        }
+      ]
+    },
+    {
       "address": "FbMZGudRjP8HE6socfUE476GM2Az5nLiseFNgEnfyFCf",
       "servers": [
         {
@@ -93662,6 +95296,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 9,
           "usdc": "742"
+        }
+      ]
+    },
+    {
+      "address": "FbkX1h2YTs171cEMa4GrV7XbAiQt5zSmV2CjfYWxXJDP",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 1,
+          "usdc": "1.070413"
         }
       ]
     },
@@ -93745,8 +95389,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 6,
-          "usdc": "0.006"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -93890,8 +95534,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -94306,6 +95950,16 @@
       ]
     },
     {
+      "address": "FhVo3mqL8PW5pH5U2CN4XE33DokiyZnUwuGpH2hmHLuM",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 3,
+          "usdc": "13.999763"
+        }
+      ]
+    },
+    {
       "address": "FhYCGnh3Uur9j3VZxzmZF8K5QSSMDQ72Yr48bmVEKreL",
       "servers": [
         {
@@ -94487,6 +96141,16 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 18,
           "usdc": "0.18"
+        }
+      ]
+    },
+    {
+      "address": "FkqmRrBn3oqmpn6unGDiD1TXikPquGMQW51SQkeCfTjT",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 2,
+          "usdc": "10.395"
         }
       ]
     },
@@ -95267,6 +96931,21 @@
           "server": "weather.hugen.tokyo",
           "transfers": 1,
           "usdc": "0.01"
+        },
+        {
+          "server": "2s — the (most) everything API",
+          "transfers": 1,
+          "usdc": "0.00144"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 1,
+          "usdc": "0.00144"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 1,
+          "usdc": "0.00144"
         }
       ]
     },
@@ -95530,8 +97209,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -95732,6 +97411,16 @@
           "server": "Xona Agent | Infrastructure for Agentic Commerce",
           "transfers": 5,
           "usdc": "0.42"
+        }
+      ]
+    },
+    {
+      "address": "FyjYYTQVuyJooeCcvrXsimhTax9FWtNaDLKJaN6pRgFj",
+      "servers": [
+        {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 2,
+          "usdc": "0.06"
         }
       ]
     },
@@ -96370,8 +98059,8 @@
       "servers": [
         {
           "server": "grov.fun",
-          "transfers": 1,
-          "usdc": "0.01"
+          "transfers": 2,
+          "usdc": "0.035"
         }
       ]
     },
@@ -96679,6 +98368,11 @@
       "address": "G7fu2vBDEZ9SYM4agJ9shffJQUmyg6UCEEUnxuYRAMuq",
       "servers": [
         {
+          "server": "Nansen AI - Trade Everything Onchain with AI",
+          "transfers": 6,
+          "usdc": "0.18"
+        },
+        {
           "server": "travel.brij.fi",
           "transfers": 1,
           "usdc": "0.1"
@@ -96780,8 +98474,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -97430,8 +99124,8 @@
       "servers": [
         {
           "server": "proxy.suverse.io",
-          "transfers": 392,
-          "usdc": "0.392"
+          "transfers": 1034,
+          "usdc": "48.210944"
         }
       ]
     },
@@ -97679,17 +99373,22 @@
           "usdc": "150.374749"
         },
         {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 5,
+          "usdc": "93.040039"
+        },
+        {
           "server": "phion.systems",
           "transfers": 1,
           "usdc": "12.148399"
         },
         {
-          "server": "api.suverse.io",
-          "transfers": 1,
-          "usdc": "1.265337"
+          "server": "proxy.suverse.io",
+          "transfers": 7,
+          "usdc": "6.062403"
         },
         {
-          "server": "proxy.suverse.io",
+          "server": "api.suverse.io",
           "transfers": 1,
           "usdc": "1.265337"
         },
@@ -97730,8 +99429,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -98261,6 +99960,16 @@
       ]
     },
     {
+      "address": "GMhgQMusBo8AVCAbJJSD2vmGYN9MtZPg1cRRFfgZ74je",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "57.789005"
+        }
+      ]
+    },
+    {
       "address": "GN4r38M6iaq6y69dwARPv35ZmoGfQScAK7dhepN3R2Va",
       "servers": [
         {
@@ -98515,8 +100224,8 @@
       "servers": [
         {
           "server": "api.deepnets.ai",
-          "transfers": 2,
-          "usdc": "2.84"
+          "transfers": 5,
+          "usdc": "17.76"
         }
       ]
     },
@@ -98575,8 +100284,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -98911,6 +100620,16 @@
       ]
     },
     {
+      "address": "GUgRPTDZ2p9EPWsaZ7DKudB1h9i33c8mdQGHcTriUboj",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 9,
+          "usdc": "0.045"
+        }
+      ]
+    },
+    {
       "address": "GUhrGGnu8fcaGpV7iL1XjA4P3XoM31auicMxd58NkL4J",
       "servers": [
         {
@@ -99045,8 +100764,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -99235,8 +100954,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -99270,8 +100989,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 1,
-          "usdc": "0.02984"
+          "transfers": 2,
+          "usdc": "0.052309"
         }
       ]
     },
@@ -100736,6 +102455,16 @@
       ]
     },
     {
+      "address": "GifHNQZhFLUAwA9GyzKTTydShJ9esvgHqAFx8RjGAe3w",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 9,
+          "usdc": "0.009"
+        }
+      ]
+    },
+    {
       "address": "Gj1Wu9GAzUwDHREASVrFYdFpDecySqvP6eySYnQzsTNN",
       "servers": [
         {
@@ -101157,6 +102886,21 @@
           "server": "wealthpulse.theaslangroupllc.com",
           "transfers": 2,
           "usdc": "0.2"
+        },
+        {
+          "server": "Agentic Reservations — Restaurant Bookings for AI Agents",
+          "transfers": 4,
+          "usdc": "0.04"
+        },
+        {
+          "server": "agentic-reservations.vercel.app",
+          "transfers": 4,
+          "usdc": "0.04"
+        },
+        {
+          "server": "api.aidress.ai",
+          "transfers": 4,
+          "usdc": "0.04"
         }
       ]
     },
@@ -101330,8 +103074,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -102065,8 +103809,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -102230,8 +103974,18 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 6,
+          "usdc": "0.006"
+        }
+      ]
+    },
+    {
+      "address": "Grr9WnZdcetQywtFXog81UhqmnJyvFhb4AT3ipw44mZP",
+      "servers": [
+        {
+          "server": "GlianaAI — pay-per-call AI inference across 90+ models",
+          "transfers": 1,
+          "usdc": "0.498909"
         }
       ]
     },
@@ -103215,8 +104969,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 2,
-          "usdc": "0.002"
+          "transfers": 8,
+          "usdc": "0.008"
         }
       ]
     },
@@ -103795,8 +105549,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 6,
-          "usdc": "0.006"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -104666,6 +106420,16 @@
       ]
     },
     {
+      "address": "HC6aGC7RsgVGonWs1MVy5Qit5R5ruEXZmeywpFwSCmdY",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 3,
+          "usdc": "129.799555"
+        }
+      ]
+    },
+    {
       "address": "HC9CWGMJ1h2teomGF92NtKCFpnNEFwTwJrquhCJR18gk",
       "servers": [
         {
@@ -105361,6 +107125,16 @@
       ]
     },
     {
+      "address": "HJPjoWUrhoZzkNfRpHuieeFk9WcZWjwy6PBjZ81ngndJ",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 4,
+          "usdc": "12.566275"
+        }
+      ]
+    },
+    {
       "address": "HJQ3PC6hRGESKAvGSiZDoESuSEREjFyt5V1wGr912EuD",
       "servers": [
         {
@@ -105432,6 +107206,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "50"
+        }
+      ]
+    },
+    {
+      "address": "HKJ6D9gssWAY8Zpkaf9MK3W8UEeuw4AHTMea9DFX68ip",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "2.331389"
         }
       ]
     },
@@ -105570,8 +107354,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -105725,8 +107509,8 @@
       "servers": [
         {
           "server": "agentutility — paid x402 API catalog",
-          "transfers": 400,
-          "usdc": "10.099"
+          "transfers": 1399,
+          "usdc": "36.32"
         }
       ]
     },
@@ -106075,8 +107859,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 7,
+          "usdc": "0.007"
         }
       ]
     },
@@ -106606,6 +108390,16 @@
       ]
     },
     {
+      "address": "HV1KXxWFaSeriyFvXyx48FqG9BoFbfinB8njCJonqP7K",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 2,
+          "usdc": "29.064367"
+        }
+      ]
+    },
+    {
       "address": "HV4qkA2kpjesrrd4Qog2We48Eegs6MFwHXcjfta3oy84",
       "servers": [
         {
@@ -106900,8 +108694,8 @@
       "servers": [
         {
           "server": "sol.blockrun.ai",
-          "transfers": 4,
-          "usdc": "0.013149"
+          "transfers": 13,
+          "usdc": "0.042606"
         }
       ]
     },
@@ -107107,6 +108901,16 @@
           "server": "Bitrefill x402",
           "transfers": 102,
           "usdc": "11185.793661"
+        }
+      ]
+    },
+    {
+      "address": "HZ6vkXkdEFRZBEXnx7gvdGzH9mQYdZvqydaSYh2oFpS7",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -107455,8 +109259,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 6,
+          "usdc": "0.006"
         }
       ]
     },
@@ -108081,6 +109885,16 @@
       ]
     },
     {
+      "address": "HeU4mip5aNfBDrdsauHyx1kE857FoJ8iWRBSgG4JzK6L",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 8,
+          "usdc": "0.008"
+        }
+      ]
+    },
+    {
       "address": "HeVgmdBWhvJcAidVZqfCELEiCTA6KGPHmQjkcZ1NrzAK",
       "servers": [
         {
@@ -108280,13 +110094,13 @@
       "servers": [
         {
           "server": "x402-gateway-production.up.railway.app",
-          "transfers": 243,
-          "usdc": "4.86"
+          "transfers": 265,
+          "usdc": "5.3"
         },
         {
           "server": "x402engine — Pay-per-call APIs for AI Agents",
-          "transfers": 243,
-          "usdc": "4.86"
+          "transfers": 265,
+          "usdc": "5.3"
         }
       ]
     },
@@ -108675,8 +110489,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 11,
+          "usdc": "0.011"
         }
       ]
     },
@@ -109194,6 +111008,11 @@
       "address": "HqW48HKsfmVT7oxk9ivXU29MLSje9uXgc39VhbfKAKTx",
       "servers": [
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 1,
+          "usdc": "0.03"
+        },
+        {
           "server": "Sponge Gateway",
           "transfers": 2,
           "usdc": "0.02"
@@ -109702,6 +111521,11 @@
           "server": "api.solsentry.app",
           "transfers": 22,
           "usdc": "0.176"
+        },
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -109861,12 +111685,32 @@
       ]
     },
     {
+      "address": "Hv4d4mm4BX6wWkkGHVMLb3GpCgPTcE1ACpw3cChDGANw",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 7,
+          "usdc": "0.07"
+        }
+      ]
+    },
+    {
+      "address": "Hv4dznxiZ17EyHtgwG2PtkgFHwaZWvCTvKriWnEyeANw",
+      "servers": [
+        {
+          "server": "api.deepnets.ai",
+          "transfers": 3,
+          "usdc": "0.0003"
+        }
+      ]
+    },
+    {
       "address": "Hv7L9VMCqFcM6pmch7MVa4H3Xx62VfpoUz1mWfaPDuvn",
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -110356,6 +112200,16 @@
       ]
     },
     {
+      "address": "J18zXr7TxEpjvm38UiBDFKsj7Gu638RJRfmU3f1LuRg4",
+      "servers": [
+        {
+          "server": "Vishwa",
+          "transfers": 8,
+          "usdc": "0.008"
+        }
+      ]
+    },
+    {
       "address": "J1d2G6zQiMcWAgunhZjRvf6e61kgC4VoZ9uSLbjyjCyT",
       "servers": [
         {
@@ -110394,6 +112248,11 @@
       "address": "J27hmYhf4AptM5fCFpSn4R4H6Gr2QuutfjejftQCW6DA",
       "servers": [
         {
+          "server": "x402.sniperx.fun",
+          "transfers": 9,
+          "usdc": "0.009"
+        },
+        {
           "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
           "transfers": 2,
           "usdc": "0.007"
@@ -110421,11 +112280,6 @@
         {
           "server": "Oblique Markets — pay-per-call APIs for AI agents",
           "transfers": 2,
-          "usdc": "0.004"
-        },
-        {
-          "server": "x402.sniperx.fun",
-          "transfers": 4,
           "usdc": "0.004"
         },
         {
@@ -111217,6 +113071,11 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "5.14"
+        },
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -111248,6 +113107,11 @@
     {
       "address": "J8ZUnkFJHuc8cigAb9KM8DFzbcvPzy367bnxYC1cEUo",
       "servers": [
+        {
+          "server": "sol.blockrun.ai",
+          "transfers": 12,
+          "usdc": "0.110915"
+        },
         {
           "server": "x402-gateway-production.up.railway.app",
           "transfers": 6,
@@ -111467,6 +113331,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "56.46"
+        }
+      ]
+    },
+    {
+      "address": "JBAGApXg6u5CckugVpixnUjJhyyW8jpnrUvA3KzYSa5a",
+      "servers": [
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 8,
+          "usdc": "0.04"
         }
       ]
     },
@@ -112549,6 +114423,16 @@
           "usdc": "0.01"
         },
         {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
           "server": "Otto AI x402 — Market Intelligence, DeFi & Trading",
           "transfers": 4,
           "usdc": "0.008"
@@ -112577,6 +114461,11 @@
           "server": "SolEnrich — Onchain Intelligence for Solana Agents",
           "transfers": 2,
           "usdc": "0.004"
+        },
+        {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 2,
+          "usdc": "0.002"
         },
         {
           "server": "api.x402.printmoneylab.com",
@@ -112664,6 +114553,11 @@
       "address": "JD4TXECdVkVdYZmVnPTYkF4Tgq8Tx5xnwozUQEehyQCJ",
       "servers": [
         {
+          "server": "X402 Protocol Test",
+          "transfers": 3,
+          "usdc": "0.039"
+        },
+        {
           "server": "api.aidress.ai",
           "transfers": 3,
           "usdc": "0.003"
@@ -112734,6 +114628,11 @@
       "address": "JDy3mCxfv3gBAx2ogKpoNcEsFd5oWvYCEWJfwxSCsuY8",
       "servers": [
         {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 6,
+          "usdc": "2.7"
+        },
+        {
           "server": "Sponge Gateway",
           "transfers": 1,
           "usdc": "1"
@@ -112782,6 +114681,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 3,
           "usdc": "705.54"
+        }
+      ]
+    },
+    {
+      "address": "JU8kmKzDHF9sXWsnoznaFDFezLsE5uomX2JkRMbmsQP",
+      "servers": [
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "7.352178"
         }
       ]
     },
@@ -112982,6 +114891,21 @@
           "server": "Bitrefill x402",
           "transfers": 103,
           "usdc": "13721.046372"
+        }
+      ]
+    },
+    {
+      "address": "KmZDjZLanVi93ateybE4V828vhCiYZn1exgcUVowRcf",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 2,
+          "usdc": "0.002"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 2,
+          "usdc": "0.002"
         }
       ]
     },
@@ -113736,6 +115660,16 @@
       ]
     },
     {
+      "address": "THREEZmp7v26VbpQ8B27bBaLNA2zMyaNHWpkQtJkrgd",
+      "servers": [
+        {
+          "server": "three.ws — The 3D Agent Layer of the Internet",
+          "transfers": 2,
+          "usdc": "0.55"
+        }
+      ]
+    },
+    {
       "address": "TLeU3gH2gWqmhnYhseUWYNKDwaucTv3weaj77cMbibx",
       "servers": [
         {
@@ -113964,12 +115898,12 @@
           "usdc": "16.997"
         },
         {
-          "server": "api.suverse.io",
-          "transfers": 250,
-          "usdc": "14.43"
+          "server": "proxy.suverse.io",
+          "transfers": 257,
+          "usdc": "14.437"
         },
         {
-          "server": "proxy.suverse.io",
+          "server": "api.suverse.io",
           "transfers": 250,
           "usdc": "14.43"
         },
@@ -114029,6 +115963,16 @@
           "usdc": "10.8"
         },
         {
+          "server": "api.carbon-cashmere.de",
+          "transfers": 285,
+          "usdc": "10.488"
+        },
+        {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 57,
+          "usdc": "9.4"
+        },
+        {
           "server": "api.cryptoetfsentinel.com",
           "transfers": 107,
           "usdc": "9.04"
@@ -114077,6 +116021,11 @@
           "server": "wolframalpha.x402.paysponge.com",
           "transfers": 391,
           "usdc": "6.67"
+        },
+        {
+          "server": "X402 Protocol Test",
+          "transfers": 448,
+          "usdc": "6.632"
         },
         {
           "server": "StableSocial",
@@ -114129,11 +116078,6 @@
           "usdc": "4.8784"
         },
         {
-          "server": "api.carbon-cashmere.de",
-          "transfers": 117,
-          "usdc": "4.55"
-        },
-        {
           "server": "pro-api.coingecko.com",
           "transfers": 441,
           "usdc": "4.41"
@@ -114142,16 +116086,6 @@
           "server": "OnchainExpat x402 APIs",
           "transfers": 244,
           "usdc": "4.23"
-        },
-        {
-          "server": "Messari API — The Institutional Standard for Crypto Data",
-          "transfers": 24,
-          "usdc": "4.2"
-        },
-        {
-          "server": "X402 Protocol Test",
-          "transfers": 255,
-          "usdc": "3.9345"
         },
         {
           "server": "convrgent.ai",
@@ -114365,8 +116299,8 @@
         },
         {
           "server": "stablecrypto.dev",
-          "transfers": 310,
-          "usdc": "3.1"
+          "transfers": 339,
+          "usdc": "3.39"
         },
         {
           "server": "aero.lonestaroracle.xyz",
@@ -114689,6 +116623,11 @@
           "usdc": "2.88"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 106,
+          "usdc": "2.698"
+        },
+        {
           "server": "Otto AI x402 — Market Intelligence, DeFi & Trading",
           "transfers": 219,
           "usdc": "1.448"
@@ -114707,6 +116646,21 @@
           "server": "quartermaster.surewhynot.app",
           "transfers": 149,
           "usdc": "1.242"
+        },
+        {
+          "server": "2s — the (most) everything API",
+          "transfers": 639,
+          "usdc": "1.17594"
+        },
+        {
+          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
+          "transfers": 639,
+          "usdc": "1.17594"
+        },
+        {
+          "server": "2s-rjsw718bb-alleyford.vercel.app",
+          "transfers": 639,
+          "usdc": "1.17594"
         },
         {
           "server": "TWZRD Agent Intel",
@@ -114747,21 +116701,6 @@
           "server": "gateway.spraay.app",
           "transfers": 73,
           "usdc": "0.666"
-        },
-        {
-          "server": "2s — the (most) everything API",
-          "transfers": 311,
-          "usdc": "0.6297"
-        },
-        {
-          "server": "2s-3cpr6qm6j-alleyford.vercel.app",
-          "transfers": 311,
-          "usdc": "0.6297"
-        },
-        {
-          "server": "2s-rjsw718bb-alleyford.vercel.app",
-          "transfers": 311,
-          "usdc": "0.6297"
         },
         {
           "server": "stable-financial.vercel.app",
@@ -115024,6 +116963,16 @@
           "usdc": "0.081"
         },
         {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 30,
+          "usdc": "0.074"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 30,
+          "usdc": "0.074"
+        },
+        {
           "server": "ApiToll — Crypto & DeFi market data for AI agents",
           "transfers": 58,
           "usdc": "0.058"
@@ -115079,6 +117028,96 @@
           "usdc": "0.015"
         },
         {
+          "server": "agentaudit.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "codepulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "costpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "datapulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "dnspulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "escrowpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "fishpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "floodpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "ippulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "ReadX — X/Twitter JSON API, Paid Per Call",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "readx.sh",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "searchpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "shieldform.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "sitepulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "solarpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "threatpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "walletintel.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
+          "server": "webpulse.waltsoft.net",
+          "transfers": 1,
+          "usdc": "0.01"
+        },
+        {
           "server": "AI Rook — Agent Commerce Platform",
           "transfers": 5,
           "usdc": "0.009"
@@ -115095,14 +117134,19 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
     {
       "address": "Tx5JG2fVa2iJG97e8DcuVKyTawKVPT12jLEBJRZP3zZ",
       "servers": [
+        {
+          "server": "Messari API — The Institutional Standard for Crypto Data",
+          "transfers": 1,
+          "usdc": "0.1"
+        },
         {
           "server": "api.aidress.ai",
           "transfers": 1,
@@ -115167,6 +117211,16 @@
           "server": "x402endpoint-utiwoa54hq-uc.a.run.app",
           "transfers": 1,
           "usdc": "0.001"
+        }
+      ]
+    },
+    {
+      "address": "Uy5ceoMBGkSzYRn5tgTwr4RSjTM94nNLJKiFFR1UttR",
+      "servers": [
+        {
+          "server": "grov.fun",
+          "transfers": 2,
+          "usdc": "21.5"
         }
       ]
     },
@@ -115389,6 +117443,11 @@
           "usdc": "45.018398"
         },
         {
+          "server": "Agent402: 500+ pay-per-call tools for AI agents over x402 and MPP",
+          "transfers": 336,
+          "usdc": "6.72"
+        },
+        {
           "server": "NetIntel API",
           "transfers": 1012,
           "usdc": "5.25"
@@ -115415,8 +117474,8 @@
       "servers": [
         {
           "server": "three.ws — The 3D Agent Layer of the Internet",
-          "transfers": 396,
-          "usdc": "0.788"
+          "transfers": 1347,
+          "usdc": "6.663"
         }
       ]
     },
@@ -115425,8 +117484,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 9,
+          "usdc": "0.009"
         }
       ]
     },
@@ -115672,6 +117731,11 @@
           "server": "CPG data analytics for AI agents",
           "transfers": 1,
           "usdc": "105.628878"
+        },
+        {
+          "server": "loonie-toll.onrender.com",
+          "transfers": 1,
+          "usdc": "1.049118"
         }
       ]
     },
@@ -116785,8 +118849,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 1,
-          "usdc": "0.001"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
@@ -116940,8 +119004,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -117207,6 +119271,11 @@
           "server": "CPG data analytics for AI agents",
           "transfers": 3,
           "usdc": "0.03"
+        },
+        {
+          "server": "stablecrypto.dev",
+          "transfers": 1,
+          "usdc": "0.01"
         }
       ]
     },
@@ -117415,8 +119484,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 3,
-          "usdc": "0.003"
+          "transfers": 12,
+          "usdc": "0.012"
         }
       ]
     },
@@ -118096,6 +120165,21 @@
       ]
     },
     {
+      "address": "svmav8vdsLCKvDRsuiD9X4eZUWNroLFovMV9NQ9iEoL",
+      "servers": [
+        {
+          "server": "x402-gateway-production.up.railway.app",
+          "transfers": 44,
+          "usdc": "3.55"
+        },
+        {
+          "server": "x402engine — Pay-per-call APIs for AI Agents",
+          "transfers": 44,
+          "usdc": "3.55"
+        }
+      ]
+    },
+    {
       "address": "swAAXWpewdsjD3yBSWRJccMDT5wVWJR8xrMs1ifvY2T",
       "servers": [
         {
@@ -118376,6 +120460,16 @@
       ]
     },
     {
+      "address": "v7RJFSS2ctkhn8qqQDNBAUMP6BBupZkgHDJsPuEWrgz",
+      "servers": [
+        {
+          "server": "api.vextorium.com",
+          "transfers": 1,
+          "usdc": "3"
+        }
+      ]
+    },
+    {
       "address": "v83m5N8hnkwN9Xc8G1PsjBrjSUoX1yWmp6uDJjMbGik",
       "servers": [
         {
@@ -118410,8 +120504,8 @@
       "servers": [
         {
           "server": "x402.sniperx.fun",
-          "transfers": 32,
-          "usdc": "0.64"
+          "transfers": 114,
+          "usdc": "2.28"
         }
       ]
     },
@@ -118730,8 +120824,8 @@
       "servers": [
         {
           "server": "Vishwa",
-          "transfers": 4,
-          "usdc": "0.004"
+          "transfers": 10,
+          "usdc": "0.01"
         }
       ]
     },
