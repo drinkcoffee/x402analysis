@@ -73,8 +73,9 @@
         "funder"
       ],
       "name": "NEAR Intents: Treasury;",
-      "tags": "Near; NEAR Intents",
-      "notes": "Peter removed from list: part of Near bridge"
+      "tags": "Phish / Hack",
+      "notes": "Bridge hack",
+      "from": "2026-09-29:00:00UTC"      
     },
     {
       "address": "0x2ec19e982172ead28b312a07faf25105fb3747d8",
@@ -365,7 +366,8 @@
       ],
       "name": "Fake_Phishing4735275; PancakeV3Pool",
       "tags": "Phish / Hack",
-      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by ChainPatrol."
+      "notes": "info: There are reports that this address was used in a Phishing scam. Please exercise caution when interacting with it. Reported by ChainPatrol.",
+      "from": "2026-09-26:00:00UTC"      
     },
     {
       "address": "0xbc1d9760bd6ca468ca9fb5ff2cfbeac35d86c973",

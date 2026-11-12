@@ -24,8 +24,10 @@ For each payment address (or group), prints:
     from dataset/metadata_base_phishing_only_annotated.json; funders from dataset/funders.json or
     its pieces) -- for an address annotated with a "from" time (when it
     became phishing), only its payments from then on, and only funding it
-    sent from then on, with the clients it funded counted from then on
-    too -- ignoring a funder's sends worth less than US$0.01 in all
+    sent from then on; and a client a phishing funder funded only from
+    when that funder first sent it anything (or the funder's "from", if
+    later), since what it paid before can't have come from the funder --
+    ignoring a funder's sends worth less than US$0.01 in all
     (--min-funding; ETH at US$2,500, --eth-usd) as dust -- tiny sends are
     what address poisoning looks like, so they mark a target, not someone
     the phishing address funded. Both are Base data, so it's 0 for Solana
@@ -46,9 +48,12 @@ For each payment address (or group), prints:
 Sorted by USDC received, most first; the top 20 by default (--top N, 0 for
 all).
 
-By default every transfer counts. A window limits that to transfers in it
+Only transfers from x402's launch, 2025-05-06 (UTC), count: server
+addresses are often older wallets, and USDC they received before x402
+existed isn't x402 income (--x402-launch DATE to move the date,
+--include-pre-x402 to count every transfer). A window limits that further
 -- everything above but the phishing-funded column, since funders were
-gathered without one:
+gathered without one; a window starting before the launch starts at it:
   --months N          the N months up to each chain's latest transfer
                       gathered (Base's and Solana's were gathered at
                       different times, so counting back from today would
@@ -65,12 +70,13 @@ dataset/ (overwritten each run), named for the window and chain:
   phishing_funds_flow-since-2026-07-01.csv   --since 2026-07-01
   phishing_funds_flow-2026-07-01-3m.csv      --since 2026-07-01 --months 3
   ...-base.csv / ...-solana.csv              with --chain
+  ...-incl-pre-x402.csv                      with --include-pre-x402
 with plain numbers (USDC to 6 places, no thousands separators) and all
 the servers, columns: rank, usdc_received, transfers, clients,
 median_transfer, from_phishing, from_phishing_percent (to 2 places),
 chain, country, phishing_funded, payment_addresses, servers, categories
 (the lists "; "-separated).
-Any USDC sent to the address counts, whatever it was for. Addresses
+Any USDC sent to the address from the launch on counts, whatever it was for. Addresses
 05 couldn't check (dataset/clients.json's "failed") aren't in the database,
 so aren't ranked; how many there are goes to standard error.
 
@@ -80,13 +86,14 @@ Usage:
     python gather/36_server_usdc_received.py [--top N] [--chain base|solana]
                                              [--months N] [--since YYYY-MM-DD]
                                              [--min-funding USD] [--eth-usd USD]
+                                             [--x402-launch YYYY-MM-DD | --include-pre-x402]
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
-from datetime import date
+from datetime import date, datetime
 import json
 import os
 import re
@@ -121,6 +128,8 @@ CSV_COLUMNS = [
     "categories",
 ]
 CHAINS = ("base", "solana")
+# Coinbase announced x402, and its first payments were made, on 6 May 2025.
+X402_LAUNCH = date(2025, 5, 6)
 DEFAULT_TOP = 20
 SERVERS_SHOWN = 3
 BASE_ADDRESS = re.compile(r"0x[0-9a-f]{40}")
@@ -221,7 +230,7 @@ def plain(amount) -> str:
     return f"{Decimal(str(amount)).quantize(Decimal('0.000001'))}"
 
 
-def csv_path(months: int | None, since: date | None, chain: str | None) -> Path:
+def csv_path(months: int | None, since: date | None, chain: str | None, pre_x402: bool = False) -> Path:
     """The CSV file for this window and chain (see the module docstring)."""
     name = CSV_STEM
     if since and months:
@@ -232,6 +241,8 @@ def csv_path(months: int | None, since: date | None, chain: str | None) -> Path:
         name += f"-{months}m"
     if chain:
         name += f"-{chain}"
+    if pre_x402:
+        name += "-incl-pre-x402"
     return DATASET_DIR / f"{name}.csv"
 
 
@@ -257,6 +268,17 @@ def windows(cur, chains: list[str], months: int | None, since: date | None) -> t
         (months, chains),
     )
     return {chain: start.isoformat() for chain, start in cur.fetchall()}, {}
+
+
+def from_launch(starts: dict, chains: list[str], launch: date | None) -> dict:
+    """`starts` ({chain: window start}) with no chain starting before
+    `launch` (None: unchanged)."""
+    if launch is None:
+        return starts
+    floor = f"{launch.isoformat()}T00:00:00+00:00"
+    return {
+        chain: max(starts[chain], floor, key=datetime.fromisoformat) if chain in starts else floor for chain in chains
+    }
 
 
 def latest(cur, chains: list[str]) -> dict[str, str]:
@@ -290,12 +312,21 @@ def main() -> None:
     parser.add_argument("--chain", choices=CHAINS, help="only this chain (default: both)")
     parser.add_argument("--months", type=int, help="only the N months up to each chain's latest transfer (or from --since)")
     parser.add_argument("--since", type=date.fromisoformat, metavar="YYYY-MM-DD", help="only transfers from this date (UTC) on")
+    launch = parser.add_mutually_exclusive_group()
+    launch.add_argument(
+        "--x402-launch",
+        type=date.fromisoformat,
+        default=X402_LAUNCH,
+        metavar="YYYY-MM-DD",
+        help=f"ignore transfers before this date (default {X402_LAUNCH}, when x402 launched)",
+    )
+    launch.add_argument("--include-pre-x402", action="store_true", help="count transfers from before x402 launched too")
     add_dust_arguments(parser)
     args = parser.parse_args()
     if args.months is not None and args.months < 1:
         parser.error("--months must be at least 1")
     chains = [args.chain] if args.chain else list(CHAINS)
-    output = csv_path(args.months, args.since, args.chain)
+    output = csv_path(args.months, args.since, args.chain, args.include_pre_x402)
     phishing, funded = phishing_and_funded(args.min_funding, args.eth_usd)
     info = server_info()
 
@@ -320,6 +351,7 @@ def main() -> None:
             if chain_of(address):
                 addresses[(chain_of(address), tuple(server_ids))].append(address)
         starts, ends = windows(cur, chains, args.months, args.since)
+        starts = from_launch(starts, chains, None if args.include_pre_x402 else args.x402_launch)
         ends_at = latest(cur, chains)
         cur.execute(RECEIVED_SQL, (chains, json.dumps(starts), json.dumps(ends), json.dumps(phishing_ids)))
         received = cur.fetchall()

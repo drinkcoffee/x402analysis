@@ -22,7 +22,15 @@ transfers at or after it count: the address's own payments, and its
 funding of an address -- funders.json only gives the first and last time
 it sent each address, so an address counts as funded if the last send
 (USDC or ETH) was at or after "from", and the dust test still uses the
-total sent. An address it funded is deemed phishing from the same time.
+total sent.
+
+An address a phishing funder funded is deemed phishing only from when
+that funder first sent it anything (or from the funder's "from", if
+that's later): money it had before it was funded can't have come from
+the phishing address. funders.json's "first" is the earliest send it
+read -- for a busy address where 07 stopped at its page limit, the
+earliest of the most recent ones -- so this can start later than the
+real first send, counting less, never more.
 """
 
 from __future__ import annotations
@@ -141,6 +149,14 @@ def last_sent(item: dict) -> datetime | None:
     return max(times) if times else None
 
 
+def first_sent(item: dict) -> datetime | None:
+    """When a funder first sent a funded address (a funders.json "funded"
+    item) USDC or ETH, or None if neither has a time."""
+    times = [(item.get(asset) or {}).get("first") for asset in ("usdc", "eth")]
+    times = [datetime.fromisoformat(time.replace("Z", "+00:00")) for time in times if time]
+    return min(times) if times else None
+
+
 def funded_after(item: dict, since: datetime | None) -> bool:
     """Whether a funder that became phishing at `since` (None: always)
     sent `item` anything then or later."""
@@ -156,14 +172,20 @@ def earliest(a: datetime | None, b: datetime | None) -> datetime | None:
     return None if a is None or b is None else min(a, b)
 
 
+def latest(a: datetime | None, b: datetime | None) -> datetime | None:
+    """The later of two times, None (no bound) being earliest."""
+    return a if b is None else b if a is None else max(a, b)
+
+
 def phishing_and_funded(
     min_usd: Decimal = DUST_USD, eth_usd: Decimal = ETH_USD
 ) -> tuple[dict[str, datetime | None], dict[str, datetime | None]]:
     """(the addresses marked as phishing, the addresses phishing funders
     funded with at least `min_usd` at or after the funder's "from" -- from
     dataset/funders.json or its pieces), lower case, each with when it's
-    deemed phishing from (None: always; for a funded address, the earliest
-    "from" of the phishing funders that funded it)."""
+    deemed phishing from (None: always; for a funded address, the earliest,
+    over the phishing funders that funded it, of when the funder first sent
+    it anything or its "from", whichever is later)."""
     phishing = {entry["address"].lower(): entry_from(entry) for entry in phishing_entries()}
     funded: dict[str, datetime | None] = {}
     for funder in load_funders():
@@ -175,5 +197,6 @@ def phishing_and_funded(
             if is_dust(item, min_usd, eth_usd) or not funded_after(item, since):
                 continue
             key = item["address"].lower()
-            funded[key] = earliest(funded[key], since) if key in funded else since
+            start = latest(first_sent(item), since)
+            funded[key] = earliest(funded[key], start) if key in funded else start
     return phishing, funded
